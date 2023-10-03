@@ -1,7 +1,7 @@
 # Tutoriel d'utilisation du Système d'Édition de Ticket de Caisse
 
 ## Étape 1 : Télécharger le code
-Tout d'abord, assurez-vous d'avoir téléchargé le code du projet depuis le référentiel Git ou le dossier où il est stocké.
+Tout d'abord, assurez-vous d'avoir téléchargé le code du projet depuis le référentiel Git ou le dossier où il est stocké. Ne pas oublier de télécharger le fichier numero_ticket.txt .
 
 
 ## Étape 2 : Prérequis
