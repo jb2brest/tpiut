@@ -19,6 +19,11 @@ Ce programme permet de créer des tickets de caisses détaillés avec toutes les
 - Total TVA
 - Total HT + TVA
 
+De plus, chaque erreur à un code, des exemple ci-dessous :
+
+- erreur A2 -> "Erreur A2 : Le nom du magasin ne peut être vide"
+- erreur A3 -> "Erreur A3 : Le nom de l'employé ne peut pas être vide"
+
 ## Utilisation
 
 Pour pouvoir utiliser ce programme vous devez avoir installer python sur votre machine. Ensuite vous devez le lancer en ligne de commande, ci-dessous des exemple de comment utiliser ce programme.
