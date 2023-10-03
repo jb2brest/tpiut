@@ -57,16 +57,20 @@ Pour personnaliser votre système et ajouter de nouveaux articles, suivez ces é
 ```python
 
 articles = {
-    "C01": Article("C01", "pack de coca", 5, 10),
-    "C02": Article("C02", "kilo de pdt", 1, 10),
-    "C03": Article("C03", "pack Biscotte", 2, 10),
-    # Ajoutez d'autres articles ici si nécessaire
-}
+        "C01": Article("C01", "pack de coca", "2", 5, 20, "Lituanie"),
+        "C02": Article("C02", "kilo de pdt", "1", 1, 10, "Espagne"),
+        "C03": Article("C03", "pack Biscotte", "0.950", 2, 10, "France"),
+        "C04": Article("C04", "Cafe soluble", "0.250", 3, 10, "Roumanie"),
+        "C05": Article("C05", "Crackers", "0.125", 4, 20, "Angleterre"),
+        "C06": Article("C06", "Eau", "1,5", 6, 10, "Suisse"),
+        "C07": Article("C07", "Pain", "0.250", 1, 10, "France")
+        # Ajoutez d'autres articles ici si nécessaire
+    }
 ```
 
-- Pour ajouter un nouvel article, ajoutez une nouvelle ligne dans le dictionnaire articles. Par exemple, pour ajouter un "Café soluble" à 3€ HT avec une TVA de 10%, vous pouvez ajouter la ligne suivante :
+- Pour ajouter un nouvel article, ajoutez une nouvelle ligne dans le dictionnaire articles. Par exemple, pour ajouter un "Ricard" à 8€ HT avec une TVA de 10%  avec un poids de 1.5 en Kg provenant de France, vous pouvez ajouter la ligne suivante :
 
 ```python
 
-"C04": Article("C04", "Café soluble", 3, 10),
+"C07": Article("C08", "Ricard", "1.5", 8, 10, "France")
 ```
