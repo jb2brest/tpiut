@@ -25,6 +25,7 @@ class TicketDeCaisse:
         print(f"Ticket numéro : {self.numero_ticket}")
         print(f"Date : {self.generer_date()}")
         print(f"Vous avez été servi par : {self.caissier}\n")
+       print("NB    Desc.             HT unitaire    TVA     Total")
 
         for article, quantite in self.articles:
             montant_ht = article.prix_ht * quantite
@@ -32,18 +33,13 @@ class TicketDeCaisse:
             total_ht += montant_ht
             total_tva += montant_tva
 
-            print(quantite)
-            print(article.description)
-            print(article.prix_ht)
-            print(article.tva)
-            print(montant_ht+montant_tva)
-            print("----------")
+            print(f"{quantite}     {article.description}      {article.prix_ht}€              {article.tva}%      {montant_ht + montant_tva}€")
 
         print(f"\nTotal HT        {total_ht}€")
         print(f"Total TVA       {total_tva}€")
         print(f"Total           {total_ht + total_tva}€")
-        
-        self.numero_ticket += 1  # Incrémenter le numéro de ticket après chaque impression
+
+        self.numero_ticket += 1
 
     def generer_date(self):
         # Utilisez le module datetime pour obtenir la date actuelle au format DD/MM/YYYY
