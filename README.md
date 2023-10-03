@@ -42,6 +42,17 @@ Actuellement, voici la liste des articles qui sont renseignés par défaut :
 |    C04     |Café soluble  | 3 |
 |    C05     |Crakers       | 4 |
 
+## Ajout d'un produit
+
+Pour ajouter un produit, il faut l'ajouter dans la fonction itemParsing
+On ajoute à la ligne dernière ligne ajoutée (/!\ ne pas ajouter avant/supprimer le case _:)
+Exemple:
+```py
+case "C06":
+                desc="Spaghetti" # description du produit
+                priceHT=2.5 # prix hors taxe
+                priceTot=nb*(priceHT*TVA)
+```
 ## Fonctionnement du programme
 
 Dans cette partie je vais vous expliquer comment le programme fonctionne et son déroulement:
