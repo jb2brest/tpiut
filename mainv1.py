@@ -1,10 +1,11 @@
 import datetime
 
 class Article:
-    def __init__(self, code, description, prix, tva):
+    def __init__(self, code, description, prix_ht, tva):
         self.code = code
         self.description = description
-        self.prix = prix
+        self.prix_ht = prix_ht
+        self.tva = tva
 
 class TicketDeCaisse:
     def __init__(self, magasin, caissier):
@@ -17,20 +18,33 @@ class TicketDeCaisse:
         self.articles.append((article, quantite))
 
     def generer_ticket(self):
+        total_ht = 0
+        total_tva = 0
+
         print(f"{self.magasin}")
         print(f"Ticket numéro : {self.numero_ticket}")
         print(f"Date : {self.generer_date()}")
         print(f"Vous avez été servi par : {self.caissier}\n")
 
         for article, quantite in self.articles:
+            montant_ht = article.prix_ht * quantite
+            montant_tva = montant_ht * (article.tva / 100)
+            total_ht += montant_ht
+            total_tva += montant_tva
 
             print(quantite)
             print(article.description)
-            print(article.prix)
+            print(article.prix_ht)
+            print(article.tva)
+            print(montant_ht+montant_tva)
             print("----------")
 
+        print(f"\nTotal HT        {total_ht}€")
+        print(f"Total TVA       {total_tva}€")
+        print(f"Total           {total_ht + total_tva}€")
+        
         self.numero_ticket += 1  # Incrémenter le numéro de ticket après chaque impression
-    
+
     def generer_date(self):
         # Utilisez le module datetime pour obtenir la date actuelle au format DD/MM/YYYY
         date_actuelle = datetime.datetime.now()
