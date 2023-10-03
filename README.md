@@ -13,22 +13,23 @@ C05 "Crakers"
 
 # Récupération du Projet
 2ème étape : lancer la commande <python3 main.tf "NOM_ENTREPRISE" "NOM_CAISSIER" "C01:4|C02|2">
-Dans le 3ème argument, on ajoute autant de article que l'on veut, en les séparant par des '|'. Dans chaque article, on précise le Code_Article et le nombre d'article.
+
+Dans le 3ème argument, on ajoute autant de article que l'on veut, en les séparant par des '|'.
+
+Dans chaque article, on précise le Code_Article et le Nombre_article avec le ':'
+
+Si je veux 6 pack de coca et 2 Crackers je ferai ceci : "C01:6|C05:2"
 
 # Execution du code
-$ python3 main.py "Mcdo" "Lisa" "C01:10|C02:2|C04:4"
-Mcdo
-Ticket numéro : 1002
+![image info](code.png)
 
-Date : 03/10/2023
+# Changer le prix produit - ajout produit
+Dans la fonction middle_ticket() que l'on peut voir ci-dessous. On a la possibilité modifier le prix correspondant.
+Si vous avez besoin d'un nouveau produit, ajouter ceci : 
+```py
+elif code_article == "CodeArticle":
+    description = "Votre description"
+    prix = 100 # changer le prix, si vous le souhaiter
+```
 
-Vous avez été servi par Lisa
-
-NB	Desc.		      HT unitaire	TVA	 Total
-10	pack de coca	5		        10%	 55.0€
-2	  kit de pft	  1		        10%	 2.2€
-4	  Café soluble	3		        10%	 13.2€
-
-                     TOTAL HT          64€
-                     TOTAL TVA         6.4€
-                     TOTAL             70.4€
+![image info](article.png)
