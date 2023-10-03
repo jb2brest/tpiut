@@ -40,3 +40,6 @@ Code	Desc.			HT unitaire	Total
 Dans articles_info: ajouter une ligne de la façon suivante
 "<num_article>": {"description": "<nom_article>", "prix_unitaire_ht": <prix>}
 
+Exemple: 
+"C06":{"description": "Chips", "prix_unitaire_ht": 3}
+
