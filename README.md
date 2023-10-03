@@ -46,7 +46,9 @@ Actuellement, voici la liste des articles qui sont renseignés par défaut :
 
 Dans cette partie je vais vous expliquer comment le programme fonctionne et son déroulement:
 
-1.
-2.
-3.
-4. 
+1. récupère les paramètres fourni en ligne de commande
+2. Sépare et traite les arguments fourni
+3. Lien entre les code article fourni en paramètres et leurs informations stockés dans le programme
+4. Sérialise les informations afin de pouvoir les affocher dans le ticket de caisse
+5. Prépare l'affichage du ticket de caisse, met en forme toutes les informations préparé précédement
+6. Affiche le ticket de caisse en vérifiant les potentiels erreurs
