@@ -24,33 +24,51 @@ def itemParsing(articleCode: str, nb: int)-> str:
     """
     desc: str = ""
     nb: float = float(nb)
-    TVA: float = 1.1
+    poid: int = 0
+    TVA1: float = 1.1
+    TVA2: float = 1.2
     match articleCode:
         case "C01":
                 desc="pack de coca"
                 priceHT=5
-                priceTot=nb*(priceHT*TVA)
+                priceTot=nb*(priceHT*TVA2)
+                poid=2000
         case "C02":
                 desc="kilo de pdt"
                 priceHT=1
-                priceTot=nb*(priceHT*TVA)
+                priceTot=nb*(priceHT*TVA1)
+                poid=1000
         case "C03":
                 desc="pack Biscotte"
                 priceHT=2
-                priceTot=nb*(priceHT*TVA)
+                priceTot=nb*(priceHT*TVA1)
+                poid=950
         case "C04":
                 desc="Café soluble"
                 priceHT=3
-                priceTot=nb*(priceHT*TVA)
+                priceTot=nb*(priceHT*TVA1)
+                poid=250
         case "C05":
                 desc="Crakers"
                 priceHT=4
-                priceTot=nb*(priceHT*TVA)
+                priceTot=nb*(priceHT*TVA2)
+                poid=125
+        case "C06":
+                desc="Eau"
+                priceHT=6
+                priceTot=nb*(priceHT*TVA1)
+                poid=1500
+        case "C07":
+                desc="Pain"
+                priceHT=1
+                priceTot=nb*(priceHT*TVA1)
+                poid=250
         case _:
                 desc="Erreur A1: code article incorrect"
                 priceHT=0
                 priceTot=0
-    return(desc,priceHT,priceTot)
+                poid=0
+    return(desc,poid,priceHT,priceTot)
 
 def betterAff(articles: list)->list:
     """
@@ -59,14 +77,16 @@ def betterAff(articles: list)->list:
     """
     nb = []
     desc = []
+    poid = []
     pht = []
     ptot = []
     for i in articles:
         nb.append(i[0])
         desc.append(i[1][0])
-        pht.append(i[1][1])
-        ptot.append(i[1][2])
-    return nb, desc, pht, ptot
+        poid.append(i[1][1])
+        pht.append(i[1][2])
+        ptot.append(i[1][3])
+    return nb, desc, poid, pht, ptot
 
 def ticketAff(ticket):
     """
@@ -80,21 +100,24 @@ def ticketAff(ticket):
         numero = -1
     with open("ticketcounter.txt", "w") as fichier:
         fichier.write(str(numero + 1))
-    nbs, descs, hts, totaux = ticket
+    nbs, descs, poids, hts, totaux = ticket
 
     totalHt = 0
     totalTva = 0
     totalGeneral = 0
+    totalPoid = 0
 
     print(shopname)
     print("Ticket numéro : "+str(numero)+"\n")
     print("Date : ", tdate)
     print("\nVous avez été servis par : ", employee)
-    print("\nNB\tDesc.\t\tHT unitaire\tTVA\tTotal")
+    print("\nNB\tDesc.\t\tPoids/volume unitaire\tPoids/volume total\tHT unitaire\tTVA\tTotal")
 
-    for nb, desc, ht, total in zip(nbs, descs, hts, totaux):
+    for nb, desc, poid, ht, total in zip(nbs, descs, poids, hts, totaux):
+        
         tva = ht * 0.1
-        print(f"{nb}\t{desc}\t\t{ht}€\t10%\t{round(total, 2)}€")
+        totalPoid = poid * int(nb)
+        print(f"{nb}\t{desc}\t\t\t{poid}\t\t{totalPoid}\t\t{ht}€\t\t10%\t{round(total, 2)}€")
 
         totalHt += ht * int(nb)
         totalTva += tva * int(nb)
@@ -103,7 +126,7 @@ def ticketAff(ticket):
     # Afficher les totaux
 
 
-    print(f"\n\t\t\t\tTotal HT	{round(totalHt, 2)}€\n\t\t\t\tTotal TVA	{round(totalTva, 2)}€\n\t\t\t\tTotal 		{round(totalGeneral, 2)}€")
+    print(f"\n\t\t\t\t\t\t\t\t\t\tTotal HT	{round(totalHt, 2)}€\n\t\t\t\t\t\t\t\t\t\tTotal TVA	{round(totalTva, 2)}€\n\t\t\t\t\t\t\t\t\t\tTotal 		{round(totalGeneral, 2)}€")
 
 
 if __name__ == "__main__":
