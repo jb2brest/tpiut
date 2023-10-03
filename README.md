@@ -34,13 +34,15 @@ Voici un exemple d'utilisation : `python3 ticket.py "BUT MARKET" "Sarah" "C01:28
 
 Actuellement, voici la liste des articles qui sont renseignés par défaut :
 
-|Code article|Description|Prix HT unitaire|
-| :--------: | :-------: | :------------: |
-|    C01     |pack de coca  | 5 |
-|    C02     |kilo de pdt   | 1 |
-|    C03     |pack Biscotte | 2 |
-|    C04     |Café soluble  | 3 |
-|    C05     |Crakers       | 4 |
+|Code article|Description| Poids ou volume unitaire |Prix HT unitaire| TVA |
+| :--------: | :-------: | :--: | :------------: | :--: |
+|    C01     |pack de coca  | 2kg  | 5 | 20% |
+|    C02     |kilo de pdt   | 1kg  | 1 | 10% |
+|    C03     |pack Biscotte | 950g | 2 | 10%|
+|    C04     |Café soluble  | 250g | 3 |10% |
+|    C05     |Crakers       | 125g | 4 | 20% |
+|    C06     |Eau           | 1,5L | 6 | 10% |
+|    C07     | Pain         | 250g | 1 | 10% |
 
 ## Ajout d'un produit
 
@@ -49,9 +51,10 @@ On ajoute à la ligne dernière ligne ajoutée (/!\ ne pas ajouter avant/supprim
 Exemple:
 ```py
 case "C06":
-                desc="Spaghetti" # description du produit
-                priceHT=2.5 # prix hors taxe
+                desc="Eau" # description du produit
+                priceHT=6 # prix hors taxe
                 priceTot=nb*(priceHT*TVA)
+                poids=1500
 ```
 ## Fonctionnement du programme
 
