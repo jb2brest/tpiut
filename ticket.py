@@ -1,8 +1,7 @@
-from random import randint
 import datetime
 
 
-def generation_ticket(produit: dict):
+def generation_ticket(ticket_number, produit: dict):
     """
     generation_ticket génère un ticket à partir des données passées en paramètre
 
@@ -11,11 +10,14 @@ def generation_ticket(produit: dict):
     """
 
     # Ecriture de l'entête
-    print(produit["market_name"])
-    print("Ticket Numéro :", randint(1, 5000))
-    print("\nDate : ", datetime.date.today().strftime("%d/%m/%Y"))
-    print("\nVous avez été servi par : ", produit["seller_name"])
-    print("\nNB\tDesc.\t\tHT unitaire\tTVA\tTotal")
+
+    ticket: list = []
+
+    ticket.append(produit["market_name"])
+    ticket.append(f"\nTicket Numéro : {ticket_number + 1}")
+    ticket.append(f"\nDate : {datetime.date.today().strftime('%d/%m/%Y')}")
+    ticket.append(f"\nVous avez été servi par : {produit['seller_name']}")
+    ticket.append("\nNB\tDesc.\t\tHT unitaire\tTVA\tTotal")
 
     # Préparation des totaux
     tt_ht: float = 0.0
@@ -28,12 +30,18 @@ def generation_ticket(produit: dict):
         tt_tt += total_tva
         tt_ht += v["price"] * v["number"]
         tt_tva += 10 * (v["price"] * v["number"]) / 100
-        print(f"{v['number']}\t{v['description']}\t{v['price']}\t\t10%\t", total_tva)
+        ticket.append(
+            f"\n{v['number']}\t{v['description']}\t{v['price']}€\t\t10%\t{total_tva}€"
+        )
 
     # Afficher les totaux
-    print("\n\t\t\t\t\tTotal HT :", tt_ht)
-    print("\t\t\t\t\tTotal TVA :", tt_tva)
-    print("\t\t\t\t\tTotal :", tt_tt)
+    ticket.append(f"\n\n\t\t\t\t\tTotal HT : {tt_ht} €")
+    ticket.append(
+        f"\n\t\t\t\t\tTotal TVA : {tt_tva} €",
+    )
+    ticket.append(f"\n\t\t\t\t\tTotal : {tt_tt} €")
+
+    return ticket_number + 1, "".join(ticket)
 
 
 if __name__ == "__main__":

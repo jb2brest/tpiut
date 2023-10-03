@@ -23,8 +23,12 @@ def parseCLI(*args) -> dict:
 
     products: dict = {}
     for prod in args[3].split("|"):
-        c, v = prod.split(":")
-        products[c] = int(v)
+        try:
+            c, v = prod.split(":")
+            products[c] = int(v)
+        except:
+            print(f"la chaine [{prod}] n'est pas valide")
+            continue
 
     return {"market_name": args[1], "seller_name": args[2], "cart": products}
 
