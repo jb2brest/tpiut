@@ -1,0 +1,2 @@
+class EntreeVide(Exception):
+    pass
