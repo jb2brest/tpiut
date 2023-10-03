@@ -23,7 +23,7 @@ class TicketDeCaisse:
         total_tva = 0
 
         print(f"{self.magasin}")
-        print(f"Ticket numéro : {self.numero_ticket}")
+        print(f"Ticket numéro : {self.lire_numero_ticket()}")
         print(f"Date : {self.generer_date()}")
         print(f"Vous avez été servi par : {self.caissier}\n")
         print("NB    Desc.             HT unitaire    TVA     Total")
@@ -45,6 +45,18 @@ class TicketDeCaisse:
     def generer_date(self):
         date_actuelle = datetime.datetime.now()
         return date_actuelle.strftime("%d/%m/%Y")
+
+    def lire_numero_ticket(self):
+        try:
+            with open("numero_ticket.txt", "r") as file:
+                numero_ticket = int(file.read())
+            with open("numero_ticket.txt", "w") as file:
+                file.write(str(numero_ticket + 1))
+                return numero_ticket
+        except FileNotFoundError:
+            # Si le fichier n'existe pas, commencez avec le numéro 1
+            return 1
+
 
 if __name__ == "__main__":
     # Récupérer les paramètres de ligne de commande
