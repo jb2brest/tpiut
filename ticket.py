@@ -1,7 +1,6 @@
 from datetime import datetime
 from exceptions import EntreeVide
 import sys
-current_time = datetime.now()
 
 def argParser(argData:str):
     """
@@ -108,7 +107,7 @@ def ticketAff(ticket):
 
 
 if __name__ == "__main__":
-    
+    current_time = datetime.now()
     try:
         shopname=sys.argv[1]
         if shopname == "":
