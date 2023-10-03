@@ -17,32 +17,38 @@ Mainteant éxecuter le programme `BUT_Market_Lambert_Thiam_Chambry.py`
 
 Voici l'usage et un exemple après avoir éxécuter le programme, on nous demande les infos suivantes et dès que l'ont as finis on entre q pour imprimer notre ticket de caisse :
 
-`Code de l'article (ou 'q' pour quitter) :` C01
+`Code de l'article (ou 'q' pour quitter) :` D01
 
-`Description de l'article :` coca
+`Description de l'article :` Viande
 
-`Prix unitaire HT :` 5
+`Prix unitaire HT :` 15
 
 `Taux de TVA :` 10
 
-`Quantite :` 2
+`Poids/volume unitaire :` 2
 
-`Code de l'article (ou 'q' pour quitter) :` q
+`Poids/volume total :` 2
+
+`Origine :` Senegal
+
+`Quantite :` 1
+
+Code de l'article (ou 'q' pour quitter) : q
 
 BUT Market
 
-Ticket numéro: 2200
 
+Ticket numéro: 2200
 Date: 03/10/2023
 
 Vous avez été servi par: Mathis, Mballo, Antoine
 
-NB  Desc.                  HT unitaire  TVA   Total
+NB  Desc.  Pds/vol. unitaire  Pds/vol. total  Origine       HT unitaire  TVA   Total
 
-2   coca                   5.0          10.0% 11.0
+1   Viande 2              2                   Senegal       15.0         10.0% 16.5
 
-Total HT: 10.0€
+Total HT: 15.0€
 
-Total TVA: 1.0€
+Total TVA: 1.5€
 
-Total: 11.0€
+Total: 16.5€
