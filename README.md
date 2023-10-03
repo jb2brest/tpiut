@@ -72,5 +72,5 @@ articles = {
 
 ```python
 
-"C07": Article("C08", "Ricard", "1.5", 8, 10, "France")
+"C08": Article("C08", "Ricard", "1.5", 8, 10, "France")
 ```
