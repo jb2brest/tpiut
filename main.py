@@ -56,6 +56,26 @@ def get_products(products):
     return articles_quantites
 
 
+# On récupère la TVA du Pays
+def get_TVA_by_country(pays):
+    if pays in ["Lituanie", "Angleterre"]:
+        tva = 1.2
+        tva_affichage = "20%"
+    else:
+        tva = 1.1
+        tva_affichage = "10%"
+    return tva, tva_affichage
+
+
+# On récupère le poids du produit avec sa bonne unité
+def get_poids(poids_article, unite):
+    if unite == "g":
+        if poids_article >= 1000:
+            poids_article = poids_article / 1000
+            unite = "kg"
+    return poids_article, unite
+
+
 # On affiche les produits, au milieu du ticket
 def middle_ticket(article_quantite, total_HT, total_TVA):
     # On parcourt les différents articles, et on en déduit le prix et la description de celui-ci
@@ -64,22 +84,53 @@ def middle_ticket(article_quantite, total_HT, total_TVA):
         if code_article == "C01":
             description = "pack de coca"
             prix = 5
+            poids_volume = 2
+            unite = "kg"
+            origine = "Lituanie"
         elif code_article == "C02":
             description = "kit de pft"
             prix = 1
+            poids_volume = 1
+            unite = "kg"
+            origine = "Espagne"
         elif code_article == "C03":
             description = "pack Biscotte"
             prix = 2
+            poids_volume = 950
+            unite = "g"
+            origine = "France"
         elif code_article == "C04":
             description = "Café soluble"
             prix = 3
+            poids_volume = 250
+            unite = "g"
+            origine = "Roumanie"
         elif code_article == "C05":
             description = "Crackers"
             prix = 4
+            poids_volume = 125
+            unite = "g"
+            origine = "Angleterre"
+        elif code_article == "C06":
+            description = "Eau"
+            prix = 6
+            poids_volume = 1.5
+            unite = "L"
+            origine = "Suisse"
+        elif code_article == "C07":
+            description = "Pain"
+            prix = 1
+            poids_volume = 250
+            unite = "g"
+            origine = "France"
+
+        tva, tva_affichage = get_TVA_by_country(origine)
 
         # calcul prix avec et sans TVA de l'article
-        prix_article_avec_TVA = prix * quantite * 1.1
+        prix_article_avec_TVA = prix * quantite * tva
         prix_article_sans_TVA = prix * quantite
+        poids_total_article = poids_volume * quantite
+        new_poids_article, new_unite = get_poids(poids_total_article, unite)
 
         # calcul du coût total de la TVA de l'article
         TVA = prix_article_avec_TVA - prix_article_sans_TVA
@@ -88,10 +139,11 @@ def middle_ticket(article_quantite, total_HT, total_TVA):
         # calcul du coût total sans TVA de l'article
         total_HT += prix_article_sans_TVA
 
-        print(f"{quantite}\t{description}\t{round(prix, 2)}\t\t10%\t{round(prix_article_avec_TVA, 2)}€")
+        print(f"{quantite}\t{description}\t{poids_volume}{unite}\t\t\t{round(new_poids_article, 2)}{new_unite}\t\t{round(prix, 2)}\t\t{tva_affichage}\t{round(prix_article_avec_TVA, 2)}€")
     return total_HT, total_TVA
 
 
+# On affiche les infos de bas de ticket (TOTAL HT / TOTAL TVA / TOTAL)
 def footer_ticket(total_HT, total_TVA):
     print(f"\n                     TOTAL HT          {round(total_HT, 2)}€")
     print(f"                     TOTAL TVA         {round(total_TVA, 2)}€")
@@ -114,7 +166,7 @@ if __name__ == "__main__":
 
     top_header_ticket(nom_entreprise, nom_caissiere, numero_ticket)
 
-    print("NB\tDesc.\t\tHT unitaire\tTVA\tTotal")
+    print("NB\tDesc.\t\tpoids/volume unitaire\tpoids/volume total\HT unitaire\tTVA\tTotal")
 
     # python3 main.py “But Maket” “Lisa” “C01:10|C02:2|C03:5”
 
