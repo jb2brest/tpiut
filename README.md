@@ -21,7 +21,19 @@ Dans chaque article, on précise le Code_Article et le Nombre_article avec le ':
 Si je veux 6 pack de coca et 2 Crackers je ferai ceci : "C01:6|C05:2"
 
 # Execution du code
-![image info](code.png)
+![image info](exec.png)
+
+# Changer le prix produit - ajout produit - origine 
+Dans la fonction middle_ticket() que l'on peut voir ci-dessous. On a la possibilité modifier le prix correspondant.
+Si vous avez besoin d'un nouveau produit, ajouter ceci : 
+```py
+elif code_article == "CodeArticle":
+    description = "Votre description"
+    origine = ""
+    prix = 100 # changer le prix, si vous le souhaiter
+```
+
+![image info](mid.png)
 
 # Changer le prix produit - ajout produit
 Dans la fonction middle_ticket() que l'on peut voir ci-dessous. On a la possibilité modifier le prix correspondant.
@@ -32,4 +44,4 @@ elif code_article == "CodeArticle":
     prix = 100 # changer le prix, si vous le souhaiter
 ```
 
-![image info](article.png)
+![image info](mid.png)
