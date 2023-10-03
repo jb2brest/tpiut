@@ -2,18 +2,20 @@ import datetime
 import sys
 
 class Article:
-    def __init__(self, code, description, prix_ht, tva):
+    def __init__(self, code, description, poids_volume_unitaire, prix_ht, tva, origine):
         self.code = code
         self.description = description
+        self.poids_volume_unitaire = poids_volume_unitaire
         self.prix_ht = prix_ht
         self.tva = tva
+        self.origine = origine
 
 class TicketDeCaisse:
-    def __init__(self, magasin, caissier):
+    def __init__(self, magasin, caissier, numero_ticket):
         self.magasin = magasin
         self.caissier = caissier
         self.articles = []
-        self.numero_ticket = 2000
+        self.numero_ticket = numero_ticket
 
     def ajouter_article(self, article, quantite):
         self.articles.append((article, quantite))
@@ -23,10 +25,10 @@ class TicketDeCaisse:
         total_tva = 0
 
         print(f"{self.magasin}")
-        print(f"Ticket numéro : {self.lire_numero_ticket()}")
+        print(f"Ticket numéro : {self.numero_ticket}")
         print(f"Date : {self.generer_date()}")
         print(f"Vous avez été servi par : {self.caissier}\n")
-        print("NB    Desc.             HT unitaire    TVA     Total")
+        print("NB    Desc.             Poids/volume unitaire    Poids/volume total    HT unitaire    TVA     Total")
 
         for article, quantite in self.articles:
             montant_ht = article.prix_ht * quantite
@@ -34,7 +36,7 @@ class TicketDeCaisse:
             total_ht += montant_ht
             total_tva += montant_tva
 
-            print(f"{quantite}     {article.description}      {article.prix_ht}€              {article.tva}%      {montant_ht + montant_tva}€")
+            print(f"{quantite}   {article.description}                  {article.poids_volume_unitaire}kg               {quantite * float(article.poids_volume_unitaire)}kg                {article.prix_ht}€         {article.tva}%      {montant_ht + montant_tva}€")
 
         print(f"\nTotal HT        {total_ht}€")
         print(f"Total TVA       {total_tva}€")
@@ -46,18 +48,6 @@ class TicketDeCaisse:
         date_actuelle = datetime.datetime.now()
         return date_actuelle.strftime("%d/%m/%Y")
 
-    def lire_numero_ticket(self):
-        try:
-            with open("numero_ticket.txt", "r") as file:
-                numero_ticket = int(file.read())
-            with open("numero_ticket.txt", "w") as file:
-                file.write(str(numero_ticket + 1))
-                return numero_ticket
-        except FileNotFoundError:
-            # Si le fichier n'existe pas, commencez avec le numéro 1
-            return 1
-
-
 if __name__ == "__main__":
     # Récupérer les paramètres de ligne de commande
     if len(sys.argv) != 4:
@@ -68,14 +58,23 @@ if __name__ == "__main__":
     caissier = sys.argv[2]
     commandes = sys.argv[3].split("|")
 
-    ticket = TicketDeCaisse(magasin, caissier)
+    # Lire le numéro de ticket depuis le fichier et l'incrémenter
+    with open("numero_ticket.txt", "r") as file:
+        numero_ticket = int(file.read())
+    numero_ticket += 1
+    with open("numero_ticket.txt", "w") as file:
+        file.write(str(numero_ticket))
+
+    ticket = TicketDeCaisse(magasin, caissier, numero_ticket)
 
     articles = {
-        "C01": Article("C01", "pack de coca", 5, 10),
-        "C02": Article("C02", "kilo de pdt", 1, 10),
-        "C03": Article("C03", "pack Biscotte", 2, 10),
-        "C04": Article("C04", "Cafe soluble",3, 10),
-        "C05": Article("C05", "Crackers",4, 10)
+        "C01": Article("C01", "pack de coca", "2", 5, 20, "Lituanie"),
+        "C02": Article("C02", "kilo de pdt", "1", 1, 10, "Espagne"),
+        "C03": Article("C03", "pack Biscotte", "0.950", 2, 10, "France"),
+        "C04": Article("C04", "Cafe soluble", "0.250", 3, 10, "Roumanie"),
+        "C05": Article("C05", "Crackers", "0.125", 4, 20, "Angleterre"),
+        "C06": Article("C06", "Eau", "1,5", 6, 10, "Suisse"),
+        "C07": Article("C07", "Pain", "0.250", 1, 10, "France")
         # Ajoutez d'autres articles ici si nécessaire
     }
 
