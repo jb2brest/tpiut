@@ -1,0 +1,16 @@
+But Maket
+Ticket Numéro : 2
+Date : 03/10/2023
+Vous avez été servi par : Lison
+NB			Desc			Pds/vol. unitaire			Pds/vol. total			Orig.			HT Unitaire			TVA			Total
+1			Kg de pdt			1.00Kg			1.00Kg			Espagne			1€			10.00%			1.00€
+2			eau			1.50L			3.00L			Suisse			6€			10.00%			12.00€
+2			pack de coca			2.00Kg			4.00Kg			Lituanie			5€			20.00%			10.00€
+1			café soluble			250.00g			250.00g			Roumanie			3€			10.00%			3.00€
+
+
+Total HT : 26.00 €
+
+Total TVA : 3.60 €
+
+Total : 29.60 €
