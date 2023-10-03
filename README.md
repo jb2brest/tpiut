@@ -2,7 +2,7 @@
 TP sur la gestion de projet niveau IUT
 
 # Récupération du Projet
-git clone <project>
+git clone <projet>
 
 # Code_Article Description              
 C01 "pack de coca"
