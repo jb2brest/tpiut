@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 class Article:
     def __init__(self, code, description, prix_ht, tva):
@@ -25,7 +26,7 @@ class TicketDeCaisse:
         print(f"Ticket numéro : {self.numero_ticket}")
         print(f"Date : {self.generer_date()}")
         print(f"Vous avez été servi par : {self.caissier}\n")
-       print("NB    Desc.             HT unitaire    TVA     Total")
+        print("NB    Desc.             HT unitaire    TVA     Total")
 
         for article, quantite in self.articles:
             montant_ht = article.prix_ht * quantite
@@ -42,23 +43,29 @@ class TicketDeCaisse:
         self.numero_ticket += 1
 
     def generer_date(self):
-        # Utilisez le module datetime pour obtenir la date actuelle au format DD/MM/YYYY
         date_actuelle = datetime.datetime.now()
         return date_actuelle.strftime("%d/%m/%Y")
 
 if __name__ == "__main__":
-    magasin = "But Market"
-    caissier = "Lisa"
+    # Récupérer les paramètres de ligne de commande
+    if len(sys.argv) != 4:
+        print("Usage: python3 main.py <magasin> <caissier> <commandes>")
+        sys.exit(1)
+
+    magasin = sys.argv[1]
+    caissier = sys.argv[2]
+    commandes = sys.argv[3].split("|")
+
     ticket = TicketDeCaisse(magasin, caissier)
 
     articles = {
         "C01": Article("C01", "pack de coca", 5, 10),
         "C02": Article("C02", "kilo de pdt", 1, 10),
         "C03": Article("C03", "pack Biscotte", 2, 10),
+        "C04": Article("C04", "Cafe soluble",3, 10),
+        "C05": Article("C05", "Crackers",4, 10)
         # Ajoutez d'autres articles ici si nécessaire
     }
-
-    commandes = ["C01:10", "C02:2"]
 
     for commande in commandes:
         code, quantite = commande.split(":")
