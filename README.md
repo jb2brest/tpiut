@@ -2,7 +2,7 @@
 ## Programme d'édition de ticket de caisse
 
 ### __Description :__
-Ceci est un programme permettant de générer un ticket de caisse en fonction des articles qu'on veut commander et leur quantité à partir d'une base de données pré-enrégistrés
+Ceci est un programme permettant de générer un ticket de caisse en fonction des articles qu'on veut commander et leur quantité à partir d'une base de données pré-enrégistrée.
 
 ### __Utilisation du programme :__
 Il est avant tout nécessaire que Python soit installé sur le système.
