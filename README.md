@@ -6,7 +6,7 @@ TP sur la gestion de projet niveau IUT
 Pour utiliser le programme, il faut se déplacer dans le bon dossier du programme
   cd /chemin
 
-Pour générer un ticket de caisse, exécutez le script `main.py` avec les arguments suivants :
+Pour générer un ticket de caisse, exécutez le script `G1-A1-lot1.py` avec les arguments suivants :
 
 python3 main.py "<nom_magasin>" "<nom_caissier>" "<num_qté_articles>"
 
@@ -32,7 +32,7 @@ Pour ajouter un article au programme :
       - "C06": {"description": "Cigarette", "prix_ht": 11},
 
 # Ajout d'un article pour le lot2
-
+exécutez le script `G1-A1-lot2.py`
 Pour ajouter un article au programme : 
   Aller dans la fonction BUT_Market 
     - Ensuite dans la variable "info_articles"
