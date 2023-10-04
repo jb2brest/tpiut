@@ -6,11 +6,15 @@ Ceci est un programme permettant de générer un ticket de caisse en fonction de
 
 ### __Utilisation du programme :__
 Il est avant tout nécessaire que Python soit installé sur le système.
-Une fois que cela est bon, éxecutez le fichier ___main.py___ via ligne de commandes ou tout autre types d'outils graphique le permettant.
+Une fois que cela est bon, éxecutez le fichier ___main.py___ via la ligne de commande suivante :
 
-Il vous suffit alors de renseigner la code de l'article que vous souhaité ainsi que la quantité souhaitée.
+```python
+python main.py "[Nom du Magasin]" "[Nom du caissier]" "[code article]:[quantité]|[code article suivante]:[quantité]"
+```
 
-Une fois que tous vos articles ont été renseignés, appuyer sur la touche __"q"__ puis __Entrée__ pour valider et afficher le Ticket final.
+Vous pouvez toujours précisez le nom du magasin en 1er paramètre et le nom du caissier en 2ème. Pour la liste des produits vous déclarer en premier le code de l'article ainsi que la quantité souhaitée en les séparants de deux points __":"__ . Vous pouvez rajouter autant d'articles que souhaités en les séparant avec un __" | "__
+
+Vous devriez alors avoir un ticket de caisse complet avec la liste de vos articles et les différents totaux.
 
 __<u> Tableau des articles déjà pré-enregistré :</u>__
 
@@ -23,24 +27,18 @@ __<u> Tableau des articles déjà pré-enregistré :</u>__
 Exemple d'exécution du code :
 
 ```console
-Code de l'article (ou 'q' pour quitter) : C01
-Quantite : 1
-Code de l'article (ou 'q' pour quitter) : C02
-Quantite : 3
-Code de l'article (ou 'q' pour quitter) : C03
-Quantite : 4
-Code de l'article (ou 'q' pour quitter) : q
+python main.py "BUT MARKET" "Lison" "C01:1|C02:3|C03:40"
 BUT MARKET
 Ticket numéro: 2200
 Date: 04/10/2023
-Vous avez été servi par: Lisa
+Vous avez été servi par: Lison
 
-NB  Desc.                  HT unitaire  TVA   Total
-1   pack de coca              5           10%    5.5
-3   kilo de pdt              1           10%    3.3
-4   pack Biscotte              2           10%    8.8
+NB  Desc.                  HT unitaire  TVA   Total    
+1   pack de coca              5           10%    5.5   
+3   kilo de pdt              1           10%    3.3    
+40   pack Biscotte              2           10%    88.0
 
-Total HT: 16€
-Total TVA: 1.6€
-Total: 17.6€
+Total HT: 88€
+Total TVA: 8.8€
+Total: 96.8€
 ```
