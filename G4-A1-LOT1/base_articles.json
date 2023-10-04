@@ -1,0 +1,11 @@
+{
+"base":[ 
+        {
+            "C01": ["Pack de Coca", 5],
+            "C02": ["Kilo de pdt", 1],
+            "C03": ["Pack de Biscottes", 2],
+            "C04": ["Cafe Soluble", 3],
+            "C05": ["Crackers", 4]
+        }
+    ]
+}
