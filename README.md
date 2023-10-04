@@ -33,6 +33,7 @@ Pour ajouter un article au programme :
 
 # Ajout d'un article pour le lot2
 exécutez le script `G1-A1-lot2.py`
+
 Pour ajouter un article au programme : 
   Aller dans la fonction BUT_Market 
     - Ensuite dans la variable "info_articles"
