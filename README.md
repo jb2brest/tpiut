@@ -46,3 +46,20 @@ Total: 96.8€
 ### __Nouvelles fonctionnalitées :__
 
 Nous avons rajouté au ticket le volume et le poids de chaque articles ainsi que le total. Le fonctionnement reste le même que la partie __Utilisation du programme__. Voici un exemple : 
+
+```console
+python3 .\main.py "BUT MARKET" "Lisa" "C01:1|C02:3|C03:4"
+BUT MARKET
+Ticket numéro: 2200
+Date: 04/10/2023
+Vous avez été servi par: Lisa
+
+NB  Desc.                  Poids/volume unitaire  Poids/volume total  HT unitaire  TVA   Total
+1   pack de coca                  2kg                     2kg             5€       20%    6.0€
+3   kilo de pdt                   1kg                     3kg             1€       10%    3.3€
+4   pas Biscotte                  950g                    3800g           2€       10%    8.8€
+
+Total HT: 16.00€
+Total TVA: 2.10€
+Total: 18.10€
+```
