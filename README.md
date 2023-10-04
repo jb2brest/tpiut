@@ -42,3 +42,7 @@ Total HT: 88€
 Total TVA: 8.8€
 Total: 96.8€
 ```
+
+### __Nouvelles fonctionnalitées :__
+
+Nous avons rajouté au ticket le volume et le poids de chaque articles ainsi que le total. Le fonctionnement reste le même que la partie __Utilisation du programme__. Voici un exemple : 
