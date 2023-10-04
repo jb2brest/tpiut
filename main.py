@@ -47,4 +47,18 @@ if __name__ == "__main__":
 
     reception = Reception(magasin, ticket_id, date, caissier)
 
+    while True:
+        item_code = input("Code de l'article (ou 'q' pour quitter) : ")
+        if item_code.lower() == 'q':
+            break
+
+        item_description = input("Description de l'article : ")
+        item_prix = float(input("Prix unitaire HT : "))
+        item_tva = float(input("Taux de TVA (%) : "))
+
+        item = Item(item_code, item_description, item_prix, item_tva)
+        
+        Quantite = int(input("Quantite : "))
+        reception.ajout_item(item, Quantite)
+
     reception.afficher_reçu()
