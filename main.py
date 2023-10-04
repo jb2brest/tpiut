@@ -39,6 +39,8 @@ class Reception:
 
 if __name__ == "__main__":
     import datetime
+    import sys
+
 
      # Définition de la base de données des articles
     articles = [
@@ -49,12 +51,16 @@ if __name__ == "__main__":
         {"code": "C05", "description": "Crakers", "prix_unite": 4, "tva": 10},
     ]
 
-    magasin = "BUT MARKET"
+    # Définition des données d'entêtes du ticket
+    magasin = sys.argv[1:]
     ticket_id = 2200
     date = datetime.date.today().strftime("%d/%m/%Y")
-    caissier = "Lisa"
+    caissier = sys.argv[2:]
 
     reception = Reception(magasin, ticket_id, date, caissier)
+
+    item_1 = sys.argv[3:].split('|')
+    print(item_1)
 
     while True:
         item_code = input("Code de l'article (ou 'q' pour quitter) : ")
