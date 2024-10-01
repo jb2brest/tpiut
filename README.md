@@ -1,44 +1,90 @@
-# Documentation du Ticket de Caisse
+Générateur de Ticket de Caisse
 
-Ce script Python génère un ticket de caisse pour une transaction dans un magasin. Il prend en compte les articles commandés, calcule le total HT et TVA, puis génère un ticket avec tous les détails nécessaires.
+Ce projet est un simple générateur de ticket de caisse écrit en Python. Il permet de générer un ticket de caisse contenant des informations sur les articles achetés, y compris leur description, quantité, poids/volume unitaire et total, prix HT, TVA, et le total à payer.
+Prérequis
 
-## Utilisation
+    Python 3.x installé sur votre machine.
+    Le fichier numero_ticket.txt doit exister dans le même répertoire que le script pour suivre le numéro de ticket. S'il n'existe pas, un numéro de ticket par défaut de 2200 sera utilisé, et un nouveau fichier sera créé.
 
-Suivez ces étapes pour utiliser le script :
+Installation
 
-1. Assurez-vous que vous avez Python installé sur votre système.
+    Clonez ou téléchargez ce projet.
 
-2. Clonez ce dépôt Git ou téléchargez le fichier `ticket_caisse.py` sur votre ordinateur.
+    Assurez-vous d'avoir Python 3 installé en exécutant la commande suivante dans votre terminal :
 
-3. Exécutez le script en utilisant la commande suivante dans votre terminal avec les arguments suivant : nom du magasin, le nom du vendeur, et les articles commandés (au format Code article: Quantité, par exemple, "C01: 10, C02: 2"),  :
-
-```python
-python ticket_caisse.py "But Market" "Lisa" "C04:4|C02:2"
+```bash
+    python --version
 ```
+Placez-vous dans le répertoire contenant le script avec la commande :
 
+```bash
 
+    cd chemin/vers/le/repertoire
+```
+Usage
 
-5. Le ticket de caisse sera généré et affiché dans la console.
+Le script prend trois paramètres principaux :
 
-## Fonctionnement
+    Nom du magasin : le nom de votre magasin.
+    Nom du caissier : la personne qui vous a servi.
+    Liste des articles : une chaîne de caractères décrivant les articles achetés sous la forme code_article:quantité, séparée par des barres verticales | pour plusieurs articles.
 
-Le script utilise une classe `TicketCaisse` pour gérer la création du ticket. Voici comment cela fonctionne :
+Exemple de commande pour générer un ticket :
 
-- Le script demande d'abord le nom du magasin, le nom du caissier et les articles commandés à l'utilisateur.
+```bash
 
-- Il crée ensuite une instance de la classe `TicketCaisse` avec ces informations.
+python ton_script.py "BUT Market" "Lisa" "C01:1|C02:3|C03:4"
+```
+Explication :
 
-- La méthode `generer_ticket` de la classe calcule le total HT et TVA pour chaque article, puis affiche un ticket détaillé avec ces informations.
+    BUT Market : le nom du magasin.
+    Lisa : le nom de la personne qui vous a servi.
+    "C01:1|C02:3|C03:4" : la chaîne de caractères représentant les articles achetés, où :
+        C01:1 signifie que vous avez acheté 1 pack de coca.
+        C02:3 signifie que vous avez acheté 3 kilos de pommes de terre.
+        C03:4 signifie que vous avez acheté 4 packs de biscottes.
 
-- Les détails des articles sont obtenus à partir de la méthode `trouver_article_par_code`, qui simule une recherche d'article basée sur un code. Dans une application réelle, cela pourrait être remplacé par une requête à une base de données ou une liste d'articles.
+Résultat :
 
-## Ajout de produits
+Le programme générera un ticket de caisse avec tous les détails comme ci-dessous :
 
-Si vous souhaitez ajouter de nouveaux produits au script, vous pouvez le faire en modifiant la méthode `trouver_article_par_code` dans le fichier `ticket_caisse.py`. Ajoutez de nouvelles entrées au dictionnaire `articles` en utilisant le code de l'article comme clé et les détails de l'article comme valeur. Par exemple :
+BUT Market
+Ticket numéro : 2200
 
-```python
-articles = {
- # ...
- "C06": {"description": "Nouveau produit", "prix_ht": 10, "tva": 0.2},
- # ...
-}
+Date : 01/10/2048
+
+Vous avez été servi par : Lisa
+
+NB   Desc.            Poids/volume unitaire Poids/volume total   HT unitaire   TVA    Total
+1    pack de coca      2kg                   2kg                 5            20.00%  6.00 €
+3    kilo de pdt       1kg                   3kg                 1            10.00%  3.30 €
+4    pack Biscotte     950g                  3.8kg               2            10.00%  8.80 €
+
+Total HT                                      16.00 €
+Total TVA                                     2.10 €
+Total                                         18.10 €
+
+Gestion des erreurs
+
+Le script gère plusieurs erreurs possibles, dont :
+
+    Paramètres manquants : Si vous ne fournissez pas tous les paramètres, un message d'erreur s'affichera pour indiquer le format correct à utiliser.
+    Code d'article incorrect : Si un code d'article n'existe pas, un message d'erreur spécifique sera affiché.
+    Quantité incorrecte : Si la quantité n'est pas un entier positif, une erreur sera signalée.
+
+Exemple d'erreur :
+
+```bash
+
+python ton_script.py "BUT Market" "Lisa" "C01:-3|C02:3"
+```
+Cela renverra l'erreur suivante :
+
+rust
+
+Erreur : La quantité pour l'article C01 doit être un entier positif.
+
+Fonctionnalités supplémentaires
+
+    Suivi du numéro de ticket : Le script génère un ticket avec un numéro unique. Le numéro de ticket est incrémenté automatiquement et sauvegardé dans le fichier numero_ticket.txt après chaque génération de ticket.
+    Calcul automatique des poids et volumes : Le script gère aussi bien les kilogrammes (kg) que les litres (L) et les grammes (g), et calcule automatiquement le poids ou volume total en fonction de la quantité.
