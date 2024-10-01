@@ -6,6 +6,8 @@ Le premier est le nom du supermarché (Exemple : "BUT Market").
 Le deuxième est le nom du vendeur(Exemple :"Lisa").
 Le troisième paramètre on rentre les produits que l'on veut ajouter ainsi que leur nombre en vous référent au tableau ci dessous.
 
+![Image tableau](/tableau_produits.png "produits").
+
 Ne pas oublier de ce placer dans le dossier du programme avant de l'éxécuter.
 Exemple d'éxécution
 
