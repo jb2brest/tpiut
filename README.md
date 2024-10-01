@@ -19,7 +19,7 @@ Il est possible d'accumuler les produits en les séparants d'un "pip" (ALT GR 6)
 
 Ainsi tout d'abord il va falloir télécharger l'ensemble des fichiers ici présent.
 
-Pour ouvrir et exécuter le fichier vous pouvez utiliser le logiciel Visual Studio Code. 
+Pour ouvrir et exécuter le fichier vous pouvez utiliser le logiciel Visual Studio Code par exemple. 
 
 Il peut être téléchargé à l'aide de ce lien, bien choisir l'OS sur lequel est votre machine : https://code.visualstudio.com/download
 
