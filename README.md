@@ -13,7 +13,11 @@ Le troisième paramètre on rentre les produits que l'on veut ajouter ainsi que 
 
 ![Image tableau](/tableau_produits.png "produits").
 
-Ainsi tout d'abord il va falloir télécharger l'ensemble des fichiers ici présent. 
+Ainsi tout d'abord il va falloir télécharger l'ensemble des fichiers ici présent.
+
+Pour ouvrir le fichier vous pouvez utiliser le logiciel Visual Studio Code. 
+
+Il peut être téléchargé à l'aide de ce lien, bien choisir l'OS sur lequel est votre machine : https://code.visualstudio.com/download
 
 Dans les mêmes guillemets on commence par mettre le code de l'article et son nombre séparé de 2 points (:). Exemple: "C01:10"
 
