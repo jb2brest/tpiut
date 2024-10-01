@@ -24,9 +24,13 @@ Pour ouvrir et exécuter le fichier vous pouvez utiliser le logiciel Visual Stud
 Il peut être téléchargé à l'aide de ce lien, bien choisir l'OS sur lequel est votre machine : https://code.visualstudio.com/download
 
 Ensuite, ouvrir Visual Studio Code aller dans file en haut à gauche puis open folder et choisir le dossier dans lequel ce trouve les fichier téléchargés.
+
 Puis ouvrir un terminal en allant dans terminal en haut puis new terminal.
+
 Ne pas oublier de vérifier d'être bien placé dans le dossier ou ce trouve le programme avant de l'éxécuter à l'aide du chemin afficher dans le terminal.
+
 Si vous n'êtes pas au bonne endroit, vous pouvez exécuter la commande suivante : cd /le chemin du répertoire ou ce trouve les fichiers.
+
 Puis exécuter le programme avec la commande suivante: python3 .\main.py
 
 Exemple d'éxécution
