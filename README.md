@@ -1,10 +1,11 @@
 # tpiut
 TP sur la gestion de projet niveau IUT
-L'objectif du programme main.py est d'afficher un ticket de caisse.
+L'objectif du programme main.py est un systeme d'édition de ticket de caisse.
 Le programme prends 3 paramètres en entrés.
-Le premier est le nom du supermarché (exemple "BUT Market").
-Le deuxième est le nom du vendeur("Lisa").
-Le troisième est la référence du produit séparer par un pip("C01:10|C02:2").
+Le premier est le nom du supermarché (Exemple : "BUT Market").
+Le deuxième est le nom du vendeur(Exemple :"Lisa").
+Le troisième paramètre on rentre les produits que l'on veut ajouter ainsi que leur nombre en vous référent au tableau ci dessous.
+
 Ne pas oublier de ce placer dans le dossier du programme avant de l'éxécuter.
 Exemple d'éxécution
 
