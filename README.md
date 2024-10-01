@@ -7,4 +7,8 @@ Le deuxième est le nom du vendeur("Lisa").
 Le troisième est la référence du produit séparer par un pip("C01:10|C02:2").
 Ne pas oublier de ce placer dans le dossier du programme avant de l'éxécuter.
 Exemple d'éxécution
-python 3 main.py
+
+```python
+python3 .\main.py   "But Maket" "Lisa" "C01:10|C02:2" 
+
+```
