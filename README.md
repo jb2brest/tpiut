@@ -19,7 +19,7 @@ Dans les mêmes guillemets on commence par mettre le code de l'article et son no
 
 Il est possible d'accumuler les produits en les séparants d'un "pip" (ALT GR 6). Exemple: "C01:10|C03:3"
 
-Ne pas oublier de ce placer dans le dossier du programme avant de l'éxécuter.
+Ne pas oublier de vérifier d'être bien placé dans le dossier du programme avant de l'éxécuter.
 Exemple d'éxécution
 
 ```python
