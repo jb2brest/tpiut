@@ -12,3 +12,26 @@ Exemple d'éxécution
 python3 .\main.py   "But Maket" "Lisa" "C01:10|C02:2" 
 
 ```
+
+Résultat:
+```python
+But Maket
+Ticket numéro : 16 
+
+Date : 01/10/2024
+
+Vous avez été servi par : Lisa
+
++----+--------------+-------------+-----+-------+
+| NB | Desc.        | HT unitaire | TVA | Total |
++----+--------------+-------------+-----+-------+
+| 10 | pack de coca | 5           | 10% | 55.0  |
++----+--------------+-------------+-----+-------+
+| 2  | kilo de pdt  | 1           | 10% | 2.2   |
++----+--------------+-------------+-----+-------+
+                                  Total HT : 52 €
+                               Total TVA : 13.2 €
+                                   Total : 57.2 €
+```
+
+
