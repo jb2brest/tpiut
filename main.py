@@ -69,6 +69,9 @@ def parse_arguments() -> Namespace:
     parser.add_argument('-c', '--code_article', help='Code article')
     parser.add_argument('-d', '--description', help='Description')
     parser.add_argument('-p', '--price-ht', help='Price HT')
+    parser.add_argument('-tva', '--tva', help='TVA')
+    parser.add_argument('-w', '--weight', help='Weight of the product in kg')
+    parser.add_argument('-u', '--unit', help='Unit of the product')
     parser.add_argument('-n', '--name', help='Name of the person')
     parser.add_argument('-m', '--marcket', help='Name of the marcket')
     parser.add_argument('-i', '--items', help='Items')
@@ -202,14 +205,16 @@ def main() -> None:
     item_manager: ItemManager = ItemManager()
 
     if args.add: # Add an article
-        if not args.code_article or not args.description or not args.price_ht: # Verify if all arguments are present
+        if not args.code_article or not args.description or not args.price_ht and args.weight and args.unit and args.tva: # Verify if all arguments are present
             print('Missing arguments: code_article, description, price_ht')
             return
         item: dict = { # Creation of the item
             'code_article': args.code_article,
             'description': args.description,
             'price_ht': args.price_ht,
-            'tva': 10 # TVA by default
+            'tva': args.tva,
+            'weight': args.weight,
+            'unit': args.unit
         }
         item_manager.add_item(item) # Add the item to the list
 
@@ -223,9 +228,9 @@ def main() -> None:
             print(f'Item {args.code_article} not found')
 
     elif args.list: # List all articles
-        print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
+        print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5} | {'Weight:':<5}') # Show the header
         for item in item_manager.get_items():
-            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10}  | {f'{item["tva"]} %':<5}') # Show the item
+            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10} | {f'{item["tva"]} %':<5} | {f'{item["weight"]} {item["unit"]}':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
         if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
