@@ -48,7 +48,7 @@ Usage
 # == Standard Imports ==
 from os import path
 from json import load, dump
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from datetime import date
 
 # == Third-Party Imports ==
@@ -61,12 +61,21 @@ from datetime import date
 nb_ticket = 0
 
 # ===== Functions =====
-def parse_arguments() -> None:
+def parse_arguments() -> Namespace:
     """Parse the command line arguments
     """
     parser: ArgumentParser = ArgumentParser()
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-a', '--add', help='Add an item', action='store_true')
+    group.add_argument('-r', '--remove', help='Remove an item', action='store_true')
+    group.add_argument('-l', '--list', help='List all items', action='store_true')
 
-    pars
+    parser.add_argument('-c', '--code_article', help='Code article')
+    parser.add_argument('-d', '--description', help='Description')
+    parser.add_argument('-p', '--price-ht', help='Price HT')
+
+    return parser.parse_args()
+
 
 def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
     """
@@ -114,11 +123,30 @@ class ItemManager:
 
     def get_items(self) -> list[dict]:
         """Get the items list
+
+        Returns:
+            list[dict]: The items list
         """
         return self._items
 
+    def _get_specific_item(self, code_article: str) -> dict:
+        """Get a specific item by its code
+
+        Args:
+            code_article (str): The code of the item
+
+        Returns:
+            dict: The item
+        """
+        for item in self._items:
+            if item['code_article'] == code_article:
+                return item
+
     def add_item(self, item: dict) -> None:
         """Add an item to the items list
+
+        Args:
+            item (dict): The item to add
         """
         self._items.append(item)
         self._save_items()
@@ -134,6 +162,29 @@ class ItemManager:
 def main() -> None:
     """Entry point
     """
+    args: Namespace = parse_arguments()
+    item_manager: ItemManager = ItemManager()
+
+    if args.add: # Add an article
+        if not args.code_article or not args.description or not args.price_ht: # Verify if all arguments are present
+            print('Missing arguments: code_article, description, price_ht')
+            return
+        item: dict = { # Creation of the item
+            'code_article': args.code_article,
+            'description': args.description,
+            'price_ht': args.price_ht
+        }
+        item_manager.add_item(item) # Add the item to the list
+
+    elif args.remove: # Remove an article
+        for item in item_manager.get_items():
+            if item['code_article'] == args.code_article: # Verify if the item exists
+                item_manager.remove_item(item) # Delete the item
+
+    elif args.list: # List all articles
+        print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10}') # Show the header
+        for item in item_manager.get_items():
+            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10}') # Show the item
 
 if __name__ == '__main__':
     main()
