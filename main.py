@@ -86,7 +86,7 @@ def decrypt_product(item_manager,arg1:str)->str:
     for product in products:
         product_id, product_number = product.split(':')
         item = item_manager.get_specific_item(product_id)
-        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['weight']}Kg':<14} {f'{item['weight']*product_number}Kg':<11} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
+        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['weight']}{item['unit']}':<14} {f'{item['weight']*product_number}{item['unit']}':<11} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
     return products_strings
 
 def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
