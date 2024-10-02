@@ -24,8 +24,8 @@ def ParseArgs(arguments: list) -> tuple:
 			magasin = arguments[1]
 			caisiere = arguments[2]
 			liste_produits = str(arguments[3]).split("|")
-		except TypeError as e:
-			print(f"ERREUR: Entrées de mauvais type ({e})")
+		except IndexError as e:
+			error = True
 
 		try:
 			dict_produits = {}
@@ -101,6 +101,7 @@ magasin: str
 caisiere: str
 dict_produits: dict
 nb_ticket: int
+not_such_item_error: bool
 
 # Définition des variables
 items = {}
@@ -131,15 +132,22 @@ except : # Si le fichier n'existe pas on l'ajoute
 # Récupération des paramètres
 USAGE = "Utilisation: python main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]"
 arguments = sys.argv
+not_such_item_error = False
 
 # Contrôle de la saisie et retour des variables
 error, magasin, caisiere, dict_produits = ParseArgs(arguments=arguments)
 
 if not error:
-    Visuel(market_name=magasin, cashier=caisiere, basket=dict_produits, catalogue=items, num_ticket=nb_ticket)
+	for key in dict_produits.keys():
+		if key not in items.keys():
+			not_such_item_error = True
+			print(f"ERREUR: Identifiant {key} inexistant dans la base de données CSV.")
+
+	if not not_such_item_error:
+		Visuel(market_name=magasin, cashier=caisiere, basket=dict_produits, catalogue=items, num_ticket=nb_ticket)
 
     # Incrémentation du numéro de ticket
-    with open('data/nb_ticket', 'w') as file:
-        file.write(str(nb_ticket))
+	with open('data/nb_ticket', 'w') as file:
+		file.write(str(nb_ticket))
 else:
 	print(USAGE)
