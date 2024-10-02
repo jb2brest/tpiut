@@ -20,7 +20,7 @@ python3 main.py -a -c "Code article" -d "Description" -p "Prix"
 
 Celui-ci sera ajouté à la base de données. (Fichier `items.json`)
 
-Example:
+Exemple:
 
 ```console
 # Ajout d'un item qui n'existe pas encore
@@ -47,7 +47,7 @@ python3 main.py -d -c "Code article"
 
 Celui-ci sera supprimé de la base de données. (Fichier `items.json`)
 
-Example:
+Exemple:
 
 ```console
 # Suppression d'un item qui existe
@@ -69,7 +69,7 @@ Pour lister les items, il faut executer la commande suivante :
 python3 main.py -l
 ```
 
-Example:
+Exemple:
 
 ```console
 python3 main.py -l
@@ -83,11 +83,18 @@ C05             | Crackers                       | 4.0 euros   | 10 %
 ```
 ## Création d'un ticket
 
-Pour créé un nouveau ticket il faut utiliser l'option -t
+Pour créé un nouveau ticket, il faut executer la commande suivante :
+```console
+main.py -t -n "nom_caissier" -m "nom_magasin" -i "id_produit1:quantité|id_produit2:quantité|..."
+```
 
-Cette option demande de présiser le nom de l'employer avec -n, le nom du magasin avec -m et la liste des produits avec leur nombre dans le format "id_produit1:nb_produit1|id_produit2:nb_produit2" avec le -i
+* `-t` : Permet de créé un ticket
+* `-n` : Permet d'indiqué le caissier qui à servis le client
+* `-m` : Permet d'indiqué le magasin où l'achat à été éffectuer
+* `-i` : Permet d'indiqué les produits acheté et leur quantités
 
-Example:
+Exemple:
+
 ```console
 main.py -t -n "Alexis" -m "IUT Lannion" -i "C01:2|C04:4"
 IUT Lannion
