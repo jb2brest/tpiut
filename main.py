@@ -9,14 +9,16 @@ def ParseArgs(arguments: list) -> tuple:
     @return: tuple -> un tuple avec le nom du magasin, le nom de la caisière et la quantité de chaque item
     """
     # Initialisation des variables
-    magasin: str
-    caisiere: str
-    liste_produits: List[str]
-    dict_produits: Dict[str]
+    magasin: str = ""
+    caisiere: str = ""
+    liste_produits: List[str] = []
+    dict_produits: Dict[str] = {}
+    error: bool = False
 
     if len(arguments) < 3:
         # Contrôle du nombre d'arguments dans la saisie utiliisateur
         print(USAGE)
+        error = True
     else:
         try:
             magasin = arguments[1]
@@ -24,14 +26,18 @@ def ParseArgs(arguments: list) -> tuple:
             liste_produits = str(arguments[3]).split("|")
         except TypeError as e:
             print(f"ERREUR: Entrées de mauvais type ({e})")
+        
+        try:
+            dict_produits = {}
+            for item in liste_produits:
+                reference = str(item).split(":")[0]
+                quantite = str(item).split(":")[1]
+                dict_produits[reference] = quantite
+        except IndexError as e:
+            print(USAGE)
+            error = True
 
-        dict_produits = {}
-        for item in liste_produits:
-            reference = str(item).split(":")[0]
-            quantite = str(item).split(":")[1]
-            dict_produits[reference] = quantite
-
-    return magasin, caisiere, dict_produits
+    return error, magasin, caisiere, dict_produits
 
 # Déclaration des variables
 USAGE: str
@@ -53,8 +59,9 @@ USAGE = "Utilisation: python main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF
 arguments = sys.argv
 
 # Contrôle de la saisie et retour des variables
-magasin, caisiere, dict_produits = ParseArgs(arguments=arguments)
+error, magasin, caisiere, dict_produits = ParseArgs(arguments=arguments)
 
-print(magasin)
-print(caisiere)
-print(dict_produits)
+if not error:
+    print(magasin)
+    print(caisiere)
+    print(dict_produits)
