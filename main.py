@@ -59,36 +59,36 @@ def parse_arguments() -> Namespace:
 
     parser.add_argument('-c', '--code_article', help='Code article')
     parser.add_argument('-d', '--description', help='Description')
-    parser.add_argument('-p', '--price-ht', help='Price HT')
+    parser.add_argument('-p', '--price-ht', type=float, help='Price HT')
 
     return parser.parse_args()
 
 
-def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
-    """
-    This function prints the ticket with the given arguments
-    arg1 => Name of the marcket
-    arg2 => Name of the person
-    arg3 => Id and Number of items
-    arg4 => tuple of the total of the ticket
-    """
-    marcket_name :str = arg1
-    person_name : str = arg2
-    ticket :str = f"""{marcket_name}
-Ticket numéro :{nb_ticket}
+# def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
+#     """
+#     This function prints the ticket with the given arguments
+#     arg1 => Name of the marcket
+#     arg2 => Name of the person
+#     arg3 => Id and Number of items
+#     arg4 => tuple of the total of the ticket
+#     """
+#     marcket_name :str = arg1
+#     person_name : str = arg2
+#     ticket :str = f"""{marcket_name}
+# Ticket numéro :{nb_ticket}
 
-Date : {date.date()}
+# Date : {date.date()}
 
-Vous avez été servi par : {person_name}
+# Vous avez été servi par : {person_name}
 
-NB	Desc.			HT unitaire 	TVA	Total
-{arg3}
-                                Total HT
-                                Total TVA
-                                Total
-    """
-    print(ticket)
-print_ticket("Carrefour","Jean","1x Pomme 1.5 0.2 1.8")
+# NB	Desc.			HT unitaire 	TVA	Total
+# {arg3}
+#                                 Total HT
+#                                 Total TVA
+#                                 Total
+#     """
+#     print(ticket)
+# print_ticket("Carrefour","Jean","1x Pomme 1.5 0.2 1.8")
 # ===== Classes =====
 class ItemManager:
     """Class for managing items
@@ -135,7 +135,11 @@ class ItemManager:
         Args:
             item (dict): The item to add
         """
-        self._items.append(item)
+        if not self._get_specific_item(item['code_article']):
+            self._items.append(item)
+            print(f'Added item {item["code_article"]}')
+        else:
+            print(f'Item {item["code_article"]} already exists')
         self._save_items()
 
     def remove_item(self, item: dict) -> None:
@@ -159,7 +163,8 @@ def main() -> None:
         item: dict = { # Creation of the item
             'code_article': args.code_article,
             'description': args.description,
-            'price_ht': args.price_ht
+            'price_ht': args.price_ht,
+            'tva': 10 # TVA by default
         }
         item_manager.add_item(item) # Add the item to the list
 
@@ -167,11 +172,15 @@ def main() -> None:
         for item in item_manager.get_items():
             if item['code_article'] == args.code_article: # Verify if the item exists
                 item_manager.remove_item(item) # Delete the item
+                print(f'Removed item: {args.code_article}')
+                break
+        else:
+            print(f'Item {args.code_article} not found')
 
     elif args.list: # List all articles
-        print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10}') # Show the header
+        print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
         for item in item_manager.get_items():
-            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10}') # Show the item
+            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10} euros | {f'{item["tva"]} %':<5}') # Show the item
 
 if __name__ == '__main__':
     main()
