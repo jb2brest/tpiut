@@ -45,7 +45,8 @@ from datetime import date
 
 
 # ===== Constant =====
-nb_ticket = 0
+with open('ticket_number.txt', 'r') as ticket_file:
+    nb_ticket = ticket_file.read()
 
 # ===== Functions =====
 def parse_arguments() -> Namespace:
@@ -56,39 +57,44 @@ def parse_arguments() -> Namespace:
     group.add_argument('-a', '--add', help='Add an item', action='store_true')
     group.add_argument('-r', '--remove', help='Remove an item', action='store_true')
     group.add_argument('-l', '--list', help='List all items', action='store_true')
+    group.add_argument('-t', '--ticket', help='Print a ticket', action='store_true')
 
     parser.add_argument('-c', '--code_article', help='Code article')
     parser.add_argument('-d', '--description', help='Description')
     parser.add_argument('-p', '--price-ht', type=float, help='Price HT')
+    parser.add_argument('-n', '--name', help='Name of the person')
+    parser.add_argument('-m', '--marcket', help='Name of the marcket')
+    parser.add_argument('-i', '--items', help='Items')
 
     return parser.parse_args()
 
 
-# def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
-#     """
-#     This function prints the ticket with the given arguments
-#     arg1 => Name of the marcket
-#     arg2 => Name of the person
-#     arg3 => Id and Number of items
-#     arg4 => tuple of the total of the ticket
-#     """
-#     marcket_name :str = arg1
-#     person_name : str = arg2
-#     ticket :str = f"""{marcket_name}
-# Ticket numéro :{nb_ticket}
+def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
+    """
+    This function prints the ticket with the given arguments
+    arg1 => Name of the marcket
+    arg2 => Name of the person
+    arg3 => Id and Number of items
+    arg4 => tuple of the total of the ticket
+    """
+    marcket_name :str = arg1
+    person_name : str = arg2
+    ticket :str = f"""{marcket_name}
+Ticket numéro :{nb_ticket}
 
 # Date : {date.date()}
 
 # Vous avez été servi par : {person_name}
 
-# NB	Desc.			HT unitaire 	TVA	Total
-# {arg3}
-#                                 Total HT
-#                                 Total TVA
-#                                 Total
-#     """
-#     print(ticket)
-# print_ticket("Carrefour","Jean","1x Pomme 1.5 0.2 1.8")
+NB	Desc.			HT unitaire 	TVA	Total
+{arg3}
+                                Total HT : {arg4[0]}
+                                Total TVA : {arg4[1]}
+                                Total : {arg4[2]}
+    """
+    with open('ticket_number.txt', 'w') as ticket_file:
+        ticket_file.write(str(int(nb_ticket)+1))
+    print(ticket)
 # ===== Classes =====
 class ItemManager:
     """Class for managing items
@@ -116,7 +122,7 @@ class ItemManager:
         """
         return self._items
 
-    def _get_specific_item(self, code_article: str) -> dict:
+    def get_specific_item(self, code_article: str) -> dict:
         """Get a specific item by its code
 
         Args:
@@ -181,6 +187,16 @@ def main() -> None:
         print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
         for item in item_manager.get_items():
             print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10} euros | {f'{item["tva"]} %':<5}') # Show the item
+
+    elif args.ticket: # Print a ticket
+        product = decrypt_product(item_manager,args.items)
+        total = total(item_manager,args.items)
+        print_ticket(args.marcket, args.name, product, total)
+
+    elif args.ticket: # Print a ticket
+        product = decrypt_product(item_manager,args.items)
+        total = total(item_manager,args.items)
+        print_ticket(args.marcket, args.name, product, total)
 
 if __name__ == '__main__':
     main()
