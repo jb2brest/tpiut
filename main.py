@@ -130,14 +130,10 @@ arguments = sys.argv
 
 # Contrôle de la saisie et retour des variables
 error, magasin, caisiere, dict_produits = ParseArgs(arguments=arguments)
-# 
-# if not error:
-#     print(magasin)
-#     print(caisiere)
-#     print(dict_produits)
 
-Visuel(market_name=magasin, cashier=caisiere, basket=dict_produits, catalogue=items, num_ticket=nb_ticket)
+if not error:
+    Visuel(market_name=magasin, cashier=caisiere, basket=dict_produits, catalogue=items, num_ticket=nb_ticket)
 
-# Incrémentation du numéro de ticket
-with open('data/nb_ticket', 'w') as file:
-	file.write(str(int(nb_ticket) + 1))
+    # Incrémentation du numéro de ticket
+    with open('data/nb_ticket', 'w') as file:
+        file.write(str(int(nb_ticket) + 1))
