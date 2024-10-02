@@ -228,12 +228,15 @@ def main() -> None:
             print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10}  | {f'{item["tva"]} %':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
-        if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
-            print('Missing arguments: items, name, marcket')
-            return
-        product = decrypt_product(item_manager,args.items)
-        total = calculate_total(args.items, item_manager)
-        print_ticket(args.marcket, args.name, product, total)
+        try :
+            if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
+                print('Missing arguments: items, name, marcket')
+                return
+            product = decrypt_product(item_manager,args.items)
+            total = calculate_total(args.items, item_manager)
+            print_ticket(args.marcket, args.name, product, total)
+        except :
+            print("Error in the arguments")
 
 if __name__ == '__main__':
     main()
