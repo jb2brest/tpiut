@@ -89,7 +89,7 @@ def decrypt_product(item_manager,arg1:str)->str:
     for product in products:
         product_id, product_number = product.split(':')
         item = item_manager.get_specific_item(product_id)
-        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
+        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['weight']}{item['unit']}':<14} {f'{item['weight']*product_number}{item['unit']}':<11} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
     return products_strings
 
 def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
@@ -127,11 +127,11 @@ Date : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 Vous avez été servi par : {person_name}
 
-NB	Desc.			HT unitaire 	TVA	Total
+NB	Desc.			poid unitaire poid total HT unitaire 	TVA	Total
 {arg3}
-                                                Total HT : {arg4[0]}
-                                                Total TVA : {arg4[1]}
-                                                Total : {arg4[2]}
+                                                    Total HT : {arg4[0]}
+                                                    Total TVA : {arg4[1]}
+                                                    Total :     {arg4[2]}
     """
     with open('ticket_number.txt', 'w', encoding='utf-8') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
@@ -233,12 +233,15 @@ def main() -> None:
             print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10} | {f'{item["tva"]} %':<5} | {f'{item["weight"]} {item["unit"]}':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
-        if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
-            print('Missing arguments: items, name, marcket')
-            return
-        product = decrypt_product(item_manager,args.items)
-        total = calculate_total(args.items, item_manager)
-        print_ticket(args.marcket, args.name, product, total)
+        try :
+            if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
+                print('Missing arguments: items, name, marcket')
+                return
+            product = decrypt_product(item_manager,args.items)
+            total = calculate_total(args.items, item_manager)
+            print_ticket(args.marcket, args.name, product, total)
+        except :
+            print("Error in the arguments")
 
 if __name__ == '__main__':
     main()
