@@ -7,6 +7,8 @@ Pour créer un ticket de caisse avec ce nouvel outil, vous devez tout d'abord t�
 git clone https://github.com/jb2brest/tpiut.git
 ```
 
+Si la commande <code>git</code> est indisponible, vous pouvez l'installer à partir d'<a href="https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git">ici</a>.
+
 Ensuite, déplacez vous dans le dossier du projet et changez de branche Git avec les commandes suivantes:
 ```
 cd 2024-tpiut
@@ -18,4 +20,16 @@ Si ce n'est pas le cas, recommencez les étapes présédentes.
 
 ## Utilisation de l'outil
 
+L'utilisation se fait avec python3, si la version n'est pas installée sur votre ordinateur veuillez l'installer <a href="https://www.python.org/downloads/release/python-3127/">ici</a>.
 
+Une fois installée, vous pouvez lancez le programme avec la commande suivante, en adaptant les paramètres:
+```
+python3 main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]
+```
+
+Exemple d'utilisation:
+```
+python3 main.py “But Maket” “Lisa” “C01:10|C02:2”
+```
+
+Exemple de résultat de la commande

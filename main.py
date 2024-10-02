@@ -55,7 +55,7 @@ items = {"C01": ["Pack de coca", 5],
          }
 
 # Récupération des paramètres
-USAGE = "Utilisation: python main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]"
+USAGE = "Utilisation: python3 main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]"
 arguments = sys.argv
 
 # Contrôle de la saisie et retour des variables
