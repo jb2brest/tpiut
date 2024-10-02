@@ -32,3 +32,29 @@ NB       Desc.                HT unitaire     TVA      Total
                                             Total       57.2€
 
 *NB : Vous n'êtes pas limité à 2 produits*
+
+**Pour ajouter un produit**
+
+Appelez la fonction ajouter_produits dans un terminal avec les arguments ci-dessous
+Les arguments sont :
+- id 
+- description
+- poids
+- prix hors taxes
+- TVA
+
+**exemple**
+
+ajouter_produit('C08','Chocolat',125g,3,20)
+
+cela ajoutera dans la liste la dernière ligne
+
+Code article         Description          poids/volume         Prix unitaire HT       TVA
+C01                  pack de coca         2kg                  5                      20 %
+C02                  kilo de pdt          1kg                  1                      10 %
+C03                  pack Biscotte        950g                 2                      10 %
+C04                  Café soluble         250g                 3                      10 %
+C05                  Crackers             125g                 4                      20 %
+C06                  Eau                  1,5L                 6                      10 %
+C07                  Pain                 250g                 1                      10 %
+C08                  Chocolat             125g                 3                      20 %
