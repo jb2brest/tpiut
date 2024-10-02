@@ -2,8 +2,13 @@
 
 ## Table des matières
 
-## Gestion des items
+* [Gestion des items](#gestion-des-items)
+  * [Ajouter un item](#ajouter-un-item)
+  * [Supprimer un item](#supprimer-un-item)
+  * [Lister les items](#lister-les-items)
+* [Création d'un ticket](#création-dun-ticket)
 
+## Gestion des items
 
 ### Ajouter un item
 
@@ -77,16 +82,20 @@ Exemple:
 ```console
 python3 main.py -l
 
-Code article    | Description                    | Price HT   | TVA:
-C02             | kilo de pdt                    | 1 euros     | 10 %
-C01             | pack de coca                   | 5.0 euros   | 10 %
-C03             | pack Biscotte                  | 2.0 euros   | 10 %
-C04             | Café soluble                   | 3.0 euros   | 10 %
-C05             | Crackers                       | 4.0 euros   | 10 %
+Code article    | Description                    | Price HT   | TVA:  | Weight:
+C02             | kilo de pdt                    | 1 euros    | 10 %  | 1 kg
+C01             | pack de coca                   | 5.0 euros  | 20 %  | 2 kg
+C03             | pack Biscotte                  | 2.0 euros  | 10 %  | 0.95 kg
+C04             | Café soluble                   | 3.0 euros  | 10 %  | 0.25 kg
+C05             | Crackers                       | 4.0 euros  | 20 %  | 0.125 kg
+C07             | Pain                           | 1 euros    | 10 %  | 0.250 Kg
+C06             | Eau                            | 6 euros    | 10 %  | 1.5 L
 ```
+
 ## Création d'un ticket
 
 Pour créé un nouveau ticket, il faut executer la commande suivante :
+
 ```console
 main.py -t -n "nom_caissier" -m "nom_magasin" -i "id_produit1:quantité|id_produit2:quantité|..."
 ```
@@ -107,11 +116,23 @@ Date : 02/10/2024 10:18:51
 
 Vous avez été servi par : Alexis
 
-NB      Desc.                   HT unitaire     TVA     Total
-2       pack de coca            5.0 €           10%     12.0€
-4       Café soluble            3.0 €           10%     14.4€
+IUT Lannion
+Ticket numéro :50
 
-                                                Total HT : 22.0
-                                                Total TVA : 4.4
-                                                Total : 26.4
+Date : 02/10/2024 11:28:20
+
+Vous avez été servi par : Alexis
+
+NB      Desc.                   Poid unitaire   Poid total  Prix HT unitaire    TVA     Total
+2       pack de coca            2kg             4.0kg       5.0 €               20%     12.0€
+4       kilo de pdt             1kg             4.0kg       1 €                 10%     4.4€
+12      pack Biscotte           0.95kg          11.4kg      2.0 €               10%     26.4€
+1       Café soluble            0.25kg          0.25kg      3.0 €               10%     3.3€
+12      Crackers                0.125kg         1.5kg       4.0 €               20%     57.6€
+42      Eau                     1.5L            63.0L       6 €                 10%     277.2€
+2       Pain                    0.250Kg         0.5Kg       1 €                 10%     2.2€
+
+                                                                                 Total HT : 343.0
+                                                                                 Total TVA : 40.1
+                                                                                 Total :     383.1
 ```
