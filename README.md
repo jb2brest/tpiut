@@ -40,13 +40,13 @@ Exemple de résultat de la commande
 
 Pour ajouter un produit vous devez modifier le fichier présent dans le dossier "data/produits.csv" en rajoutant une ligne sous la forme:
 ```csv
-Nom produit,Référence,Prix,TVA
+Nom produit,Référence,Prix,TVA,Poids
 ```
 
 Exemple:
 ```
-Pack de coca,C01,5;0.2
-Kilo de pomme de terre,C02,1,0.1
+Pack de coca,C01,5,0.2,2kg;
+Kilo de pomme de terre,C02,1,0.1,1kg
 ```
 
 NOTE: Si deux produits possèdent la même référence, vous aurez un warning de ce type à l'éxécution du programme:
