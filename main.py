@@ -9,6 +9,8 @@ History
 
 - 02/10/2024, Alexis P.: Gestion des articles
 - 02/10/2024, Malo J.: Impression des tickets
+- 02/10/2024, Alexis P.: Ajout de la TVA, du poids et de l'unité
+- 02/10/2024, Malo J.: Modification du ticket avec les nouvelles informations
 
 ***************
 Description
@@ -18,7 +20,8 @@ Script for creating Receipts and managing items
 ***************
 Usage
 ***************
-usage: main.py [-h] (-a | -r | -l | -t) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT] [-n NAME] [-m MARCKET] [-i ITEMS]
+usage: main.py [-h] (-a | -r | -l | -t) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT] [-tva TVA] [-w WEIGHT] [-u UNIT] [-n NAME] [-m MARCKET]
+               [-i ITEMS]
 
 options:
   -h, --help            show this help message and exit
@@ -32,12 +35,17 @@ options:
                         Description
   -p PRICE_HT, --price-ht PRICE_HT
                         Price HT
+  -tva TVA, --tva TVA   TVA
+  -w WEIGHT, --weight WEIGHT
+                        Weight of the product in kg
+  -u UNIT, --unit UNIT  Unit of the product
   -n NAME, --name NAME  Name of the person
   -m MARCKET, --marcket MARCKET
                         Name of the marcket
   -i ITEMS, --items ITEMS
                         Items
 """
+# pylint: disable=all
 # ===== Imports =====
 # == Standard Imports ==
 from os import path
@@ -53,7 +61,7 @@ from datetime import datetime
 
 # ===== Constant =====
 with open('ticket_number.txt', 'r', encoding='utf-8') as ticket_file:
-    nb_ticket = ticket_file.read()
+    nb_ticket = ticket_file.read() # Retrieve the ticket number
 
 # ===== Functions =====
 def parse_arguments() -> Namespace:
@@ -86,14 +94,14 @@ def decrypt_product(item_manager,arg1:str)->str:
     """
     products = arg1.split('|')
     products_strings = ""
-    for product in products:
-        product_id, product_number = product.split(':')
+    for product in products: # For each product
+        product_id, product_number = product.split(':') # Split the product id and the number of items
         item = item_manager.get_specific_item(product_id)
-        weight_unit = f"{item['weight']}{item['unit']}"
-        total_weight = f"{round(float(item['weight']) * int(product_number), 2)}{item['unit']}"
-        price_ht = f"{item['price_ht']} €"
-        tva = f"{item['tva']}%"
-        total_price = f"{round(float(item['price_ht']) * (1 + float(item['tva']) / 100) * int(product_number), 2)}€"
+        weight_unit = f"{item['weight']}{item['unit']}" # Weight and unit of the product
+        total_weight = f"{round(float(item['weight']) * float(product_number), 2)}{item['unit']}" # Total weight of the product
+        price_ht = f"{item['price_ht']} €" # Price HT of the product
+        tva = f"{item['tva']}%" # TVA of the product
+        total_price = f"{round(float(item['price_ht']) * (1 + float(item['tva']) / 100) * int(product_number), 2)}€" # Total price of the product
         products_strings += f"{product_number:<7} {item['description']:<23} {weight_unit:<15} {total_weight:<11} {price_ht:<19} {tva:<7} {total_price:<10}\n"
     return products_strings
 
@@ -107,12 +115,12 @@ def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
     products = arg1.split('|')
     total_ht = 0
     total_tva = 0
-    for product in products:
-        product_id, product_number = product.split(':')
+    for product in products: # For each product
+        product_id, product_number = product.split(':') # Split the product id and the number of items
         product = arg2.get_specific_item(product_id)
-        total_ht += float(product['price_ht']) * int(product_number)
-        total_tva += round(float(product['price_ht']) * float(product['tva'])/100 * int(product_number), 2)
-    total = total_ht + total_tva
+        total_ht += float(product['price_ht']) * int(product_number) # Total HT of the product
+        total_tva += round(float(product['price_ht']) * float(product['tva'])/100 * int(product_number), 2) # Total TVA of the product
+    total = total_ht + total_tva # Total of the ticket
     return (total_ht, total_tva, total)
 
 def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
@@ -242,9 +250,9 @@ def main() -> None:
             if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
                 print('Missing arguments: items, name, marcket')
                 return
-            product = decrypt_product(item_manager,args.items)
-            total = calculate_total(args.items, item_manager)
-            print_ticket(args.marcket, args.name, product, total)
+            product = decrypt_product(item_manager,args.items) # Decrypt the string containing the product id and the number of items
+            total = calculate_total(args.items, item_manager) # Calculate the total of the ticket
+            print_ticket(args.marcket, args.name, product, total) # Print the ticket
         except Exception as e:
             print(f'Error in the ticket: {e}')
 

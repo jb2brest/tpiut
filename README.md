@@ -15,7 +15,7 @@
 Pour ajouter un item, il faut executer la commande suivante :
 
 ```console
-python3 main.py -a -c "Code article" -d "Description" -p "Prix"
+python3 main.py -a -c "Code article" -d "description" -p prix -w poids -u unité -tva tva
 ```
 
 * `-a`  : Permet d'ajouter un item
