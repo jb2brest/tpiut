@@ -4,6 +4,7 @@
 
 ## Gestion des items
 
+
 ### Ajouter un item
 
 Pour ajouter un item, il faut executer la commande suivante :
@@ -79,4 +80,16 @@ C01             | pack de coca                   | 5.0
 C03             | pack Biscotte                  | 2.0
 C04             | Café soluble                   | 3.0
 C05             | Crackers                       | 4.0
+```
+## Création d'un ticket
+
+Pour créé un nouveau ticket il faut utiliser l'option -t
+
+Cette option demande de présiser le nom de l'employer avec -n, le nom du magasin avec -m et la liste des produits avec leur nombre dans le format "id_produit1:nb_produit1|id_produit2:nb_produit2" avec le -i
+
+Exemple:
+```console
+python3 main.py -t -n Malo -m ploc300 -i C01:10|C02:2
+
+
 ```
