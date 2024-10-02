@@ -1,6 +1,8 @@
-Nom produit,Référence,Prix
-Pack de coca,C01,5
-Kilo de pdt,C02,1
-Pack de biscottes,C03,2
-Café soluble,C04,3
-Crackers,C05,4
+Nom produit,Référence,Prix,TVA,Poids,Unité poids
+Pack de coca,C01,5,0.2,2,kg
+Kilo de pdt,C02,1,0.1,1,kg
+Pack de biscottes,C03,2,0.1,950,g
+Café soluble,C04,3,0.1,250,g
+Crackers,C05,4,0.2,125,g
+Eau,C06,6,0.1,1.5,L
+Pain,CO7,1,0.1,250,g
