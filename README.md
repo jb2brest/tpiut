@@ -38,7 +38,7 @@ Exemple de résultat de la commande
 
 ## Ajout d'un produit
 
-Pour ajouter un produit vous devez modifier le fichier présent dans le dossier "data/produits.csv" en rajoutant une ligne sous la forme:
+Pour ajouter un produit vous devez modifier le fichier présent dans le dossier [https://github.com/jb2brest/tpiut/blob/2024-Lannion-GA1-MARTIN-BEAUPEL/data/produits.csv](data/produits.csv) en rajoutant une ligne sous la forme:
 ```csv
 Nom produit,Référence,Prix,TVA,Poids,Unité Poids
 ```
