@@ -8,6 +8,7 @@ History
 ***************
 
 - 02/10/2024, Alexis P.: Gestion des articles
+- 02/10/2024, Malo J.: Impression des tickets
 
 ***************
 Description
@@ -17,26 +18,32 @@ Script for creating Receipts and managing items
 ***************
 Usage
 ***************
-usage: main.py [-h] (-a | -r | -l) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT]
+usage: main.py [-h] (-a | -r | -l | -t) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT] [-n NAME] [-m MARCKET] [-i ITEMS]
 
 options:
   -h, --help            show this help message and exit
   -a, --add             Add an item
   -r, --remove          Remove an item
   -l, --list            List all items
+  -t, --ticket          Print a ticket
   -c CODE_ARTICLE, --code_article CODE_ARTICLE
                         Code article
   -d DESCRIPTION, --description DESCRIPTION
                         Description
   -p PRICE_HT, --price-ht PRICE_HT
                         Price HT
+  -n NAME, --name NAME  Name of the person
+  -m MARCKET, --marcket MARCKET
+                        Name of the marcket
+  -i ITEMS, --items ITEMS
+                        Items
 """
 # ===== Imports =====
 # == Standard Imports ==
 from os import path
 from json import load, dump
 from argparse import ArgumentParser, Namespace
-from datetime import date
+from datetime import datetime
 
 # == Third-Party Imports ==
 
@@ -45,7 +52,7 @@ from datetime import date
 
 
 # ===== Constant =====
-with open('ticket_number.txt', 'r') as ticket_file:
+with open('ticket_number.txt', 'r', encoding='utf-8') as ticket_file:
     nb_ticket = ticket_file.read()
 
 # ===== Functions =====
@@ -78,10 +85,11 @@ def decrypt_product(item_manager,arg1:str)->str:
     products_strings = ""
     for product in products:
         product_id, product_number = product.split(':')
-        products_strings += f"{product_number}x {item_manager.get_specific_item(product_id)}\n"
+        item = item_manager.get_specific_item(product_id)
+        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
     return products_strings
 
-def total(arg1:str,arg2:'ItemManager')->tuple:
+def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
     """
     This function calculates the total of the ticket
     arg1 => string containing the product id and the number of items C01:10|C02:2
@@ -112,17 +120,17 @@ def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
     ticket :str = f"""{marcket_name}
 Ticket numéro :{nb_ticket}
 
-Date : {date.date()}
+Date : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 Vous avez été servi par : {person_name}
 
 NB	Desc.			HT unitaire 	TVA	Total
 {arg3}
-                                Total HT : {arg4[0]}
-                                Total TVA : {arg4[1]}
-                                Total : {arg4[2]}
+                                                Total HT : {arg4[0]}
+                                                Total TVA : {arg4[1]}
+                                                Total : {arg4[2]}
     """
-    with open('ticket_number.txt', 'w') as ticket_file:
+    with open('ticket_number.txt', 'w', encoding='utf-8') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
     print(ticket)
 
@@ -217,11 +225,14 @@ def main() -> None:
     elif args.list: # List all articles
         print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
         for item in item_manager.get_items():
-            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10} euros | {f'{item["tva"]} %':<5}') # Show the item
+            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10}  | {f'{item["tva"]} %':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
+        if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
+            print('Missing arguments: items, name, marcket')
+            return
         product = decrypt_product(item_manager,args.items)
-        total = total(item_manager,args.items)
+        total = calculate_total(args.items, item_manager)
         print_ticket(args.marcket, args.name, product, total)
 
 if __name__ == '__main__':
