@@ -18,7 +18,6 @@ def ParseArgs(arguments: list) -> tuple:
 
 	if len(arguments) < 3:
 		# Contrôle du nombre d'arguments dans la saisie utiliisateur
-		print(USAGE)
 		error = True
 	else:
 		try:
@@ -33,11 +32,10 @@ def ParseArgs(arguments: list) -> tuple:
 			for item in liste_produits:
 				reference = str(item).split(":")[0]
 				quantite = str(item).split(":")[1]
-				assert reference != "", "Une référence est mal renseignée ou manquante."
-				assert quantite != "", f"La quantité de la référence {reference} n'est pas renseignée."
+				if reference == "" or quantite == "":
+					error = True
 				dict_produits[reference] = quantite
 		except IndexError as e:
-			print(USAGE)
 			error = True
 
 	return error, magasin, caisiere, dict_produits
@@ -57,6 +55,8 @@ def Visuel(market_name: str, cashier: str, basket: dict, catalogue: dict, num_ti
 	prix: float = 0
 	prix_unitaire: float = 0
 	total: float = 0
+	poids_unitaire: float = 0
+	unite_poid: str = "kg"
 
 	# Vérification des types de variable
 	assert type(market_name) == str, "Le nom du magasin doit être une chaine de caractère."
@@ -72,24 +72,23 @@ def Visuel(market_name: str, cashier: str, basket: dict, catalogue: dict, num_ti
 	print("|")
 	print(f"| Vous avez été servi par : {cashier}") # Affichage du nom du caissier
 	print("|")
-	print("| NB		Desc.			HT unitaire		TVA		Total") # Affichage de l'en-tête du tableau
+	print("| NB		Desc.	        Pds/vol. unitaire   Pds/vol. total	HT unitaire		TVA		Total") # Affichage de l'en-tête du tableau
 	for key in basket.keys() :
-		try: # Affichage des informations du produit comme mis dans l'en-tête 
-			prix_unitaire = float(catalogue[key][1]) # Prix unitaire du produit
-			prix_TVA = (prix_unitaire * 0.1) # TVA du produit
-			quantity = float(basket[key]) # Quantité 
-			prix = (quantity * prix_unitaire) + (prix_TVA * quantity)# Prix
-			print(f"| {int(quantity)}		{catalogue[key][0]}			{prix_unitaire}		10%		{prix}€")
-			total_TVA += (prix_TVA * quantity)
-			total_HT += (prix_unitaire * quantity)
-		except TypeError as e:
-			print("Erreur lors de la création du ticket : ", e)
+		prix_unitaire = float(catalogue[key][1]) # Prix unitaire du produit
+		prix_TVA = (prix_unitaire * float(catalogue[key][2])) # TVA du produit
+		quantity = float(basket[key]) # Quantité 
+		prix = (quantity * prix_unitaire) + (prix_TVA * quantity)# Prix
+		poids_unitaire = float(catalogue[key][3])
+		unite_poids = catalogue[key][4]
+		print(f"| {int(quantity)}		{catalogue[key][0]}	{poids_unitaire}{unite_poids}	            {poids_unitaire*quantity}{unite_poids}	        {prix_unitaire}		        {float(catalogue[key][2])*100}%		{prix}€")
+		total_TVA += (prix_TVA * quantity)
+		total_HT += (prix_unitaire * quantity)
 	# Affichage des totaux
 	total = total_HT + total_TVA
 	print("|")
-	print(f"| 								Total HT	{total_HT}€")
-	print(f"| 								Total TVA	{total_TVA}€")
-	print(f"| 								Total		{total}€")
+	print(f"| 								                        Total HT	{total_HT}€")
+	print(f"| 								                        Total TVA	{total_TVA}€")
+	print(f"| 								                        Total		{total}€")
 	print("______________________________________________________")
 
 
@@ -112,11 +111,14 @@ with open('data/produits.csv', newline='\n', encoding="utf-8") as csvfile:
 		nom = row[0] # Nom du produit
 		reference = row[1] # Référence du produit
 		prix = row[2] # Prix du produit
+		tva = row[3]
+		poids = row[4]
+		unite_poids = row[5]
 
 		if reference in items.keys():
 			print(f"WARNING: La même référence est présente au moins deux fois. Le produit {nom} n'a donc pas été pris en compte.")
 		else:
-			items[reference] = [nom, prix]
+			items[reference] = [nom, prix, tva, poids, unite_poids]
 # Récupération du numéro de ticket			
 try :
 	with open('data/nb_ticket', 'r') as file:
@@ -139,3 +141,5 @@ if not error:
     # Incrémentation du numéro de ticket
     with open('data/nb_ticket', 'w') as file:
         file.write(str(nb_ticket))
+else:
+	print(USAGE)
