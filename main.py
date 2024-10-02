@@ -23,10 +23,9 @@ if __name__ == "__main__" :
         f = open(filename, "r") #ouverture du fichier en lecture seule
         nb_ticket:int = int(f.read()) #attribution de la valeur actuel du ticket
         f.close() #fermeture du fichier
-        f = open(filename, "w")
-        print(f"{nb_ticket+1}")
-        f.write(f"{nb_ticket+1}")
-        f.close()
+        f = open(filename, "w") #ouverture du fichier en écriture
+        f.write(f"{nb_ticket+1}") #écriture du prochain numéro de fichier
+        f.close()#fermeture du fichier
         print(f"Ticket numéro: {nb_ticket} \n")
         name_vendeur = sys.argv[2] #variable de récupération du deuxiéme paramétre
         print(f"Date : {date.today()} \n")
@@ -50,9 +49,9 @@ if __name__ == "__main__" :
             tva_total = tva_total + tva #calcul de la tva
             total = total + prix_produits # prix total de la recette
             total_tva = total_tva + prix_produits + tva # tva total lié à l'achat
-            poids_unitaire = produits[element.split(':')[0]][1]
-            poids_total = float(produits[element.split(':')[0]][1].split(' ')[0])*nb_produit
-            unite = produits[element.split(':')[0]][1].split(' ')[1]
+            poids_unitaire = produits[element.split(':')[0]][1] #extraction du poids unitaire
+            poids_total = float(produits[element.split(':')[0]][1].split(' ')[0])*nb_produit #récupération du poids et multiplication pas la quantité
+            unite = produits[element.split(':')[0]][1].split(' ')[1] #récupération de l'unité
             print(f"{nb_produit:<8} {name_produit:<25} {poids_unitaire:<23} {poids_total:<2} {unite:<14} {prix:<15} {tva_pourcent:<7} {prix_produits}")
 
         print(f"\n                                                                                    total ht     {total}")
