@@ -1,5 +1,6 @@
 import sys
 from typing import List, Dict
+import csv
 
 # Fonctions
 
@@ -17,7 +18,6 @@ def ParseArgs(arguments: list) -> tuple:
 
     if len(arguments) < 3:
         # Contrôle du nombre d'arguments dans la saisie utiliisateur
-        print(USAGE)
         error = True
     else:
         try:
@@ -26,6 +26,8 @@ def ParseArgs(arguments: list) -> tuple:
             liste_produits = str(arguments[3]).split("|")
         except TypeError as e:
             print(f"ERREUR: Entrées de mauvais type ({e})")
+        except Exception as e:
+            error = True
         
         try:
             dict_produits = {}
@@ -34,7 +36,6 @@ def ParseArgs(arguments: list) -> tuple:
                 quantite = str(item).split(":")[1]
                 dict_produits[reference] = quantite
         except IndexError as e:
-            print(USAGE)
             error = True
 
     return error, magasin, caisiere, dict_produits
@@ -47,12 +48,19 @@ caisiere: str
 dict_produits: dict
 
 # Définition des variables
-items = {"C01": ["Pack de coca", 5], 
-         "C02": ["Kilo de pomme de terre", 1],
-         "C03": ["Pack de biscottes", 2],
-         "C04": ["Café soluble", 3],
-         "C05": ["Crackers", 4]
-         }
+items = {}
+with open('data/produits.csv', newline='\n', encoding="utf-8") as csvfile:
+    # Boucle pour récupérer tout les produits dans le fichier csv
+    spamreader = csv.reader(csvfile, delimiter=',')
+    for row in spamreader:
+        nom = row[0] # Nom du produit
+        reference = row[1] # Référence du produit
+        prix = row[2] # Prix du produit
+
+        if reference in items.keys():
+            print(f"WARNING: La même référence est présente au moins deux fois. Le produit {nom} n'a donc pas été pris en compte.")
+        else:
+            items[reference] = [nom, prix]
 
 # Récupération des paramètres
 USAGE = "Utilisation: python3 main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]"
@@ -61,7 +69,10 @@ arguments = sys.argv
 # Contrôle de la saisie et retour des variables
 error, magasin, caisiere, dict_produits = ParseArgs(arguments=arguments)
 
+# Si il n'y a pas eu d'erreurs de l'utilisateur sur la saisie des données
 if not error:
     print(magasin)
     print(caisiere)
     print(dict_produits)
+else:
+    print(USAGE)

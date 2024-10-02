@@ -18,6 +18,7 @@ git checkout 2024-Lannion-GA1-MARTIN-BEAUPEL
 Ensuite, si vous effectuez la commande <code>dir</code> dans votre dossier courant vous devriez trouver le fichier <code>main.py</code>.
 Si ce n'est pas le cas, recommencez les étapes présédentes.
 
+
 ## Utilisation de l'outil
 
 L'utilisation se fait avec python3, si la version n'est pas installée sur votre ordinateur veuillez l'installer <a href="https://www.python.org/downloads/release/python-3127/">ici</a>.
@@ -33,3 +34,22 @@ python3 main.py “But Maket” “Lisa” “C01:10|C02:2”
 ```
 
 Exemple de résultat de la commande
+
+
+## Ajout d'un produit
+
+Pour ajouter un produit vous devez modifier le fichier présent dans le dossier "data/produits.csv" en rajoutant une ligne sous la forme:
+```csv
+Nom produit,Référence,Prix
+```
+
+Exemple:
+```
+Pack de coca,C01,5
+Kilo de pomme de terre,C02,1
+```
+
+NOTE: Si deux produits possèdent la même référence, vous aurez un warning de ce type à l'éxécution du programme:
+```
+WARNING: La même référence est présente au moins deux fois. Le produit [NOM DU PRODUIT] n'a donc pas été pris en compte.
+```
