@@ -103,7 +103,7 @@ def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
         product_id, product_number = product.split(':')
         product = arg2.get_specific_item(product_id)
         total_ht += product['price_ht'] * int(product_number)
-        total_tva += product['price_ht'] * 0.2 * int(product_number)
+        total_tva += product['price_ht'] * product['tva']/100 * int(product_number)
     total = total_ht + total_tva
     return (total_ht, total_tva, total)
 
