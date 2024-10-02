@@ -5,40 +5,42 @@ from datetime import date
 # Fonctions
 
 def ParseArgs(arguments: list) -> tuple:
-    """Fonction qui retourne un tuple avec le nom du magasin, le nom de la caisière et la quantité de chaque item
-    @args: arguments: list -> La liste des arguments
-    @return: tuple -> un tuple avec le nom du magasin, le nom de la caisière et la quantité de chaque item
-    """
-    # Initialisation des variables
-    magasin: str = ""
-    caisiere: str = ""
-    liste_produits: List[str] = []
-    dict_produits: Dict[str] = {}
-    error: bool = False
+	"""Fonction qui retourne un tuple avec le nom du magasin, le nom de la caisière et la quantité de chaque item
+	@args: arguments: list -> La liste des arguments
+	@return: tuple -> un tuple avec le nom du magasin, le nom de la caisière et la quantité de chaque item
+	"""
+	# Initialisation des variables
+	magasin: str = ""
+	caisiere: str = ""
+	liste_produits: List[str] = []
+	dict_produits: Dict[str] = {}
+	error: bool = False
 
-    if len(arguments) < 3:
-        # Contrôle du nombre d'arguments dans la saisie utiliisateur
-        error = True
-    else:
-        try:
-            magasin = arguments[1]
-            caisiere = arguments[2]
-            liste_produits = str(arguments[3]).split("|")
-        except TypeError as e:
-            print(f"ERREUR: Entrées de mauvais type ({e})")
-        except IndexError as e:
-            error = True
-        
-        try:
-            dict_produits = {}
-            for item in liste_produits:
-                reference = str(item).split(":")[0]
-                quantite = str(item).split(":")[1]
-                dict_produits[reference] = quantite
-        except IndexError as e:
-            error = True
+	if len(arguments) < 3:
+		# Contrôle du nombre d'arguments dans la saisie utiliisateur
+		print(USAGE)
+		error = True
+	else:
+		try:
+			magasin = arguments[1]
+			caisiere = arguments[2]
+			liste_produits = str(arguments[3]).split("|")
+		except TypeError as e:
+			print(f"ERREUR: Entrées de mauvais type ({e})")
 
-    return error, magasin, caisiere, dict_produits
+		try:
+			dict_produits = {}
+			for item in liste_produits:
+				reference = str(item).split(":")[0]
+				quantite = str(item).split(":")[1]
+				assert reference != "", "Une référence est mal renseignée ou manquante."
+				assert quantite != "", f"La quantité de la référence {reference} n'est pas renseignée."
+				dict_produits[reference] = quantite
+		except IndexError as e:
+			print(USAGE)
+			error = True
+
+	return error, magasin, caisiere, dict_produits
 
 
 def Visuel(market_name: str, cashier: str, basket: dict, catalogue: dict, num_ticket: int) -> None:
@@ -76,7 +78,7 @@ def Visuel(market_name: str, cashier: str, basket: dict, catalogue: dict, num_ti
 			prix_unitaire = float(catalogue[key][1]) # Prix unitaire du produit
 			prix_TVA = (prix_unitaire * 0.1) # TVA du produit
 			quantity = float(basket[key]) # Quantité 
-			prix = (quantity * prix_unitaire) # Prix HT 
+			prix = (quantity * prix_unitaire) + (prix_TVA * quantity)# Prix
 			print(f"| {int(quantity)}		{catalogue[key][0]}			{prix_unitaire}		10%		{prix}€")
 			total_TVA += (prix_TVA * quantity)
 			total_HT += (prix_unitaire * quantity)
@@ -118,11 +120,11 @@ with open('data/produits.csv', newline='\n', encoding="utf-8") as csvfile:
 # Récupération du numéro de ticket			
 try :
 	with open('data/nb_ticket', 'r') as file:
-		nb_ticket = file.readline(1)
+		nb_ticket = int(file.readline(1)) + 1
 except : # Si le fichier n'existe pas on l'ajoute
 	nb_ticket = 1
 	with open('data/nb_ticket', 'x') as file:
-		file.write(nb_ticket)
+		file.write(str(nb_ticket))
 
 # Récupération des paramètres
 USAGE = "Utilisation: python main.py [NOM DU MAGASIN] [CAISIERE] [REF:NOMBRE|REF:NOMBRE|...]"
@@ -136,6 +138,4 @@ if not error:
 
     # Incrémentation du numéro de ticket
     with open('data/nb_ticket', 'w') as file:
-        file.write(str(int(nb_ticket) + 1))
-else:
-	print(USAGE)
+        file.write(str(nb_ticket))
