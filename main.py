@@ -36,6 +36,7 @@ options:
 from os import path
 from json import load, dump
 from argparse import ArgumentParser, Namespace
+from datetime import date
 
 # == Third-Party Imports ==
 
@@ -44,14 +45,13 @@ from argparse import ArgumentParser, Namespace
 
 
 # ===== Constant =====
-
+nb_ticket = 0
 
 # ===== Functions =====
 def parse_arguments() -> Namespace:
     """Parse the command line arguments
     """
     parser: ArgumentParser = ArgumentParser()
-
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-a', '--add', help='Add an item', action='store_true')
     group.add_argument('-r', '--remove', help='Remove an item', action='store_true')
@@ -64,6 +64,31 @@ def parse_arguments() -> Namespace:
     return parser.parse_args()
 
 
+def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
+    """
+    This function prints the ticket with the given arguments
+    arg1 => Name of the marcket
+    arg2 => Name of the person
+    arg3 => Id and Number of items
+    arg4 => tuple of the total of the ticket
+    """
+    marcket_name :str = arg1
+    person_name : str = arg2
+    ticket :str = f"""{marcket_name}
+Ticket numéro :{nb_ticket}
+
+Date : {date.date()}
+
+Vous avez été servi par : {person_name}
+
+NB	Desc.			HT unitaire 	TVA	Total
+{arg3}
+                                Total HT
+                                Total TVA
+                                Total
+    """
+    print(ticket)
+print_ticket("Carrefour","Jean","1x Pomme 1.5 0.2 1.8")
 # ===== Classes =====
 class ItemManager:
     """Class for managing items
