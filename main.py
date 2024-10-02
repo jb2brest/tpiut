@@ -36,7 +36,7 @@ options:
 from os import path
 from json import load, dump
 from argparse import ArgumentParser, Namespace
-from datetime import date
+from datetime import datetime
 
 # == Third-Party Imports ==
 
@@ -78,10 +78,11 @@ def decrypt_product(item_manager,arg1:str)->str:
     products_strings = ""
     for product in products:
         product_id, product_number = product.split(':')
-        products_strings += f"{product_number}x {item_manager.get_specific_item(product_id)}\n"
+        item = item_manager.get_specific_item(product_id)
+        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
     return products_strings
 
-def total(arg1:str,arg2:'ItemManager')->tuple:
+def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
     """
     This function calculates the total of the ticket
     arg1 => string containing the product id and the number of items C01:10|C02:2
@@ -112,17 +113,17 @@ def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
     ticket :str = f"""{marcket_name}
 Ticket numéro :{nb_ticket}
 
-Date : {date.date()}
+Date : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 Vous avez été servi par : {person_name}
 
 NB	Desc.			HT unitaire 	TVA	Total
 {arg3}
-                                Total HT : {arg4[0]}
-                                Total TVA : {arg4[1]}
-                                Total : {arg4[2]}
+                                                Total HT : {arg4[0]}
+                                                Total TVA : {arg4[1]}
+                                                Total : {arg4[2]}
     """
-    with open('ticket_number.txt', 'w') as ticket_file:
+    with open('ticket_number.txt', 'w', encoding='utf-8') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
     print(ticket)
 
@@ -217,11 +218,11 @@ def main() -> None:
     elif args.list: # List all articles
         print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
         for item in item_manager.get_items():
-            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10} euros | {f'{item["tva"]} %':<5}') # Show the item
+            print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10}  | {f'{item["tva"]} %':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
         product = decrypt_product(item_manager,args.items)
-        total = total(item_manager,args.items)
+        total = calculate_total(args.items, item_manager)
         print_ticket(args.marcket, args.name, product, total)
 
 if __name__ == '__main__':
