@@ -8,6 +8,7 @@ History
 ***************
 
 - 02/10/2024, Alexis P.: Gestion des articles
+- 02/10/2024, Malo J.: Impression des tickets
 
 ***************
 Description
@@ -17,19 +18,25 @@ Script for creating Receipts and managing items
 ***************
 Usage
 ***************
-usage: main.py [-h] (-a | -r | -l) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT]
+usage: main.py [-h] (-a | -r | -l | -t) [-c CODE_ARTICLE] [-d DESCRIPTION] [-p PRICE_HT] [-n NAME] [-m MARCKET] [-i ITEMS]
 
 options:
   -h, --help            show this help message and exit
   -a, --add             Add an item
   -r, --remove          Remove an item
   -l, --list            List all items
+  -t, --ticket          Print a ticket
   -c CODE_ARTICLE, --code_article CODE_ARTICLE
                         Code article
   -d DESCRIPTION, --description DESCRIPTION
                         Description
   -p PRICE_HT, --price-ht PRICE_HT
                         Price HT
+  -n NAME, --name NAME  Name of the person
+  -m MARCKET, --marcket MARCKET
+                        Name of the marcket
+  -i ITEMS, --items ITEMS
+                        Items
 """
 # ===== Imports =====
 # == Standard Imports ==
@@ -45,7 +52,7 @@ from datetime import datetime
 
 
 # ===== Constant =====
-with open('ticket_number.txt', 'r') as ticket_file:
+with open('ticket_number.txt', 'r', encoding='utf-8') as ticket_file:
     nb_ticket = ticket_file.read()
 
 # ===== Functions =====
