@@ -68,9 +68,9 @@ def parse_arguments() -> Namespace:
 
     parser.add_argument('-c', '--code_article', help='Code article')
     parser.add_argument('-d', '--description', help='Description')
-    parser.add_argument('-p', '--price-ht', help='Price HT')
-    parser.add_argument('-tva', '--tva', help='TVA')
-    parser.add_argument('-w', '--weight', help='Weight of the product in kg')
+    parser.add_argument('-p', '--price-ht', type=float, help='Price HT')
+    parser.add_argument('-tva', '--tva', type=float, help='TVA')
+    parser.add_argument('-w', '--weight', type=float, help='Weight of the product in kg')
     parser.add_argument('-u', '--unit', help='Unit of the product')
     parser.add_argument('-n', '--name', help='Name of the person')
     parser.add_argument('-m', '--marcket', help='Name of the marcket')
@@ -89,7 +89,12 @@ def decrypt_product(item_manager,arg1:str)->str:
     for product in products:
         product_id, product_number = product.split(':')
         item = item_manager.get_specific_item(product_id)
-        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['weight']}{item['unit']}':<14} {f'{item['weight']*product_number}{item['unit']}':<11} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
+        weight_unit = f"{item['weight']}{item['unit']}"
+        total_weight = f"{round(float(item['weight']) * int(product_number), 2)}{item['unit']}"
+        price_ht = f"{item['price_ht']} €"
+        tva = f"{item['tva']}%"
+        total_price = f"{round(float(item['price_ht']) * (1 + float(item['tva']) / 100) * int(product_number), 2)}€"
+        products_strings += f"{product_number:<7} {item['description']:<23} {weight_unit:<15} {total_weight:<11} {price_ht:<19} {tva:<7} {total_price:<10}\n"
     return products_strings
 
 def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
@@ -105,8 +110,8 @@ def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
     for product in products:
         product_id, product_number = product.split(':')
         product = arg2.get_specific_item(product_id)
-        total_ht += product['price_ht'] * int(product_number)
-        total_tva += product['price_ht'] * product['tva']/100 * int(product_number)
+        total_ht += float(product['price_ht']) * int(product_number)
+        total_tva += round(float(product['price_ht']) * float(product['tva'])/100 * int(product_number), 2)
     total = total_ht + total_tva
     return (total_ht, total_tva, total)
 
@@ -127,11 +132,11 @@ Date : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 Vous avez été servi par : {person_name}
 
-NB	Desc.			poid unitaire poid total HT unitaire 	TVA	Total
+NB	Desc.			Poid unitaire   Poid total  Prix HT unitaire    TVA	Total
 {arg3}
-                                                    Total HT : {arg4[0]}
-                                                    Total TVA : {arg4[1]}
-                                                    Total :     {arg4[2]}
+                                                                                 Total HT : {arg4[0]}
+                                                                                 Total TVA : {arg4[1]}
+                                                                                 Total :     {arg4[2]}
     """
     with open('ticket_number.txt', 'w', encoding='utf-8') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
@@ -233,15 +238,15 @@ def main() -> None:
             print(f'{item["code_article"]:<15} | {item["description"]:<30} | {f'{item["price_ht"]} euros':<10} | {f'{item["tva"]} %':<5} | {f'{item["weight"]} {item["unit"]}':<5}') # Show the item
 
     elif args.ticket: # Print a ticket
-        try :
+        try:
             if not args.items or not args.name or not args.marcket: # Verify if all arguments are present
                 print('Missing arguments: items, name, marcket')
                 return
             product = decrypt_product(item_manager,args.items)
             total = calculate_total(args.items, item_manager)
             print_ticket(args.marcket, args.name, product, total)
-        except :
-            print("Error in the arguments")
+        except Exception as e:
+            print(f'Error in the ticket: {e}')
 
 if __name__ == '__main__':
     main()
