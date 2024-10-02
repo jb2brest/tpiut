@@ -73,10 +73,10 @@ Example:
 ```console
 python3 main.py -l
 
-Code article    | Description                    | Price HT
-C02             | kilo de pdt                    | 1
-C01             | pack de coca                   | 5.0
-C03             | pack Biscotte                  | 2.0
-C04             | Café soluble                   | 3.0
-C05             | Crackers                       | 4.0
+Code article    | Description                    | Price HT   | TVA:
+C02             | kilo de pdt                    | 1 euros     | 10 %
+C01             | pack de coca                   | 5.0 euros   | 10 %
+C03             | pack Biscotte                  | 2.0 euros   | 10 %
+C04             | Café soluble                   | 3.0 euros   | 10 %
+C05             | Crackers                       | 4.0 euros   | 10 % 
 ```
