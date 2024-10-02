@@ -19,7 +19,14 @@ if __name__ == "__main__" :
     try:
         name_magasin = sys.argv[1] #variable de récupération du premier paramétre
         print(name_magasin)
-        nb_ticket:int = 12
+        filename = 'compteur.txt' #récupération du nom du fichier de comptage
+        f = open(filename, "r") #ouverture du fichier en lecture seule
+        nb_ticket:int = int(f.read()) #attribution de la valeur actuel du ticket
+        f.close() #fermeture du fichier
+        f = open(filename, "w")
+        print(f"{nb_ticket+1}")
+        f.write(f"{nb_ticket+1}")
+        f.close()
         print(f"Ticket numéro: {nb_ticket} \n")
         name_vendeur = sys.argv[2] #variable de récupération du deuxiéme paramétre
         print(f"Date : {date.today()} \n")
@@ -38,14 +45,15 @@ if __name__ == "__main__" :
             nb_produit = float(element.split(':')[1]) #récupération du nombre de produits acheter
             prix = float(produits[element.split(':')[0]][2]) #récupération du prix du produits dans le dictionnaire
             prix_produits = nb_produit * prix #calcul du prix total lié à ce produits
-            tva = (nb_produit * prix)*0.1 #calcul de la tva lié à ce produits
+            tva = (nb_produit * prix)* (float(produits[element.split(':')[0]][3])/100) #calcul de la tva lié à ce produits
+            tva_pourcent = str(produits[element.split(':')[0]][3]) + "%"
             tva_total = tva_total + tva #calcul de la tva
             total = total + prix_produits # prix total de la recette
             total_tva = total_tva + prix_produits + tva # tva total lié à l'achat
             poids_unitaire = produits[element.split(':')[0]][1]
             poids_total = float(produits[element.split(':')[0]][1].split(' ')[0])*nb_produit
             unite = produits[element.split(':')[0]][1].split(' ')[1]
-            print(f"{nb_produit:<8} {name_produit:<25} {poids_unitaire:<23} {poids_total:<2} {unite:<14} {prix:<15} {tva:<7} {prix_produits}")
+            print(f"{nb_produit:<8} {name_produit:<25} {poids_unitaire:<23} {poids_total:<2} {unite:<14} {prix:<15} {tva_pourcent:<7} {prix_produits}")
 
         print(f"\n                                                                                    total ht     {total}")
         print(f"                                                                                    total tva    {tva_total}")
