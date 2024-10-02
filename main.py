@@ -73,10 +73,10 @@ def Visuel(market_name: str, cashier: str, basket: dict, catalogue: dict, num_ti
 	print("| NB		Desc.			HT unitaire		TVA		Total") # Affichage de l'en-tête du tableau
 	for key in basket.keys() :
 		try: # Affichage des informations du produit comme mis dans l'en-tête 
-			prix_unitaire = float(catalogue[key][1])
-			prix_TVA = (prix_unitaire * 0.1)
-			quantity = float(basket[key])
-			prix = (quantity * prix_unitaire)
+			prix_unitaire = float(catalogue[key][1]) # Prix unitaire du produit
+			prix_TVA = (prix_unitaire * 0.1) # TVA du produit
+			quantity = float(basket[key]) # Quantité 
+			prix = (quantity * prix_unitaire) # Prix HT 
 			print(f"| {int(quantity)}		{catalogue[key][0]}			{prix_unitaire}		10%		{prix}€")
 			total_TVA += (prix_TVA * quantity)
 			total_HT += (prix_unitaire * quantity)
