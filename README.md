@@ -79,7 +79,7 @@ C02             | kilo de pdt                    | 1 euros     | 10 %
 C01             | pack de coca                   | 5.0 euros   | 10 %
 C03             | pack Biscotte                  | 2.0 euros   | 10 %
 C04             | Café soluble                   | 3.0 euros   | 10 %
-C05             | Crackers                       | 4.0 euros   | 10 % 
+C05             | Crackers                       | 4.0 euros   | 10 %
 ```
 ## Création d'un ticket
 
@@ -87,9 +87,21 @@ Pour créé un nouveau ticket il faut utiliser l'option -t
 
 Cette option demande de présiser le nom de l'employer avec -n, le nom du magasin avec -m et la liste des produits avec leur nombre dans le format "id_produit1:nb_produit1|id_produit2:nb_produit2" avec le -i
 
-Exemple:
+Example:
 ```console
-python3 main.py -t -n Malo -m ploc300 -i C01:10|C02:2
+main.py -t -n "Alexis" -m "IUT Lannion" -i "C01:2|C04:4"
+IUT Lannion
+Ticket numéro :19
 
+Date : 02/10/2024 10:18:51
 
+Vous avez été servi par : Alexis
+
+NB      Desc.                   HT unitaire     TVA     Total
+2       pack de coca            5.0 €           10%     12.0€
+4       Café soluble            3.0 €           10%     14.4€
+
+                                                Total HT : 22.0
+                                                Total TVA : 4.4
+                                                Total : 26.4
 ```
