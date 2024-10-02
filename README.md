@@ -35,7 +35,10 @@ NB       Desc.                HT unitaire     TVA      Total \n
 
 **Pour ajouter un produit**
 
-Appelez la fonction ajouter_produits dans un terminal avec les arguments ci-dessous
+Si vous voulez ajouter des produits, répondez "oui" à la question demandée
+
+Ajouter produit au format suivant : id,desc,poids,prix_ht,tva avec les virgules :
+
 Les arguments sont :
 - id 
 - description
