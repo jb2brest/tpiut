@@ -86,7 +86,7 @@ def decrypt_product(item_manager,arg1:str)->str:
     for product in products:
         product_id, product_number = product.split(':')
         item = item_manager.get_specific_item(product_id)
-        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
+        products_strings += f"{product_number:<7} {item['description']:<23} {f'{item['weight']}Kg':<14} {f'{item['weight']*product_number}Kg':<11} {f'{item['price_ht']} €':<15} {f'{item['tva']}%':<7} {f'{round(item['price_ht'] * 1.2 * int(product_number), 2)}€':<10}\n"
     return products_strings
 
 def calculate_total(arg1:str,arg2:'ItemManager')->tuple:
@@ -124,11 +124,11 @@ Date : {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
 
 Vous avez été servi par : {person_name}
 
-NB	Desc.			HT unitaire 	TVA	Total
+NB	Desc.			poid unitaire poid total HT unitaire 	TVA	Total
 {arg3}
-                                                Total HT : {arg4[0]}
-                                                Total TVA : {arg4[1]}
-                                                Total : {arg4[2]}
+                                                    Total HT : {arg4[0]}
+                                                    Total TVA : {arg4[1]}
+                                                    Total :     {arg4[2]}
     """
     with open('ticket_number.txt', 'w', encoding='utf-8') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
