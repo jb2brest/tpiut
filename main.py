@@ -34,6 +34,8 @@ def parser_articles(dict, articles):
     ticket = {}
     for article in articles:
         id_article, quantite_article = article.split(":")
+        assert id_article != ""
+        assert quantite_article != ""
         quantite_article = int(quantite_article)
         description_produit = dict[id_article][0]
         prix_ht, prix_tva, prix_total_tva, prix_total_ht = calcul_prix(dict, id_article, quantite_article)
@@ -77,6 +79,7 @@ Vous avez été servi par : {nom_serveur}
     print(f"{' '*44}Total{' '*7}{total:.1f}€")
 
 if __name__ == "__main__":
+    print(len(sys.argv)) == 4
     # Afficher les items :
     print(f"{'Code article':<20} {'Description':<20} {'Prix unitaire hors taxe':<25}")
 
