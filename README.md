@@ -13,10 +13,13 @@ Pour ajouter un item, il faut executer la commande suivante :
 python3 main.py -a -c "Code article" -d "Description" -p "Prix"
 ```
 
-* `-a` : Permet d'ajouter un item
-* `-c` : Code de l'article
-* `-d` : Description de l'article
-* `-p` : Prix de l'article
+* `-a`  : Permet d'ajouter un item
+* `-c`  : Code de l'article
+* `-d`  : Description de l'article
+* `-p`  : Prix de l'article
+* `-w`  : Poid de l'article
+* `-u`  : Unité de mesure du poid(Kg, L, etc...)
+* `-tva`: La valeur de la tva en pourcentage
 
 Celui-ci sera ajouté à la base de données. (Fichier `items.json`)
 
@@ -24,12 +27,12 @@ Exemple:
 
 ```console
 # Ajout d'un item qui n'existe pas encore
-python3 main.py -a -c "C01" -d "pack de coca" -p 5
+python3 main.py -a -c "C01" -d "pack de coca" -p 5 -w 2 -u Kg -tva 20
 
 Added item: C01 - pack de coca - 5
 
 # Ajout d'un item qui existe déjà
-python3 main.py -a -c "C01" -d "pack de coca" -p 5
+python3 main.py -a -c "C01" -d "pack de coca" -p 5 -w 2 -u Kg -tva 20
 
 Item C01 already exists
 ```
