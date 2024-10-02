@@ -61,13 +61,43 @@ def parse_arguments() -> Namespace:
 
     parser.add_argument('-c', '--code_article', help='Code article')
     parser.add_argument('-d', '--description', help='Description')
-    parser.add_argument('-p', '--price-ht', type=float, help='Price HT')
+    parser.add_argument('-p', '--price-ht', help='Price HT')
     parser.add_argument('-n', '--name', help='Name of the person')
     parser.add_argument('-m', '--marcket', help='Name of the marcket')
     parser.add_argument('-i', '--items', help='Items')
 
     return parser.parse_args()
 
+def decrypt_product(item_manager,arg1:str)->str:
+    """
+    This function decrypts the strings containing the product id and the number of items into a string readable for the ticket
+    arg1 => string containing the product id and the number of items C01:10|C02:2
+    return => string readable for the ticket 10x Product 1 2x Product 2
+    """
+    products = arg1.split('|')
+    products_strings = ""
+    for product in products:
+        product_id, product_number = product.split(':')
+        products_strings += f"{product_number}x {item_manager.get_specific_item(product_id)}\n"
+    return products_strings
+
+def total(arg1:str,arg2:'ItemManager')->tuple:
+    """
+    This function calculates the total of the ticket
+    arg1 => string containing the product id and the number of items C01:10|C02:2
+    arg2 => ItemManager object
+    return => tuple of the total of the ticket (total_ht, total_tva, total)
+    """
+    products = arg1.split('|')
+    total_ht = 0
+    total_tva = 0
+    for product in products:
+        product_id, product_number = product.split(':')
+        product = arg2.get_specific_item(product_id)
+        total_ht += product['price_ht'] * int(product_number)
+        total_tva += product['price_ht'] * 0.2 * int(product_number)
+    total = total_ht + total_tva
+    return (total_ht, total_tva, total)
 
 def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
     """
@@ -82,9 +112,9 @@ def print_ticket(arg1:str,arg2:str,arg3 : str,arg4 : tuple)->None:
     ticket :str = f"""{marcket_name}
 Ticket numéro :{nb_ticket}
 
-# Date : {date.date()}
+Date : {date.date()}
 
-# Vous avez été servi par : {person_name}
+Vous avez été servi par : {person_name}
 
 NB	Desc.			HT unitaire 	TVA	Total
 {arg3}
@@ -95,6 +125,7 @@ NB	Desc.			HT unitaire 	TVA	Total
     with open('ticket_number.txt', 'w') as ticket_file:
         ticket_file.write(str(int(nb_ticket)+1))
     print(ticket)
+
 # ===== Classes =====
 class ItemManager:
     """Class for managing items
@@ -141,7 +172,7 @@ class ItemManager:
         Args:
             item (dict): The item to add
         """
-        if not self._get_specific_item(item['code_article']):
+        if not self.get_specific_item(item['code_article']):
             self._items.append(item)
             print(f'Added item {item["code_article"]}')
         else:
@@ -187,11 +218,6 @@ def main() -> None:
         print(f'{'Code article':<15} | {'Description':<30} | {'Price HT':<10} | {'TVA:':<5}') # Show the header
         for item in item_manager.get_items():
             print(f'{item["code_article"]:<15} | {item["description"]:<30} | {item["price_ht"]:<10} euros | {f'{item["tva"]} %':<5}') # Show the item
-
-    elif args.ticket: # Print a ticket
-        product = decrypt_product(item_manager,args.items)
-        total = total(item_manager,args.items)
-        print_ticket(args.marcket, args.name, product, total)
 
     elif args.ticket: # Print a ticket
         product = decrypt_product(item_manager,args.items)
