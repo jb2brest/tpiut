@@ -18,7 +18,6 @@ def ParseArgs(arguments: list) -> tuple:
 
     if len(arguments) < 3:
         # Contrôle du nombre d'arguments dans la saisie utiliisateur
-        print(USAGE)
         error = True
     else:
         try:
@@ -27,6 +26,8 @@ def ParseArgs(arguments: list) -> tuple:
             liste_produits = str(arguments[3]).split("|")
         except TypeError as e:
             print(f"ERREUR: Entrées de mauvais type ({e})")
+        except IndexError as e:
+            error = True
         
         try:
             dict_produits = {}
@@ -35,7 +36,6 @@ def ParseArgs(arguments: list) -> tuple:
                 quantite = str(item).split(":")[1]
                 dict_produits[reference] = quantite
         except IndexError as e:
-            print(USAGE)
             error = True
 
     return error, magasin, caisiere, dict_produits
@@ -137,3 +137,5 @@ if not error:
     # Incrémentation du numéro de ticket
     with open('data/nb_ticket', 'w') as file:
         file.write(str(int(nb_ticket) + 1))
+else:
+	print(USAGE)
