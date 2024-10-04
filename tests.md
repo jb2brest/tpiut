@@ -10,4 +10,4 @@
 
 4 - Vérifier que le poids unitaire et le poids total sont corrects
 
-4 - Tester si la saisie de fausses données met en défaut le programme ou non. 
+5 - Tester si la saisie de fausses données met en défaut le programme ou non. 
