@@ -2,6 +2,7 @@ from datetime import datetime
 import csv
 import sys
 import random
+import re
 
 num_ticket=random.randint(1,9999)
 nom="moi"
@@ -47,7 +48,7 @@ def recup_elem(csv,liste2):
 valeur_tva=0
 ht_unitaire_glob=0
 total_glob=0
-def calcul_tva(ht_unitaire,nb):
+def calcul_tva(ht_unitaire,nb,tva):
     """
     Les paramètres sont la quantité et le prix du produit demandés.
     On globalise les calculs des totaux.
@@ -55,8 +56,7 @@ def calcul_tva(ht_unitaire,nb):
     global valeur_tva
     global ht_unitaire_glob
     global total_glob
-    tva=0.1
-    total=ht_unitaire*(1.0+tva)*int(nb)
+    total=ht_unitaire*(1.0+int(tva))*int(nb)
     valeur_tva+=total-(ht_unitaire*int(nb))
     ht_unitaire_glob+=ht_unitaire*int(nb)
     total_glob+=total
@@ -80,18 +80,23 @@ def ticket():
     date_ac = '%s/%s/%s' % (date_val.day, date_val.month, date_val.year)
     print(f"Date : {date_ac}\n")
     print(f"Vous avez été servi par : {nom_utilisateur}\n")
-    print(f"NB	Desc.		HT unitaire	TVA	Total")
+    print(f"NB	Desc.		Pds/vol. unitaire	Pds/vol. total	Orig.	HT unitaire	TVA	Total")
     for i in range(len(liste3)):
         nb=liste2[i][1]
         nom=liste3[i][3]
-        prix=liste3[i][5]
-        print(f"{nb}	{nom}		{prix}€	10%	{calcul_tva(int(prix),int(nb))}€")
+        vol_uni=liste3[i][5]
+        chiffres = re.findall(r'\d+', vol_uni)
+        vol_tot=int(chiffres[0])*int(nb)
+        origine=liste3[i][11]
+        prix=liste3[i][7]
+        tva=liste3[i][9]
+        print(f"{nb}	{nom}		{vol_uni}		{vol_tot}		{origine}		{prix}€	10%	{calcul_tva(int(prix),int(nb),tva)}€")
     
     print(f"Total HT : {calcul_totaux()[1]}")
     print(f"Total TVA : {calcul_totaux()[0]}")
     print(f"Total : {calcul_totaux()[2]}")
 
 if __name__ == "__main__":
-    csv=recup_csv("bdd1.csv")
+    csv=recup_csv("bdd2.csv")
     recup_elem(csv,liste2)
     ticket()
