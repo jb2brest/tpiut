@@ -8,4 +8,6 @@
 
 3 - Vérifier que le prix en fonction de la TVA et de la quantité des produits inscrit sur le ticket, correspond bien aux valeurs téhoriques.
 
+4 - Vérifier que le poids unitaire et le poids total sont corrects
+
 4 - Tester si la saisie de fausses données met en défaut le programme ou non. 
