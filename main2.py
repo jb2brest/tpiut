@@ -78,7 +78,7 @@ def ticket(articles,titre,nom_caiss,chaine) :
 
                 if poid_uni[-1]== 'g' :
                     
-                    if poid_uni[:-2]=="kg" :
+                    if poid_uni[-2:]=="kg" :
                         poid_total = poid_total + "kg"
                     else :
                         if int(poid_total) > 999 :
