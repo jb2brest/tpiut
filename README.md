@@ -42,3 +42,9 @@ Total HT: 61€
 Total TVA: 6.1€
 Total: 66.6€
 ```
+
+### Rajout d'articles dans le tableau des articles :
+
+Pour rajouté un article il suffit de rajouté un dictionaire a la suite de ceux deja existant (entre les []) en respectant le format et avec une , a la fin. 
+
+exemple de format :  {"code": "C01", "description": "pack de coca", "prix_unite": 5, "tva": 20},
