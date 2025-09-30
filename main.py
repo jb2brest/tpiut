@@ -6,7 +6,7 @@ ARTICLES = {
     "CO1": {"desc": "pack de coca", "prix": 5, "tva": 0.1},
     "CO2": {"desc": "kilo de pdt", "prix": 1, "tva": 0.1},
     "CO3": {"desc": "pack Biscotte", "prix": 2, "tva": 0.1},
-    "CO4": {"desc": "Café soluble", "prix": 3, "tva": 0.1},
+    "CO4": {"desc": "Cafe soluble", "prix": 3, "tva": 0.1},
     "CO5": {"desc": "Crakers", "prix": 4, "tva": 0.1},
 }
 
@@ -72,4 +72,5 @@ def generer_ticket(magasin, caissier, commande_str):
 
 ticket = generer_ticket("BUT Market", "Lisa", "CO1:a|CO2:2")
 print(ticket)
+
 
