@@ -1,21 +1,33 @@
-articles:dict = {
-    "CO1" : {"desc":"pack de coca","HTuni":5,"TVA":0.1},
-    "CO2" : {"desc":"kilo de pdt","HTuni":1,"TVA":0.1},
-    "CO3" : {"desc":"pack biscotte","HTuni":2,"TVA":0.1},
-    "CO4" : {"desc":"Café soluble","HTuni":3,"TVA":0.1},
-    "CO5" : {"desc":"Crakers","HTuni":4,"TVA":0.1}
+import sys
+import datetime
+
+produits:dict = {
+    "C01" : {"desc":"pack de coca","HTuni":5,"TVA":10},
+    "C02" : {"desc":"kilo de pdt","HTuni":1,"TVA":10},
+    "C03" : {"desc":"pack biscotte","HTuni":2,"TVA":10},
+    "C04" : {"desc":"Café soluble","HTuni":3,"TVA":10},
+    "C05" : {"desc":"Crakers","HTuni":4,"TVA":10}
 }
 
+if __name__ == "__main__":
+
+    tot = len(sys.argv)
+    nom_mag :str = sys.argv[1]
+    employe :str = sys.argv[2]
+    articles :str = sys.argv[3]
+
+    date = datetime.date.today().strftime("%d/%m/%Y")
+    total : int = 0
 
 
-nom_mag : int
-employe :str = "Lisa"
-
-
-num_tic:int = 1
-date = "30/09/2025"
-ticket1 : str = f"BUT Market \nTicket num : {num_tic}\n\nDate : {date}\nVous avez été desservi par {employe}\n"
-
-ticket2 : str = ""
-
-print (ticket1+ticket2)
+print(nom_mag)
+print(f"Numéro du ticket : 2200")
+print(f"\n{date}")
+print(f"\nVous avez été servi par {employe}\n")
+print("NB   Desc    HT unitaire TVA Total_HT    Total_TTC")
+for article in articles.split("|") :
+    code , qte = article.split(":")
+    TVA_art = produits[code]['HTuni'] * ((produits[code]['TVA'])/100+1)
+    print(f"{qte}   {produits[code]['desc']}    {produits[code]['HTuni']}€  {produits[code]['TVA']}% {TVA_art}€")
+    total += int(TVA_art)
+print(f"\nTotal TTC: {total*1.1}€")
