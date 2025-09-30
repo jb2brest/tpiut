@@ -111,6 +111,7 @@ NB	Description		Poids U.	Poids total	HT unitaire	TVA	Total TTC
 **LOT1**
    * Développement + commit
    * Livraison → `git tag 3A2-lot1 && git push origin 3A2-lot1`
+     
 **LOT 2**
    * Livraison  → `git tag 3A2-lot2 && git push origin 3A2-lot2`
 ---
