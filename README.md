@@ -48,3 +48,24 @@ Total: 66.6€
 Pour rajouté un article il suffit de rajouté un dictionaire a la suite de ceux deja existant (entre les []) en respectant le format et avec une , a la fin. 
 
 exemple de format :  {"code": "C01", "description": "pack de coca", "prix_unite": 5, "tva": 20},
+
+### Nouvelles fonctionnalitées :
+
+Nous avons rajouté au ticket le volume et le poids de chaque articles ainsi que le total du poids. Le fonctionnement reste le même que la partie Utilisation du programme. Voici un exemple : 
+
+```console
+python3 .\main.py "BUT MARKET" "Lisa" "C01:1|C02:3|C03:4"
+BUT MARKET
+Ticket numéro: 2200
+Date: 04/10/2023
+Vous avez été servi par: Lisa
+
+NB  Desc.                  Poids/volume unitaire  Poids/volume total  HT unitaire  TVA   Total
+10   pack de coca                  2kg                     20kg             5€       20%    60€
+1   kilo de pdt                   1kg                     1kg             1€       10%    1.1€
+5   pas Biscotte                  950g                    4750g           2€       10%    11€
+
+Total HT: 61€
+Total TVA: 11.1€
+Total: 72.1€
+```
