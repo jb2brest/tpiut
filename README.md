@@ -29,11 +29,11 @@ Vous devriez alors avoir un ticket de caisse complet avec la liste de vos articl
 Exemple d'exécution du code :
 
 ```console
-python main.py "BUT MARKET" "Lison" "C01:1|C02:3|C03:40"
+python main.py "BUT MARKET" "Guenael" "C01:1|C02:3|C03:40"
 BUT MARKET
 Ticket numéro: 2200
 Date: 04/10/2023
-Vous avez été servi par: Lison
+Vous avez été servi par: Guenael
 NB  Desc.                  HT unitaire  TVA   Total    
 10   pack de coca              5           10%    55.0   
 1   kilo de pdt                1           10%    1.1    
