@@ -22,7 +22,7 @@ Vous devriez alors avoir un ticket de caisse complet avec la liste de vos articl
 
 | Code article | Description  | Prix HT unitaire | TVA |
 |--------------|--------------|------------------|-----|
-|C01           | pack de coca | 5                | 20% |
+|C01           | pack de coca | 5                | 10% |
 |C02           | kilo de pdt  | 1                | 10% |
 |C03           | pack Biscotte| 2                | 10% |
 
