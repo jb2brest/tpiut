@@ -1,7 +1,7 @@
 # GA2-STEWART-LEGUEN  
 ## Programme d'édition d'un ticket de caisse
 
-### __Description__ : 
+### __Description__ :
 
 Ce programme permet de générer un ticket de caisse en fonciton des articles que l'on veut commander et de leur quantité dans une BDD.
 
