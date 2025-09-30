@@ -6,7 +6,7 @@ ARTICLES = {
     "CO1": {"desc": "pack de coca", "prix": 5, "tva": 0.1},
     "CO2": {"desc": "kilo de pdt", "prix": 1, "tva": 0.1},
     "CO3": {"desc": "pack Biscotte", "prix": 2, "tva": 0.1},
-    "CO4": {"desc": "Cafe soluble", "prix": 3, "tva": 0.1},
+    "CO4": {"desc": "Café soluble", "prix": 3, "tva": 0.1},
     "CO5": {"desc": "Crakers", "prix": 4, "tva": 0.1},
 }
 
@@ -21,9 +21,21 @@ def generer_ticket(magasin, caissier, commande_str):
     # Découper la commande en paires code:quantité
     items = commande_str.split("|")
     for i in items:
-        code, quantite = i.split(":")
-        quantite = int(quantite)
+        try:
+            code, quantite_str = i.split(":")
+        except ValueError:
+            print(f"⚠️ Format invalide pour l'article : {i}. Utilisez <code>:<quantité>.")
+            continue
 
+        # Vérifier que la quantité est bien un entier
+        try:
+            quantite = int(quantite_str)
+            if quantite <= 0:
+                print(f"Quantité non valide ({quantite}) pour {code}. Elle doit être > 0.")
+                continue
+        except ValueError:
+            print(f"Quantité '{quantite_str}' invalide pour {code}. Saisissez un nombre entier.")
+            continue
         if code not in ARTICLES:
             print(f"Article {code} inconnu, ignoré.")
             continue
@@ -58,17 +70,6 @@ def generer_ticket(magasin, caissier, commande_str):
     return "\n".join(ticket)
 
 
-ticket = generer_ticket("BUT Market", "Lisa", "CO1:10|CO2:2")
+ticket = generer_ticket("BUT Market", "Lisa", "CO1:a|CO2:2")
 print(ticket)
-if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python3 main.py <Magasin> <Caissier> <Commande>")
-        print("Exemple: python3 main.py 'BUT Market' 'Lisa' 'C01:10|C02:2'")
-        sys.exit(1)
 
-    magasin = sys.argv[1]
-    caissier = sys.argv[2]
-    commande_str = sys.argv[3]
-
-    ticket = generer_ticket(magasin, caissier, commande_str)
-    print(ticket)
