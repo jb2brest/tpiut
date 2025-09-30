@@ -8,7 +8,7 @@ Ceci est un programme permettant de générer un ticket de caisse en fonction de
 ### Utilisation du programme :
 Il est avant tout nécessaire que Python soit installé sur le système.
 
-Une fois que cela est bon, éxecutez le fichier ___main.py___ via la ligne de commande suivante :
+Une fois que cela est bon, éxecutez le fichier ***main.py*** via la ligne de commande suivante :
 
 ```python
 python main.py "[Tableau des articles déjà pré-enregistré]" "[Nom du Magasin]" "[Nom du caissier]" "[code article]:[quantité]|[code article suivante]:[quantité]"
