@@ -40,30 +40,34 @@ tkinter : pour créer une interface graphique et afficher le ticket.
 
 ```Python
 articles = [
-    {"Code": "C01", "Description": "Pack de coca", "Prix": 5},
-    {"Code": "C02", "Description": "Kilo de pdt", "Prix": 1},
-    {"Code": "C03", "Description": "Pack de Biscotte", "Prix": 2},
-    {"Code": "C04", "Description": "Café soluble", "Prix": 3},
-    {"Code": "C05", "Description": "Crakers", "Prix": 4},
+    {"Code" : "C01", "Description" : "Pack de coca", "Poids" : 2000, "Prix"  : 5, "TVA" : 0.2, "Origine" : "Lituanie"},
+    {"Code" : "C02", "Description" : "Kilo de pdt", "Poids" : 1000, "Prix"  : 1, "TVA" : 0.1, "Origine" : "Espagne"},
+    {"Code" : "C03", "Description" : "Pack de Biscotte", "Poids" : 950, "Prix"  : 2, "TVA" : 0.1, "Origine" : "France"},
+    {"Code" : "C04", "Description" : "Café soluble", "Poids" : 250, "Prix"  : 3, "TVA" : 0.1, "Origine" : "Roumanie"},
+    {"Code" : "C05", "Description" : "Crakers", "Poids" : 125, "Prix"  : 4, "TVA" : 0.2, "Origine" : "Angleterre"},
+    {"Code" : "C06", "Description" : "Eau", "Poids" : 1500, "Prix"  : 6, "TVA" : 0.1, "Origine" : "Suisse"},
+    {"Code" : "C07", "Description" : "Pain", "Poids" : 250, "Prix"  : 1, "TVA" : 0.1, "Origine" : "France"}
 ]
 ```
 
 Chaque article est représenté par un dictionnaire avec :
 
-Code → identifiant unique (C01, C02, …)
+Code : Code unique de l’article.
 
-Description → nom de l’article
+Description : Nom de l’article.
 
-Prix → prix unitaire HT
+Poids : Poids ou volume unitaire (en grammes).
+
+Prix : Prix unitaire HT (en euros).
+
+TVA : Taux de TVA applicable (0.1 = 10%, 0.2 = 20%).
+
+Origine : Pays d’origine du produit.
 
 #### c) Variables globales
 
 ```Python
 TVA = 0.1        # 10% de TVA
-Total_TVA = 0.0
-Total_HT = 0.0
-Total_articles = 0.0
-Total_final = 0.0
 num_ticket = 2200  # numéro initial du ticket
 ```
 
@@ -77,6 +81,20 @@ def Date() -> str:
 Retourne la date du jour au format JJ/MM/AAAA
 
 #### e) Fonction recuperer_infos_ticket
+
+###### Description :
+
+Transforme la commande utilisateur en liste d’articles détaillés avec quantité, prix, poids et TVA.
+
+###### Paramètres :
+
+nom_mag (str) : Nom du magasin.
+
+personnel (str) : Prénom du caissier/ière.
+
+commande (str) : Chaîne de caractères contenant les articles et quantités, ex : "C01:10|C02:2".
+
+articles_disponibles (list) : Liste de dictionnaires décrivant les articles disponibles.
 
 ```Python
 def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
@@ -103,6 +121,26 @@ def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
         "articles": articles_ticket
     }
 ```
+
+Retour de la fonction : 
+
+```Python
+{
+    "nom_mag": nom_mag,
+    "personnel": personnel,
+    "articles": [
+        {
+            "Desc": str,     # Description de l'article
+            "Prix": float,   # Prix unitaire HT
+            "Poids": int,    # Poids/volume unitaire en grammes
+            "TVA": float,    # Taux de TVA de l'article
+            "Quantite": int  # Quantité commandée
+        },
+        ...
+    ]
+}
+```
+
 Cette fonction :
 
 Transforme la commande en dictionnaire.
