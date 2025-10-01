@@ -1,12 +1,29 @@
 # tpiut
 TP sur la gestion de projet niveau IUT
 
-## Document fait par Tugdual THEPAUT et Hugo SEVESTRE
+
+## Description
+
+Ce programme permet de générer un ticket de caisse en ligne de commande.  
+Vous pouvez créer un ticket en entrant le nom du magasin, le nom du vendeur et la liste des articles achetés avec leurs quantités.  
+Le ticket est affiché au format classique dans la console.
 
 
-### Lancement du programme
+### Création d'un ticket
 
-Pour lancer le programme, il suffit de taper la commande **Python3 main.py "***Nom de Magasin***" “***Vendeur***” “***C01:10|C02:2***”**
+Lancez le programme en ligne de commande, en respectant la syntaxe suivante :
+
+```bash
+python3 main.py "Nom Magasin" "Vendeur" "C01:QTE|C02:QTE|..."
+```
+
+
+### Règles de saisie
+
+- **Nom du magasin** et **vendeur** : uniquement des lettres et espaces (pas de chiffres, ni de caractères spéciaux).
+- **Articles** : chaque article doit avoir un code valide (voir tableau ci-dessus) et une quantité entière strictement positive.
+- **Format obligatoire** : `C01:2|C03:1` (pas de caractères spéciaux, de lettres dans les quantités, ni d’espaces inutiles).
+- **En cas d’erreur** : le programme affiche un message d’erreur, la syntaxe attendue, un exemple, et la liste des produits disponibles.
 
 
 ### Comment fonctionne le programme : 
@@ -26,8 +43,42 @@ Le programme crée alors un tableau en 5 colonnes qu'il affiche. Il reprend le n
 Pour finir, le programme crée un tableau de 3 lignes contenant le prix total de tous les objets de votre ticket hors taxes, puis juste le prix de la TVA de la somme des produits sans le prix inital puis la combinaison des deux prix afin d'avoir le total TTC.
 
 
+### Exemple de ticket généré
+
+```
+Leclerc
+Ticket numéro : 2201
+
+Date : 01/10/2025
+
+Vous avez été servi par : José
+
+NB  Desc.           HT unitaire TVA   Total
+4   pack de coca    5€         10%  22.0€
+1   Crakers         4€         10%  4.4€
+
+Total HT         24€
+Total TVA        2.4€
+Total            26.4€
+```
+
+
 ### Comment ajouter des produits :
 
 vous trouverez dans le programme nommé main.py à partir de la ligne 5 (PRODUITS) la liste des produits déjà référencés. Si vous voulez ajouter des produits, vous pouvez créer une ligne supplémentaire juste en dessous de la dernière ligne en recopiant le schéma ici présent :
       "CXX": {"description": "blablabla", "prix_ht": X},
 Vous pouvez ajouter votre nouveau produit en modifiant les paramètres et en faisant attention d'éviter de créer des doublons de Code d'article (très important) et de description. Vous pouvez avoir le même prix pour différents articles.
+
+
+### Modifier le taux de TVA
+
+Changez la variable `TAUX_TVA` dans `main.py` :
+
+```python
+TAUX_TVA = 0.10  # 10%
+```
+
+
+## Auteur
+
+Projet réalisé par Hugo SEVESTRE et Tugdual THEPAUT
