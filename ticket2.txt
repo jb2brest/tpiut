@@ -1,0 +1,19 @@
+
+--------------------------------------------------------------------------------
+
+But Maket
+Ticket numéro : 71
+
+Date : 01/10/2025
+
+Vous avez été servi par : Lisa 123
+
+NB  Desc.              Poids unitaire  Poids total  HT unitaire  TVA   Total
+10   pack de coca       2kg                  20.0            5€  20%   60.0€
+7   kilo de pdt        1kg                  7.0             1€  10%   7.7€
+
+                                                            Total HT   57€
+                                                            Total TVA  10.7€
+                                                            Total      67.7€
+
+--------------------------------------------------------------------------------
