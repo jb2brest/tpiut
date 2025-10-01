@@ -17,5 +17,5 @@ Total_HT : float = 0.0
 Total_articles : float = 0.0
 Total_final : float = 0.0
 
-num_ticket : str = "0000"
+num_ticket : str = "2200"
 Date : str = "//"
