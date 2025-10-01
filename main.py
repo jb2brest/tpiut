@@ -29,11 +29,6 @@ for article in articles:
     nb_article = int(parties[1])
     list_articles.append([code_article, nb_article])
 
-# Affichage pour vérifier
-print(f"Magasin: {nom_magasin}")
-print(f"Vendeur: {nom_vendeur}")
-print(f"Articles: {list_articles}")
-
 for article in list_articles:
     code:str = article[0]
     quantite:int = article[1]
