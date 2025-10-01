@@ -61,6 +61,9 @@ Le script initialise automatiquement un stockage avec 10 produits :
 - C09: Bananes (2.30€)
 - C10: Pommes (2.80€)
 
+Il est possible de modifier le stockage en éditant la fonction `initialiser_stockage()` dans le code source.
+commande: ```stockage_ajouter_produit("Pommes", 2.80)```
+
 ## Exemples
 
 ### Exemple valide
