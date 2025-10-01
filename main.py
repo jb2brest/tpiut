@@ -18,6 +18,10 @@ if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     sys.exit(1)
 
 num_ticket=0
+    
+f = open('num_ticket.txt', 'r+')
+num_ticket = int(f.read().strip())
+
 nom_magasin:str = sys.argv[1]
 nom_vendeur:str = sys.argv[2]
 list_articles_brut:str = sys.argv[3]
@@ -47,3 +51,8 @@ today = datetime.datetime.now()
 date = today.strftime("%d/%m/%y")
 
 print(f"{nom_magasin}\nTicket numéro : {num_ticket}\n\nDate : {date}\n\nVous avez été servi par : {nom_vendeur}\n\n{list_articles}")
+
+num_ticket += 1
+f.seek(0)
+f.write(str(num_ticket))
+f.close()
