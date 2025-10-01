@@ -8,7 +8,7 @@ Exemple d'exécution en ligne de commande :
 import sys
 from datetime import datetime
 
-PRODUITS = {
+liste_produits = {
     "C01": {"nom": "Coca Cola", "prix_ht": 5.00},
     "C02": {"nom": "kilo de pdt", "prix_ht": 1.00},
     "C03": {"nom": "pack Biscotte", "prix_ht": 2.00},
@@ -16,20 +16,43 @@ PRODUITS = {
     "C05": {"nom": "Crackers", "prix_ht": 4.00},    
 }
 
+
 TAUX_TVA = 0.10  # TVA de 10%
 
 
-def generer_ticket(magasin: str, vendeur: str, items: str) -> str:
+#fonction pour actualiser le numéro de ticket dans un fichier txt:
+def get_num_ticket():
+    try:
+        with open("numero_ticket.txt", "r") as f:
+            numero_ticket = int(f.read())
+    except FileNotFoundError:#si on ne trouve pas le fichier le numéro est 0
+            numero_ticket = 0
+    
+    numero_ticket += 1
+
+    with open("numero_ticket.txt", "w") as f:
+        f.write(str(numero_ticket))
+
+    ticket_final:str = f"Numéro de ticket :{numero_ticket}"
+    return ticket_final
+
+def generer_ticket(magasin: str, numero_ticket:str, vendeur: str, items: str) -> str:
     """
     Génère un ticket de caisse sous le format demandé en cours
     """
     lignes_ticket = []
     total_ht = 0
+    numero_ticket = get_num_ticket()
+
 
     # --- En-tête ---
 
-    lignes_ticket.append(f"{magasin:^40}")
-    lignes_ticket.append(f"Vendeur : {vendeur:<25} {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    lignes_ticket.append(f"{magasin}")
+    lignes_ticket.append(f"{numero_ticket}")
+    lignes_ticket.append("")
+    lignes_ticket.append(f"Vous avez été servi par : {vendeur:<25}")
+    lignes_ticket.append("")
+    lignes_ticket.append(f"{datetime.now().strftime('%d/%m/%Y %H:%M')}")
     lignes_ticket.append("-" * 40)
     lignes_ticket.append(f"{'Article':<20}{'Qté':>5}{'PU HT':>7}{'Total HT':>8}")
     lignes_ticket.append("-" * 40)
@@ -42,7 +65,7 @@ def generer_ticket(magasin: str, vendeur: str, items: str) -> str:
         except ValueError:
             continue  # ignore entrée invalide
 
-        produit = PRODUITS.get(code)
+        produit = liste_produits.get(code)
         if produit:
             pu = produit["prix_ht"]
             prix_total = pu * quantite
@@ -69,8 +92,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     magasin = sys.argv[1]
+    numero_ticket = get_num_ticket
     vendeur = sys.argv[2]
     items = sys.argv[3]
-
-    ticket = generer_ticket(magasin, vendeur, items)
+    ticket = generer_ticket(magasin, numero_ticket, vendeur, items)
     print(ticket)
