@@ -2,11 +2,13 @@ import sys
 import datetime
 
 produits:list[dict] = [
-    {"code_article":"C01", "description":"pack de coca", "prix_HT":5},
-    {"code_article":"C02", "description":"kilo de pdt", "prix_HT":1},
-    {"code_article":"C03", "description":"pack Biscotte", "prix_HT":2},
-    {"code_article":"C04", "description":"Café soluble", "prix_HT":3},
-    {"code_article":"C05", "description":"Crackers", "prix_HT":4}
+    {"code_article":"C01", "description":"pack de coca","poids":"2 kg" , "prix_HT":5, "TVA":"20 %", "origine":"Lituanie" },
+    {"code_article":"C02", "description":"kilo de pdt","poids":"1 kg" , "prix_HT":1, "TVA":"10 %", "origine":"Espagne"},
+    {"code_article":"C03", "description":"pack Biscotte","poids":"950 g" , "prix_HT":2, "TVA":"10 %", "origine":"France"},
+    {"code_article":"C04", "description":"Café soluble","poids":"250 g" , "prix_HT":3, "TVA":"10 %", "origine":"Roumanie"},
+    {"code_article":"C05", "description":"Crackers", "poids":"125 g" , "prix_HT":4, "TVA":"20 %", "origine":"Angleterre"},
+    {"code_article":"C06", "description":"Eau", "poids":"1.5 L", "prix_HT":6, "TVA":"10 %", "origine":"Suisse"},
+    {"code_article":"C07", "description":"Pain", "poids":"250 g", "prix_HT":1, "TVA":"10 %", "origine":"France"}
 ]
 
 def calcule_TVA(prix_ht, code_article) -> int:
