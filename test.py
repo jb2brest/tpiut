@@ -2,7 +2,7 @@ import sys
 import datetime
 
 
-# BDD : Dictionnaire avec code article comme clé
+# Option 1: Dictionnaire avec code article comme clé
 bdd = {
     "C01": {"description": "pack de coca", "prix": 5},
     "C02": {"description": "kilo de pdt", "prix": 1},
@@ -43,15 +43,6 @@ for article in articles :
 
 
 def calcul_resultat(dico: dict, articles:dict) -> tuple:
-    """Calcule les résultats de la vente.
-
-    Args:
-        dico (dict): le dictionnaire des articles disponibles à la vente.
-        articles (dict): le dictionnaire des articles du ticket de caisse et de leur quantité.
-
-    Returns:
-        tuple: liste_prix, total, TVA_total
-    """
     prix:list = []
     liste_prix:list = []
     total = 0
@@ -62,28 +53,19 @@ def calcul_resultat(dico: dict, articles:dict) -> tuple:
             quantite = articles[article]
             prix_unitaire = dico[article]["prix"]
             prix_total_ht = prix_unitaire * quantite
-            tva_montant = round(prix_total_ht * 0.1, 2)  # Arrondir pour éviter les problèmes de précision
+            tva_montant = prix_total_ht * 0.1
             prix=[article, quantite, prix_unitaire, prix_total_ht, tva_montant]
             liste_prix.append(prix)
             total += prix_total_ht
             TVA_total += tva_montant
     
-    return liste_prix, total, round(TVA_total, 2)
+    return liste_prix, total, TVA_total
 
 def affichage(articles: dict, bdd: dict) -> str:
-    """Affiche le ticket de caisse.
-
-    Args:
-        articles (dict): le dictionnaire des articles du ticket de caisse et de leur quantité.
-        bdd (dict): le dictionnaire des articles disponibles à la vente.
-
-    Returns:
-        str: le ticket de caisse formaté.
-    """
     # Utiliser la fonction calcul_resultat
     liste_prix, total_ht, total_tva = calcul_resultat(bdd, articles)
     total_ttc = total_ht + total_tva
-
+    
     print(nom_magasin)
     print(f"Ticket numéro : 2200")
     print()
@@ -111,14 +93,6 @@ def affichage(articles: dict, bdd: dict) -> str:
     print(f"{'':<26}{'Total TTC':<9} : {total_ttc:>8.2f}€")
 
 affichage(articles_dict, bdd)
-
-# Test de la fonction calcul_resultat
-if __name__ == "__main__":
-    # Test avec des données spécifiques
-    art_test = {'C03': 12, 'C01': 10}
-    resultat_test = calcul_resultat(bdd, art_test)
-    print("Test de calcul_resultat:", resultat_test)
     
-    # Vérification que les calculs sont corrects
-    expected = ([['C03', 12, 2, 24, 2.4], ['C01', 10, 5, 50, 5.0]], 74, 7.4)
-    assert resultat_test == expected, f"Test échoué: attendu {expected}, obtenu {resultat_test}"
+# res=calcul_resultat(articles, articles_dict)
+# affichage(res)

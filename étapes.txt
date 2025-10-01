@@ -4,3 +4,8 @@
     - excution de la requete
     - calcul du résultat 
     - affichage du ticket
+
+Cahier des charges:
+-A partir d'un commande listant le nom du magasin l'hôte de caisse et les produit on obtient le ticket de caisse
+-le programme devra éviter les mauvais types de paramètres
+-le programme doit pouvoir êtres robuste
