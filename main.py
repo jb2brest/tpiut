@@ -16,12 +16,14 @@ def calcule_TVA(prix_ht) -> int:
 if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     print("Usage: python script.py nom_du_magasin nom_du_vendeur liste_des_articles")
     sys.exit(1)
-    
+
+num_ticket=0
 nom_magasin:str = sys.argv[1]
 nom_vendeur:str = sys.argv[2]
 list_articles_brut:str = sys.argv[3]
 
 list_articles: list[list[str | int]] = []
+list_articles.append(["NB", "Desc.", "HT unitaire", "TVA", "Total"])
 
 # Séparer par le pipe |
 list_articles = list_articles_brut.split("|")
@@ -42,3 +44,4 @@ for article in list_articles:
 today = datetime.datetime.now()
 date = today.strftime("%d/%m/%y")
 
+print(f"{nom_magasin}\nTicket numéro : {num_ticket}\n\nDate : {date}\n\nVous avez été servi par : {nom_vendeur}\n\n{list_articles}")
