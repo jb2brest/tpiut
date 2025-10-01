@@ -35,6 +35,12 @@ def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
     catalogue = {art["Code"]: art for art in articles_disponibles}
     articles_ticket = []
 
+try:
+        # transformation en dict (ça lèvera une erreur si mauvais format)
+        commandes = dict(item.split(":") for item in ref.split("|"))
+    except ValueError:
+        return 'Merci de bien renseigner les informations sous la forme suivante par exemple : "C01:10|C02:2"'
+
     for item in commande.split('|'):
         code, quant = item.split(':')
         quant = int(quant)
