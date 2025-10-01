@@ -7,6 +7,7 @@ produits:list[dict] = [
 ]
 
 import sys
+import datetime
 
 if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     print("Usage: python script.py nom_du_magasin nom_du_vendeur liste_des_articles")
@@ -28,7 +29,7 @@ for article in articles:
     nb_article = int(parties[1])
     list_articles.append([code_article, nb_article])
 
-# Affichage pour vérifier
-print(f"Magasin: {nom_magasin}")
-print(f"Vendeur: {nom_vendeur}")
-print(f"Articles: {list_articles}")
+today = datetime.datetime.now()
+date = today.strftime("%d/%m/%y")
+
+
