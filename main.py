@@ -14,16 +14,18 @@ Total_TVA : float = 0.0
 Total_HT : float = 0.0
 Total_articles : float = 0.0
 Total_final : float = 0.0
+
 num_ticket : str = "2200"
 Date : str = ""
 
 
-# fonction Date
+# Fonction Date
 def Date() -> str : 
-    """Fonction qui récupère la date à l'instant T
+    """Fonction qui récupère la date.
+
     Returns:
         str: Date au format JJ/MM/YYYY
     """
-    date : str = datetime.now()
-    Date = date.strftime("%d/%m/%Y")
-    return Date
+    date : str = datetime.now()     # Récupère la date à l'instant T
+    Date = date.strftime("%d/%m/%Y")    # Mise au format JJ/MM/YYYY
+    return Date     # Affectation de cette valeur à la variable Date
