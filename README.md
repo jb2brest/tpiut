@@ -1,4 +1,4 @@
-# tpiut
+# TP IUT 
 TP sur la gestion de projet niveau IUT
 
 AUBINAIS Nathan - VIEIRA MIRANDA Lucas 
