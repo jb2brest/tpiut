@@ -22,9 +22,13 @@ num_ticket=0
 f = open('num_ticket.txt', 'r+')
 num_ticket = int(f.read().strip())
 
-nom_magasin:str = sys.argv[1]
-nom_vendeur:str = sys.argv[2]
-list_articles_brut:str = sys.argv[3]
+try :
+    nom_magasin:str = sys.argv[1]
+    nom_vendeur:str = sys.argv[2]
+    list_articles_brut:str = sys.argv[3]
+    
+except :
+    print("Mauvaise syntaxe, merci de suivre cette syntaxe : main.py <nom_du_magasin> <nom_du_vendeur> <liste_des_articles au format CODE:QUANTITE|CODE:QUANTITE|... >")
 
 list_articles: list[list[str | int]] = []
 list_articles.append(["NB", "Desc.", "HT unitaire", "TVA", "Total"])
