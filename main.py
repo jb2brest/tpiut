@@ -16,15 +16,12 @@ def calcule_TVA(prix_ht) -> int:
 if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     print("Usage: python script.py nom_du_magasin nom_du_vendeur liste_des_articles")
     sys.exit(1)
-<<<<<<< Updated upstream
 
 num_ticket=0
-=======
     
 f = open('num_ticket.txt', 'r+')
 num_ticket = int(f.read().strip())
-    
->>>>>>> Stashed changes
+
 nom_magasin:str = sys.argv[1]
 nom_vendeur:str = sys.argv[2]
 list_articles_brut:str = sys.argv[3]
