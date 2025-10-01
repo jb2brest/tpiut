@@ -51,11 +51,9 @@ for article in list_articles:
 today = datetime.datetime.now()
 date = today.strftime("%d/%m/%y")
 
-<<<<<<< Updated upstream
 print(f"{nom_magasin}\nTicket numéro : {num_ticket}\n\nDate : {date}\n\nVous avez été servi par : {nom_vendeur}\n\n{list_articles}")
-=======
+
 num_ticket += 1
 f.seek(0)
 f.write(str(num_ticket))
 f.close()
->>>>>>> Stashed changes
