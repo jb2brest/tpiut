@@ -29,8 +29,6 @@ list_articles_brut:str = sys.argv[3]
 list_articles: list[list[str | int]] = []
 list_articles.append(["NB", "Desc.", "HT unitaire", "TVA", "Total"])
 
-print(list_articles_brut)
-
 # Séparer par le pipe |
 list_articles_brut = list_articles_brut.split("|")
 
@@ -45,12 +43,30 @@ for article in list_articles_brut:
             description = produits[i]["description"]
     prix_HT = prix_HT*nb_article
     total_TVA:float = calcule_TVA(prix_HT)  
-    list_articles.append([nb_article, description, prix_HT, "10%", total_TVA])
+    list_articles.append([nb_article, description, prix_HT, "10%", round(total_TVA, 2)])
 
 today = datetime.datetime.now()
 date = today.strftime("%d/%m/%y")
 
-print(f"{nom_magasin}\nTicket numéro : {num_ticket}\n\nDate : {date}\n\nVous avez été servi par : {nom_vendeur}\n\n{list_articles}")
+print(f"{nom_magasin}\nTicket numéro : {num_ticket}\n\nDate : {date}\n")
+print(f"Vous avez été servi par : {nom_vendeur}\n")
+
+for ligne in list_articles:
+    print("{:<5} {:<20} {:<12} {:<6} {:<8}".format(*ligne))
+print("\n")
+
+def calcul_total(list_article:list):
+    total_HT = 0
+    for i in range(1, len(list_article)):
+        prix_HT = list_article[i][2]
+        total_HT += float(prix_HT)
+    total_TVA = calcule_TVA(total_HT)
+    return [["","Total HT : ", f"{total_HT}€"], ["","Total TVA : ", f"{round(total_TVA-total_HT, 2)}€"], ["", "Total : ", f"{round(total_TVA, 2)}€"]]
+
+list_total = calcul_total(list_articles)
+
+for ligne in list_total:
+    print("{:<35} {:<6} {:<8}".format(*ligne))
 
 num_ticket += 1
 f.seek(0)
