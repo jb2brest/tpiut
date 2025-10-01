@@ -1,7 +1,0 @@
-Cahier des charges du projet :
-
-Programmes : 
-
-Python3 main.py -> qui a besoin des variables (store, client, liste_des_items)
-produits.bdd -> Contient tous les produits déjà existants de la boutique (Code article, Description, Prix HT unitaire)
-readme.md -> Une documentation qui permet de comprendre comment utiliser notre produit (lancement, fonctionnement, ajout de produits,.... )
