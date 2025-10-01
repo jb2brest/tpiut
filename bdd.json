@@ -1,0 +1,24 @@
+{
+  "articles": {
+    "C01": {
+      "description": "Coca-Cola 2L",
+      "prix_unitaire": 6.0
+    },
+    "C02": {
+      "description": "kilo de pdt",
+      "prix_unitaire": 1.0
+    },
+    "C03": {
+      "description": "pack Biscotte",
+      "prix_unitaire": 2.0
+    },
+    "C04": {
+      "description": "Café soluble",
+      "prix_unitaire": 3.0
+    },
+    "C05": {
+      "description": "Crakers",
+      "prix_unitaire": 4.0
+    }
+  }
+}
