@@ -63,7 +63,8 @@ def generer_ticket(magasin: str, numero_ticket:str, vendeur: str, items: str) ->
             code, quantite = item.split(":")
             quantite = int(quantite)
         except ValueError:
-            continue  # ignore entrée invalide
+            print(f"!!!!!!!!!!IL Y A UNE ERREUR POUR L'ARTICLE CODE : {code}, IL FAUT METTRE UN ENTIER POUR LA QUANTITE!!!!!!!!!!!!!")
+            sys.exit(1) # ignore entrée invalide
 
         produit = liste_produits.get(code)
         if produit:
