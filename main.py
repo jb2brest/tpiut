@@ -38,7 +38,8 @@ def afficher_articles():
     if db:
         print("\n--- ARTICLES DISPONIBLES ---")
         for code, article in db['articles'].items():
-            print(f"{code}: {article['description']} - {article['prix_unitaire']}€")
+            tva_percent = int(article['tva'] * 100)
+            print(f"{code}: {article['description']} ({article['poids_volume']}) - {article['prix_unitaire']}€ - TVA {tva_percent}%")
         print("-----------------------------")
 
 # Fonction pour obtenir le prochain numéro de ticket
@@ -97,7 +98,10 @@ def parser_articles_args(articles_string):
             panier.append({
                 'code': code,
                 'description': article['description'],
+                'poids_volume': article['poids_volume'],
                 'prix_unitaire': article['prix_unitaire'],
+                'tva': article['tva'],
+                'origine': article['origine'],
                 'quantite': quantite,
                 'total': article['prix_unitaire'] * quantite
             })
@@ -245,7 +249,7 @@ def afficher_aide():
 
 # Fonction pour afficher le ticket final
 def afficher_ticket_final(panier, serveur, ticket_num, date, nom_magasin):
-    print("\n" + "==================================================")
+    print("\n" + "================================================================================")
     print(f"{nom_magasin}")
     print(f"Ticket numéro : {ticket_num}")
     print("")
@@ -255,27 +259,44 @@ def afficher_ticket_final(panier, serveur, ticket_num, date, nom_magasin):
     print("")
     
     # En-tête du tableau
-    print(f"{'NB':<3} {'Desc.':<15} {'HT unitaire':<11} {'TVA':<4} {'Total':<6}")
+    print(f"{'NB':<3} {'Desc.':<15} {'Poids/volume':<13} {'Poids/volume':<13} {'HT unitaire':<11} {'TVA':<4} {'Total HT':<6}")
+    print(f"{'':<3} {'':<15} {'unitaire':<13} {'total':<13} {'':<11} {'':<4} {'':<6}")
     
     total_ht = 0
+    total_tva = 0
+    
     for item in panier:
-        ht_unitaire = f"{item['prix_unitaire']:.0f}€"
-        tva_percent = f"{int(TVA*100)}%"
+        # Calculer le poids/volume total
+        poids_volume_unitaire = item['poids_volume']
+        quantite = item['quantite']
+        
+        # Extraire la valeur numérique et l'unité du poids/volume
+        import re
+        match = re.match(r'([0-9.]+)([a-zA-Z]+)', poids_volume_unitaire)
+        if match:
+            valeur = float(match.group(1))
+            unite = match.group(2)
+            poids_volume_total = f"{valeur * quantite}{unite}"
+        else:
+            poids_volume_total = f"{quantite}x{poids_volume_unitaire}"
+        
+        prix_ht = f"{item['prix_unitaire']:.0f}€"
+        tva_percent = f"{int(item['tva']*100)}%"
         total_item = f"{item['total']:.1f}€"
         
-        print(f"{item['quantite']:<3} {item['description']:<15} {ht_unitaire:<11} {tva_percent:<4} {total_item:<6}")
+        print(f"{quantite:<3} {item['description']:<15} {poids_volume_unitaire:<13} {poids_volume_total:<13} {prix_ht:<11} {tva_percent:<4} {total_item:<6}")
+        
         total_ht += item['total']
+        total_tva += item['total'] * item['tva']
     
     print("")
-    print(f"{'':<31} Total HT   {total_ht:.0f}€")
+    print(f"{'':<66} Total HT    {total_ht:.0f}€")
+    print(f"{'':<66} Total TVA   {total_tva:.1f}€")
     
-    tva_montant = total_ht * TVA
-    print(f"{'':<31} Total TVA  {tva_montant:.1f}€")
+    total_ttc = total_ht + total_tva
+    print(f"{'':<66} Total       {total_ttc:.1f}€")
     
-    total_ttc = total_ht + tva_montant
-    print(f"{'':<31} Total      {total_ttc:.1f}€")
-    
-    print("==================================================")
+    print("================================================================================")
 
 # Programme principal
 if __name__ == "__main__":

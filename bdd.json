@@ -1,24 +1,53 @@
 {
   "articles": {
     "C01": {
-      "description": "Coca-Cola 2L",
-      "prix_unitaire": 6.0
+      "description": "pack de coca",
+      "poids_volume": "2kg",
+      "prix_unitaire": 5,
+      "tva": 0.20,
+      "origine": "Lituanie"
     },
     "C02": {
       "description": "kilo de pdt",
-      "prix_unitaire": 1.0
+      "poids_volume": "1kg",
+      "prix_unitaire": 1,
+      "tva": 0.10,
+      "origine": "Espagne"
     },
     "C03": {
       "description": "pack Biscotte",
-      "prix_unitaire": 2.0
+      "poids_volume": "950g",
+      "prix_unitaire": 2,
+      "tva": 0.10,
+      "origine": "France"
     },
     "C04": {
       "description": "Café soluble",
-      "prix_unitaire": 3.0
+      "poids_volume": "250g",
+      "prix_unitaire": 3,
+      "tva": 0.10,
+      "origine": "Roumanie"
     },
     "C05": {
       "description": "Crakers",
-      "prix_unitaire": 4.0
+      "poids_volume": "125g",
+      "prix_unitaire": 4,
+      "tva": 0.20,
+      "origine": "Angleterre"
+    },
+    "C06": {
+      "description": "Eau",
+      "poids_volume": "1.5L",
+      "prix_unitaire": 6,
+      "tva": 0.10,
+      "origine": "Suisse"
+    },
+    "C07": {
+      "description": "Pain",
+      "poids_volume": "250g",
+      "prix_unitaire": 1,
+      "tva": 0.10,
+      "origine": "France"
     }
   }
 }
