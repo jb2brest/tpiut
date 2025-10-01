@@ -18,14 +18,15 @@ le nom du vendeur
 
 le numero associé aux articles -> C01:10|C02:2
 
-### lancement
+### Lancement
 
 Il faut renter dans le terminal ouvert à l'emplacement du fichier : python3 main.py <Magasin> <Vendeur> <Items ex: C01:2|C02:1>
 
 Exemple d'exécution en ligne de commande :
     python3 main.py "But Market" "Lisa" "C01:2|C02:1|C03:3"
 """
-Résultat attendu
+
+Résultat attendu:
 
 Le ticket de ciasse s'affiche dans le terminal
 
