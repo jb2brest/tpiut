@@ -9,8 +9,8 @@ produits:list[dict] = [
     {"code_article":"C05", "description":"Crackers", "prix_HT":4}
 ]
 
-def calcule_TVA(prix_ht) -> int:
-    prix_ttc = prix_ht*1.1
+def calcule_TVA(prix_ht, code_article) -> int:
+    prix_ttc = prix_ht*(recup_tva(code_article)/100)
     return prix_ttc
 
 def poids_total(code_article, nb_article) -> int:
