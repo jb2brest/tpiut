@@ -24,13 +24,16 @@ def stockage_list():
     stockage = []
     code_counter = 1
 
-def stockage_ajouter_produit(description: str, prix_ht_unitaire: float):
-    """Ajoute un produit dans le stockage"""
+def stockage_ajouter_produit(description: str, prix_ht_unitaire: float, tva_percent: float = 10.0, poids_volume: str = "", origine: str = ""):
+    """Ajoute un produit dans le stockage avec TVA spécifique"""
     global stockage, code_counter
     product = {
         "code_produit": code_counter,
         "description": description,
-        "prix_ht_unitaire": prix_ht_unitaire
+        "prix_ht_unitaire": prix_ht_unitaire,
+        "tva_percent": tva_percent,
+        "poids_volume": poids_volume,
+        "origine": origine
     }
     stockage.append(product)
     code_counter += 1
@@ -42,7 +45,7 @@ def afficher_stockage():
     else:
         print("Liste des produits en stockage :")
         for produit in stockage:
-            print(f"Code produit: {produit['code_produit']}, Description: {produit['description']}, Prix HT unitaire: {produit['prix_ht_unitaire']} €")
+            print(f"C{produit['code_produit']:02d}: {produit['description']} - {produit['prix_ht_unitaire']:.2f}€ HT - TVA {produit['tva_percent']:.0f}% - {produit['poids_volume']} - {produit['origine']}")
 
 
 # =============================================================================
@@ -70,7 +73,10 @@ def convertir_stockage_vers_articles(codes_produits_et_quantites):
             article = {
                 "nom": produit_trouve["description"],
                 "quantite": quantite,
-                "prix_ht": produit_trouve["prix_ht_unitaire"]
+                "prix_ht": produit_trouve["prix_ht_unitaire"],
+                "tva_percent": produit_trouve["tva_percent"],
+                "poids_volume": produit_trouve.get("poids_volume", ""),
+                "origine": produit_trouve.get("origine", "")
             }
             articles.append(article)
         else:
@@ -79,19 +85,20 @@ def convertir_stockage_vers_articles(codes_produits_et_quantites):
     return articles
 
 
-def generer_ticket_depuis_stockage(date, nom_client, nom_magasin, pourcentage_tva, codes_produits_et_quantites):
-    """Génère un ticket de caisse à partir des produits en stockage"""
+def generer_ticket_depuis_stockage(date, nom_client, nom_magasin, codes_produits_et_quantites):
+    """Génère un ticket de caisse à partir des produits en stockage avec TVA par produit"""
     # Convertir les codes produits en articles
     articles = convertir_stockage_vers_articles(codes_produits_et_quantites)
     
-    # Calculer la somme totale TTC
+    # Calculer la somme totale TTC en tenant compte du taux de TVA de chaque produit
     somme_totale = 0
     for article in articles:
-        prix_ttc = article["prix_ht"] * (1 + pourcentage_tva / 100)
+        tva_produit = article.get("tva_percent", 10.0)  # TVA par défaut 10% si non spécifiée
+        prix_ttc = article["prix_ht"] * (1 + tva_produit / 100)
         somme_totale += article["quantite"] * prix_ttc
     
-    # Générer le ticket
-    return afficher_ticket_caisse(date, nom_client, nom_magasin, pourcentage_tva, articles, somme_totale)
+    # Générer le ticket (la TVA sera calculée individuellement pour chaque produit)
+    return afficher_ticket_caisse(date, nom_client, nom_magasin, articles, somme_totale)
 
 
 # =============================================================================
@@ -267,165 +274,131 @@ def parser_commandes(commandes_str):
 
 def initialiser_stockage_par_defaut():
     """
-    Initialise le stockage avec une liste de produits par défaut.
-    Cette fonction peuple le stockage avec 10 produits couramment utilisés pour les tests.
-    
-    Liste des produits ajoutés:
-        - C01: pack de coca (5.00€)
-        - C02: kilo de pdt (1.00€)
-        - C03: pack Biscotte (2.00€)
-        - C04: Pain complet (1.50€)
-        - C05: Fromage de chèvre (4.20€)
-        - C06: Salade verte (1.80€)
-        - C07: Lait (1.20€)
-        - C08: Yaourts (3.50€)
-        - C09: Bananes (2.30€)
-        - C10: Pommes (2.80€)
+    Initialise le stockage avec la liste de produits selon les exigences.
+    Produits de C01 à C07 avec leurs taux de TVA spécifiques.
     """
     # Vider le stockage existant et réinitialiser le compteur
     stockage_list()
     
-    # Ajouter les produits un par un avec leurs prix HT
-    stockage_ajouter_produit("pack de coca", 5.0)      # C01
-    stockage_ajouter_produit("kilo de pdt", 1.0)       # C02
-    stockage_ajouter_produit("pack Biscotte", 2.0)     # C03
-    stockage_ajouter_produit("Pain complet", 1.50)     # C04
-    stockage_ajouter_produit("Fromage de chèvre", 4.20) # C05
-    stockage_ajouter_produit("Salade verte", 1.80)     # C06
-    stockage_ajouter_produit("Lait", 1.20)             # C07
-    stockage_ajouter_produit("Yaourts", 3.50)          # C08
-    stockage_ajouter_produit("Bananes", 2.30)          # C09
-    stockage_ajouter_produit("Pommes", 2.80)           # C10
+    # Ajouter les produits selon le tableau des exigences
+    stockage_ajouter_produit("pack de coca", 5.0, 20.0, "2kg", "Lituanie")        # C01
+    stockage_ajouter_produit("kilo de pdt", 1.0, 10.0, "1kg", "Espagne")          # C02
+    stockage_ajouter_produit("pack Biscotte", 2.0, 10.0, "950g", "France")        # C03
+    stockage_ajouter_produit("Café soluble", 3.0, 10.0, "250g", "Roumanie")       # C04
+    stockage_ajouter_produit("Crackers", 4.0, 20.0, "125g", "Angleterre")         # C05
+    stockage_ajouter_produit("Eau", 6.0, 10.0, "1,5L", "Suisse")                 # C06
+    stockage_ajouter_produit("Pain", 1.0, 10.0, "250g", "France")                 # C07
 
 
 # =============================================================================
 # FONCTIONS DE GÉNÉRATION DU TICKET DE CAISSE
 # =============================================================================
-def afficher_ticket_caisse(date, nom_client, nom_magasin, pourcentage_tva, articles, somme_totale):
+def afficher_ticket_caisse(date, nom_client, nom_magasin, articles, somme_totale):
     """
-    Génère un ticket de caisse formaté similaire à l'exemple fourni et l'enregistre dans un fichier .txt.
-    Cette fonction est le cœur du système de génération de tickets, créant un fichier formaté 
-    avec tous les détails de la transaction.
+    Génère un ticket de caisse formaté selon le nouveau format avec poids/volume et TVA par produit.
     
     Args:
         date (str): Date du ticket (format: "DD/MM/YYYY")
         nom_client (str): Nom du client/vendeur
         nom_magasin (str): Nom du magasin
-        pourcentage_tva (float): Pourcentage de la TVA (ex: 10.0 pour 10%)
-        articles (list): Liste des articles sous forme de dictionnaires 
-                        [{"nom": "Article", "quantite": 1, "prix_ht": 5.00}, ...]
+        articles (list): Liste des articles avec TVA individuelle
         somme_totale (float): Somme totale TTC du ticket
     
     Returns:
         str: Le nom du fichier généré
     """
     
-    # Génération d'un numéro de ticket aléatoire à 4 chiffres pour identification
+    # Génération d'un numéro de ticket aléatoire à 4 chiffres
     numero_ticket = random.randint(1000, 9999)
     
     # Formatage de la date et heure actuelles pour créer un nom de fichier unique
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format: AAAAMMJJ_HHMMSS
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     nom_fichier = f"ticket_caisse_{timestamp}.txt"
     
     # Initialisation des variables pour les calculs de totaux
-    total_ht = 0    # Total hors taxes
-    total_tva = 0   # Total de la TVA
+    total_ht = 0
+    total_tva = 0
     
     # Création de la liste qui contiendra toutes les lignes du ticket
     contenu_ticket = []
     
     # =============================================================================
-    # CRÉATION DE L'EN-TÊTE DU TICKET (STYLE ENCADRÉ)
+    # CRÉATION DE L'EN-TÊTE DU TICKET
     # =============================================================================
-    largeur = 60  # Largeur totale du ticket en caractères
     
-    # Ligne supérieure du cadre
-    contenu_ticket.append("+" + "-" * (largeur - 2) + "+")
+    # En-tête simple comme dans l'exemple
+    contenu_ticket.append(nom_magasin)
+    contenu_ticket.append(f"Ticket numéro : {numero_ticket}")
+    contenu_ticket.append("")
+    contenu_ticket.append(f"Date : {date}")
+    contenu_ticket.append("")
+    contenu_ticket.append(f"Vous avez été servi par : {nom_client}")
+    contenu_ticket.append("")
     
-    # Nom du magasin centré dans le cadre
-    contenu_ticket.append("|" + nom_magasin.center(largeur - 2) + "|")
-    
-    # Numéro de ticket aligné à gauche
-    contenu_ticket.append("|" + f"Ticket numéro : {numero_ticket}".ljust(largeur - 2) + "|")
-    
-    # Ligne vide pour la séparation
-    contenu_ticket.append("|" + " " * (largeur - 2) + "|")
-    
-    # Date du ticket
-    contenu_ticket.append("|" + f"Date : {date}".ljust(largeur - 2) + "|")
-    
-    # Ligne vide pour la séparation
-    contenu_ticket.append("|" + " " * (largeur - 2) + "|")
-    
-    # Nom du vendeur/client
-    contenu_ticket.append("|" + f"Vous avez été servi par : {nom_client}".ljust(largeur - 2) + "|")
-    
-    # Ligne vide avant le tableau des articles
-    contenu_ticket.append("|" + " " * (largeur - 2) + "|")
-    
-    # =============================================================================
-    # CRÉATION DE L'EN-TÊTE DU TABLEAU DES ARTICLES
-    # =============================================================================
-    contenu_ticket.append("|" + f"{'NB':<3} {'Desc.':<20} {'HT unitaire':<12} {'TVA':<5} {'Total':<10}".ljust(largeur - 2) + "|")
+    # En-tête du tableau selon le nouveau format
+    contenu_ticket.append(f"{'NB':<3} {'Desc.':<15} {'Poids/volume unitaire':<20} {'Poids/volume total':<18} {'HT unitaire':<12} {'TVA':<5} {'Total':<8}")
     
     # =============================================================================
     # TRAITEMENT DE CHAQUE ARTICLE
     # =============================================================================
-    for i, article in enumerate(articles, 1):  # Numérotation des articles à partir de 1
-        # Extraction des données de l'article
-        nom = article["nom"]           # Description du produit
-        quantite = article["quantite"] # Quantité commandée
-        prix_ht = article["prix_ht"]   # Prix hors taxes unitaire
+    for article in articles:
+        nom = article["nom"]
+        quantite = article["quantite"]
+        prix_ht = article["prix_ht"]
+        tva_percent = article["tva_percent"]
+        poids_volume = article.get("poids_volume", "")
         
         # Calculs financiers pour cet article
-        prix_ttc = prix_ht * (1 + pourcentage_tva / 100)  # Prix TTC unitaire
-        total_article_ttc = quantite * prix_ttc            # Total TTC pour cet article
-        total_article_ht = quantite * prix_ht              # Total HT pour cet article
+        prix_ttc_unitaire = prix_ht * (1 + tva_percent / 100)
+        total_article_ht = quantite * prix_ht
+        tva_article = total_article_ht * (tva_percent / 100)
+        total_article_ttc = total_article_ht + tva_article
         
-        # Calcul de la TVA pour cet article
-        tva_article = total_article_ht * (pourcentage_tva / 100)
+        # Calcul du poids/volume total (si numérique)
+        try:
+            if poids_volume.replace('kg', '').replace('g', '').replace('L', '').replace(',', '.').replace(' ', ''):
+                poids_num = float(poids_volume.replace('kg', '').replace('g', '').replace('L', '').replace(',', '.'))
+                if 'kg' in poids_volume:
+                    poids_total = f"{poids_num * quantite}kg"
+                elif 'g' in poids_volume:
+                    if poids_num * quantite >= 1000:
+                        poids_total = f"{(poids_num * quantite)/1000}kg"
+                    else:
+                        poids_total = f"{poids_num * quantite}g"
+                elif 'L' in poids_volume:
+                    poids_total = f"{poids_num * quantite}L"
+                else:
+                    poids_total = f"{poids_num * quantite}"
+            else:
+                poids_total = f"{quantite}x{poids_volume}"
+        except:
+            poids_total = f"{quantite}x{poids_volume}"
         
         # Accumulation des totaux généraux
-        total_ht += total_article_ht   # Ajouter au total HT général
-        total_tva += tva_article       # Ajouter au total TVA général
+        total_ht += total_article_ht
+        total_tva += tva_article
         
-        # Formatage de la ligne article avec alignement des colonnes
-        ligne = f"{quantite:<3} {nom:<20} {prix_ht:.2f}€{'':<6} {pourcentage_tva:g}% {total_article_ttc:.2f}€"
-        contenu_ticket.append("|" + ligne.ljust(largeur - 2) + "|")
+        # Formatage de la ligne selon le nouveau format
+        ligne = f"{quantite:<3} {nom:<15} {poids_volume:<20} {poids_total:<18} {prix_ht:<12.0f} {tva_percent:<5.0f}% {total_article_ttc:<8.2f}"
+        contenu_ticket.append(ligne)
     
     # =============================================================================
-    # AJOUT DES TOTAUX EN BAS DU TICKET
+    # AJOUT DES TOTAUX
     # =============================================================================
-    
-    # Ligne vide pour séparer les articles des totaux
-    contenu_ticket.append("|" + " " * (largeur - 2) + "|")
-    
-    # Ligne du total HT
-    contenu_ticket.append("|" + f"{'Total HT':<40} {total_ht:.2f}€".ljust(largeur - 2) + "|")
-    
-    # Ligne du total TVA
-    contenu_ticket.append("|" + f"{'Total TVA':<40} {total_tva:.2f}€".ljust(largeur - 2) + "|")
-    
-    # Ligne du total TTC final
-    contenu_ticket.append("|" + f"{'Total':<40} {somme_totale:.2f}€".ljust(largeur - 2) + "|")
-    
-    # Ligne inférieure du cadre pour fermer le ticket
-    contenu_ticket.append("+" + "-" * (largeur - 2) + "+")
+    contenu_ticket.append("")
+    contenu_ticket.append(f"{'Total HT':<60} {total_ht:.0f}€")
+    contenu_ticket.append(f"{'Total TVA':<60} {total_tva:.1f}€")
+    contenu_ticket.append(f"{'Total':<60} {somme_totale:.1f}€")
     
     # =============================================================================
     # ÉCRITURE DU TICKET DANS UN FICHIER
     # =============================================================================
-    
-    # Création et écriture du fichier ticket avec encodage UTF-8 pour les caractères spéciaux
     with open(nom_fichier, 'w', encoding='utf-8') as fichier:
-        # Écrire chaque ligne du ticket dans le fichier
         for ligne in contenu_ticket:
-            fichier.write(ligne + '\n')  # Ajouter un retour à la ligne après chaque ligne
+            fichier.write(ligne + '\n')
+            print(ligne)
     
-    # Confirmer la génération réussie du ticket
-    print(f"Ticket de caisse généré avec succès: {nom_fichier}")
-    
-    # Retourner le nom du fichier créé pour usage ultérieur
+    print(f"\nTicket de caisse généré avec succès: {nom_fichier}")
     return nom_fichier
 
 
@@ -467,7 +440,6 @@ if __name__ == "__main__":
             date=date_aujourd_hui,
             nom_client=nom_client,
             nom_magasin=nom_magasin,
-            pourcentage_tva=10.0,
             codes_produits_et_quantites=codes_et_quantites
         )
 
