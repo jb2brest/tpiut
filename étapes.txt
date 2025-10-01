@@ -1,0 +1,6 @@
+- liste des produits vendus (liste variable globale)
+- programme :
+    - récupération des paramètres fournis au lancement du programme
+    - excution de la requete
+    - calcul du résultat 
+    - affichage du ticket
