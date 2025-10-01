@@ -1,3 +1,5 @@
+import sys
+
 produits:list[dict] = [
     {"code_article":"C01", "description":"pack de coca", "prix_HT":5},
     {"code_article":"C02", "description":"kilo de pdt", "prix_HT":1},
@@ -5,8 +7,6 @@ produits:list[dict] = [
     {"code_article":"C04", "description":"Café soluble", "prix_HT":3},
     {"code_article":"C05", "description":"Crackers", "prix_HT":4}
 ]
-
-import sys
 
 if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     print("Usage: python script.py nom_du_magasin nom_du_vendeur liste_des_articles")
@@ -32,3 +32,12 @@ for article in articles:
 print(f"Magasin: {nom_magasin}")
 print(f"Vendeur: {nom_vendeur}")
 print(f"Articles: {list_articles}")
+
+for article in list_articles:
+    code:str = article[0]
+    quantite:int = article[1]
+    for i in range (len(produits)):
+        if code == produits(i)("code_article") :
+            prix_HT:int = produits(i)("prix_HT")
+    prix_HT = prix_HT*quantite
+    article.append[]
