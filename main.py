@@ -13,6 +13,23 @@ def calcule_TVA(prix_ht) -> int:
     prix_ttc = prix_ht*1.1
     return prix_ttc
 
+def poids_total(code_article, nb_article) -> int:
+    for produits in produits :
+        if code_article == produits["code_article"] :
+            poids = produits["poids"]
+            poids = poids.split(" ")
+            poids_total = int(poids[0]) * nb_article
+            return poids_total
+
+def recup_tva(code_article) -> int :
+    for produits in produits :
+        if code_article == produits["code_article"] :
+            tva = produits["TVA"]
+            tva = tva.split(" ")
+            tva = int(tva[0])
+            return tva
+    
+    
 if len(sys.argv) != 4:  # 4 car sys.argv[0] = nom du script + 3 paramètres
     print("Usage: python script.py nom_du_magasin nom_du_vendeur liste_des_articles")
     sys.exit(1)
