@@ -9,3 +9,7 @@ Cahier des charges:
 -A partir d'un commande listant le nom du magasin l'hôte de caisse et les produit on obtient le ticket de caisse
 -le programme devra éviter les mauvais types de paramètres
 -le programme doit pouvoir êtres robuste
+
+Cahier des charges v2:
+-le poids unitaire et le poids total doit etres afficher sur le ticket
+-la TVA est changé sur certains produits

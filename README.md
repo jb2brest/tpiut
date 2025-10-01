@@ -8,10 +8,13 @@ Ce projet est un système de génération de tickets de caisse développé en Py
 
 - ✅ Génération de tickets de caisse formatés
 - ✅ Calcul automatique des totaux (HT, TVA, TTC)
-- ✅ Gestion d'une base de données d'articles
+- ✅ Gestion d'une base de données d'articles avec poids et origine
+- ✅ Affichage des poids unitaires et totaux (formatage automatique g/kg)
+- ✅ Numérotation automatique et incrémentale des tickets
+- ✅ Gestion de différents taux de TVA par produit
 - ✅ Validation des données d'entrée
 - ✅ Gestion des erreurs (codes articles invalides, quantités incorrectes)
-- ✅ Affichage aligné des colonnes
+- ✅ Affichage aligné des colonnes avec ligne de séparation
 - ✅ Symbole euro (€) pour les prix
 
 ## Structure du Projet
@@ -59,35 +62,38 @@ python main.py "But Market" "Lisa" "C01:1|C02:3|C03:2"
 ### Résultat Attendu
 
 ```bash
-{'C01': 1, 'C02': 3, 'C03': 2}
+{}
 But Market
-Ticket numéro : 2200
+Ticket numéro : 3
 
 Date : 01/10/2025
 
 Vous avez été servi par : Lisa
 
-NB     Description     HT unitaire  TVA    Total
-1      pack de coca    5€           10%    5.5€
-3      kilo de pdt     1€           10%    3.3€
-2      pack Biscotte   2€           10%    4.4€
+NB   Description     Poids Unit.  Poids Total  HT unitaire  TVA   Total
+1    pack de coca    2.00kg       2.00kg       5€           20%   6.00€
+3    kilo de pdt     1.00kg       3.00kg       1€           10%   3.30€
+2    pack Biscotte   950g         1.90kg       2€           10%   4.40€
 
-                          Total HT  :    10.00€
-                          Total TVA :     1.00€
-                          Total TTC :    11.00€
+                                                Total Poids :    6.90kg
+                                                Total HT    :    8.00€
+                                                Total TVA   :    1.70€
+                                                Total TTC   :    9.70€
 ```
 
 ## Base de Données des Articles
 
-Les articles disponibles sont stockés dans le dictionnaire `bdd` :
+Les articles disponibles sont stockés dans le dictionnaire `bdd` avec leurs propriétés complètes :
 
-| Code | Description     | Prix HT |
-|------|----------------|---------|
-| C01  | pack de coca   | 5€      |
-| C02  | kilo de pdt    | 1€      |
-| C03  | pack Biscotte  | 2€      |
-| C04  | Café soluble   | 3€      |
-| C05  | Crakers        | 4€      |
+| Code | Description     | Poids  | Prix HT | TVA | Origine    |
+|------|----------------|--------|---------|-----|------------|
+| C01  | pack de coca   | 2.0kg  | 5€      | 20% | Lituanie   |
+| C02  | kilo de pdt    | 1.0kg  | 1€      | 10% | Espagne    |
+| C03  | pack Biscotte  | 950g   | 2€      | 10% | France     |
+| C04  | Café soluble   | 250g   | 3€      | 10% | Roumanie   |
+| C05  | Crakers        | 125g   | 4€      | 20% | Angleterre |
+| C06  | Eau            | 1.5kg  | 6€      | 10% | Suisse     |
+| C07  | Pain           | 250g   | 1€      | 10% | France     |
 
 ### Ajout de Nouveaux Produits
 
@@ -95,26 +101,28 @@ Pour ajouter un nouveau produit, modifiez le dictionnaire `bdd` dans le fichier 
 
 ```python
 bdd = {
-    "C01": {"description": "pack de coca", "prix": 5},
-    "C02": {"description": "kilo de pdt", "prix": 1},
-    "C03": {"description": "pack Biscotte", "prix": 2},
-    "C04": {"description": "Café soluble", "prix": 3},
-    "C05": {"description": "Crakers", "prix": 4},
-    "C06": {"description": "Nouveau produit", "prix": 6}  # Nouveau produit
+    "C01": {"description": "pack de coca", "poids": 2, "prix": 5, "TVA": 0.2, "Orgine": "Lituanie"},
+    "C02": {"description": "kilo de pdt", "poids": 1, "prix": 1, "TVA": 0.1, "Orgine": "Espagne"},
+    "C03": {"description": "pack Biscotte", "poids": 0.95, "prix": 2, "TVA": 0.1, "Orgine": "France"},
+    # ... autres articles existants
+    "C08": {"description": "Nouveau produit", "poids": 0.5, "prix": 6, "TVA": 0.1, "Orgine": "France"}
 }
 ```
 
 ### Format d'Ajout
 
-- **Code** : Identifiant unique (ex: "C06")
+- **Code** : Identifiant unique (ex: "C08")
 - **Description** : Nom du produit (string)
+- **Poids** : Poids en kilogrammes (float)
 - **Prix** : Prix unitaire HT (nombre entier ou décimal)
+- **TVA** : Taux de TVA en décimal (0.1 = 10%, 0.2 = 20%)
+- **Orgine** : Pays d'origine (string)
 
 ## Fonctions Principales
 
 ### `calcul_resultat(dico, articles)`
 
-Calcule les totaux pour tous les articles du panier.
+Calcule les totaux pour tous les articles du panier, incluant les poids.
 
 **Paramètres :**
 
@@ -123,9 +131,29 @@ Calcule les totaux pour tous les articles du panier.
 
 **Retour :**
 
-- `liste_prix` : Liste détaillée des calculs par article
+- `liste_prix` : Liste détaillée des calculs par article [code, quantité, prix_unitaire, prix_total_ht, tva_montant, poids_unitaire, poids_total]
 - `total_ht` : Total hors taxes
 - `total_tva` : Total de la TVA
+
+### `formater_poids(poids_kg)`
+
+Formate automatiquement l'affichage des poids pour une meilleure lisibilité.
+
+**Paramètres :**
+
+- `poids_kg` : Poids en kilogrammes
+
+**Retour :**
+
+- String formatée (ex: "950g" pour 0.95kg, "2.00kg" pour 2kg)
+
+### `generer_numero_ticket()`
+
+Génère un numéro de ticket incrémental sauvegardé dans un fichier.
+
+**Retour :**
+
+- Numéro de ticket unique et incrémental
 
 ### `affichage(articles, bdd)`
 
@@ -165,23 +193,24 @@ python main.py "Magasin"
 
 ### Taux de TVA
 
-Le taux de TVA est fixé à 10% dans le code. Pour le modifier :
+Chaque produit peut avoir son propre taux de TVA défini dans la base de données :
 
 ```python
-# Dans la fonction calcul_resultat
-tva_montant = round(prix_total_ht * 0.1, 2)  # Changer 0.1 pour le nouveau taux
+# Dans le dictionnaire bdd
+"C01": {"description": "pack de coca", "poids": 2, "prix": 5, "TVA": 0.2, "Orgine": "Lituanie"},  # TVA 20%
+"C02": {"description": "kilo de pdt", "poids": 1, "prix": 1, "TVA": 0.1, "Orgine": "Espagne"},   # TVA 10%
 ```
 
 ### Numéro de Ticket
 
-Le numéro de ticket est fixe (2200). Pour le rendre dynamique :
+Les numéros de tickets sont automatiquement incrémentés et sauvegardés dans `numero_ticket.txt`. Le compteur démarre à 1 et s'incrémente à chaque nouvelle vente.
 
-```python
-# Remplacer dans la fonction affichage
-import random
-numero_ticket = random.randint(1000, 9999)
-print(f"Ticket numéro : {numero_ticket}")
-```
+### Formatage des Poids
+
+Le système affiche automatiquement :
+
+- Les poids < 1kg en grammes (ex: 950g, 250g)
+- Les poids ≥ 1kg en kilogrammes (ex: 2.00kg, 1.50kg)
 
 ## Tests
 
@@ -191,8 +220,15 @@ Le programme inclut des tests automatiques pour vérifier le bon fonctionnement 
 # Test automatique dans main.py
 art_test = {'C03': 12, 'C01': 10}
 resultat_test = calcul_resultat(bdd, art_test)
+expected = ([['C03', 12, 2, 24, 2.4, 0.95, 11.4], ['C01', 10, 5, 50, 10.0, 2, 20]], 74, 12.4)
 assert resultat_test == expected
 ```
+
+### Fichiers Générés
+
+Le programme crée automatiquement :
+
+- `numero_ticket.txt` : Stockage du dernier numéro de ticket utilisé
 
 ## Exemples d'Utilisation Avancés
 
@@ -213,3 +249,29 @@ python main.py "Épicerie du Coin" "Jean" "C01:1|C02:5|C03:3|C04:2"
 ```bash
 python main.py "Grossiste" "Paul" "C02:100|C05:50"
 ```
+
+## Nouvelles Fonctionnalités (Version Actuelle)
+
+### 🆕 Affichage des Poids
+
+- Affichage du poids unitaire et total pour chaque article
+- Formatage intelligent : grammes pour < 1kg, kilogrammes pour ≥ 1kg
+- Calcul automatique du poids total de la commande
+
+### 🆕 TVA Variable
+
+- Chaque produit peut avoir son propre taux de TVA
+- Support de différents taux (10%, 20%, etc.)
+- Affichage du taux de TVA spécifique pour chaque ligne
+
+### 🆕 Numérotation Automatique
+
+- Numéros de tickets incrémentaux automatiques
+- Sauvegarde persistante dans un fichier
+- Reprise du compteur après redémarrage
+
+### 🆕 Interface Améliorée
+
+- Colonnes parfaitement alignées
+- Ligne de séparation pour l'en-tête
+- Totaux alignés à droite pour une meilleure lisibilité
