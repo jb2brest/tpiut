@@ -20,9 +20,9 @@ list_articles_brut:str = sys.argv[3]
 list_articles: list[list[str | int]] = []
 
 # Séparer par le pipe |
-articles = list_articles_brut.split("|")
+list_articles = list_articles_brut.split("|")
 
-for article in articles:
+for article in list_articles:
     # Séparer par le deux-points :
     parties = article.split(":")
     code_article = parties[0]
@@ -32,4 +32,7 @@ for article in articles:
 today = datetime.datetime.now()
 date = today.strftime("%d/%m/%y")
 
+def calcule_TVA(prix_ht) -> int:
+    prix_ttc = prix_ht*1.1
+    return prix_ttc
 
