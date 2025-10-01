@@ -4,13 +4,11 @@ import tkinter as tk
 
 # Tableau des articles
 articles : list
-articles = [{"Code" : "C01", "Description" : "Pack de coca", "Poids" : 2000, "Prix"  : 5, "TVA" : 0.2, "Origine" : "Lituanie"},
-            {"Code" : "C02", "Description" : "Kilo de pdt", "Poids" : 1000, "Prix"  : 1, "TVA" : 0.1, "Origine" : "Espagne"},
-            {"Code" : "C03", "Description" : "Pack de Biscotte", "Poids" : 950, "Prix"  : 2, "TVA" : 0.1, "Origine" : "France"},
-            {"Code" : "C04", "Description" : "Café soluble", "Poids" : 250, "Prix"  : 3, "TVA" : 0.1, "Origine" : "Roumanie"},
-            {"Code" : "C05", "Description" : "Crakers", "Poids" : 125, "Prix"  : 4, "TVA" : 0.2, "Origine" : "Angleterre"},
-            {"Code" : "C06", "Description" : "Eau", "Poids" : 1500, "Prix"  : 6, "TVA" : 0.1, "Origine" : "Suisse"},
-            {"Code" : "C07", "Description" : "Pain", "Poids" : 250, "Prix"  : 1, "TVA" : 0.1, "Origine" : "France"}]
+articles = [{"Code" : "C01", "Description" : "Pack de coca", "Prix"  : 5},
+            {"Code" : "C02", "Description" : "Kilo de pdt", "Prix"  : 1},
+            {"Code" : "C03", "Description" : "Pack de Biscotte", "Prix"  : 2},
+            {"Code" : "C04", "Description" : "Café soluble", "Prix"  : 3},
+            {"Code" : "C05", "Description" : "Crakers", "Prix"  : 4}]
 
 # Définition des variables
 TVA : float = 0.1
@@ -37,15 +35,22 @@ def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
     articles_ticket = []
 
     for item in commande.split('|'):
-        code, quant = item.split(':')
-        quant = int(quant)
+        try:
+            code, quant = item.split(':')
+            quant = int(quant)
+        except ValueError:
+            print(f"Format invalide pour l’article : {item}")
+            continue
+
         if code in catalogue:
             art = catalogue[code]
             articles_ticket.append({
                 "Desc": art["Description"],
                 "Prix": art["Prix"],
-                "TVA": TVA,
-                "Quantite": quant
+                "Poids": art["Poids"],   # Ajout du poids unitaire
+                "TVA": art["TVA"],       # TVA propre à l’article
+                "Quantite": quant,
+                "Origine": art["Origine"]  # (optionnel si tu veux afficher aussi l’origine)
             })
         else:
             print(f"Attention : code {code} non trouvé dans le catalogue.")
@@ -55,6 +60,7 @@ def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
         "personnel": personnel,
         "articles": articles_ticket
     }
+
 
 
 # Fonction Ticket de caisse
