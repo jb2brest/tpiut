@@ -1,4 +1,5 @@
 import sys
+import datetime
 
 produits:list[dict] = [
     {"code_article":"C01", "description":"pack de coca", "prix_HT":5},
@@ -41,3 +42,7 @@ for article in list_articles:
             prix_HT:int = produits(i)("prix_HT")
     prix_HT = prix_HT*quantite
     article.append[]
+
+today = datetime.datetime.now()
+date = today.strftime("%d/%m/%y")
+
