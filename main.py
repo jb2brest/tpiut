@@ -16,8 +16,7 @@ Total_TVA : float = 0.0
 Total_HT : float = 0.0
 Total_articles : float = 0.0
 Total_final : float = 0.0
-num_ticket : str = 2200
-
+num_ticket : int = 2200
 
 # Fonction Date
 def Date() -> str : 
@@ -28,18 +27,12 @@ def Date() -> str :
     """
     date : str = datetime.now()     # Récupère la date à l'instant T
     Date = date.strftime("%d/%m/%Y")    # Mise au format JJ/MM/YYYY
-    return Date()     # Affectation de cette valeur à la variable Date
+    return Date     # Affectation de cette valeur à la variable Date
 
 
 def recuperer_infos_ticket(nom_mag, personnel, commande, articles_disponibles):
     catalogue = {art["Code"]: art for art in articles_disponibles}
     articles_ticket = []
-
-try:
-        # transformation en dict (ça lèvera une erreur si mauvais format)
-        commandes = dict(item.split(":") for item in ref.split("|"))
-    except ValueError:
-        return 'Merci de bien renseigner les informations sous la forme suivante par exemple : "C01:10|C02:2"'
 
     for item in commande.split('|'):
         code, quant = item.split(':')
@@ -71,7 +64,8 @@ def Ticket_caisse(nom_mag : str, num : int, personnel : str, articles : list) :
         personnel (str): Prénom du caissier/ère
         articles (list): Liste des articles achetés par le client
     """
-    num = num_ticket + 1
+    num = num_ticket
+    date = Date()
     
     # Création de la fenêtre
     ticket_c : tk = tk.Tk()
@@ -87,13 +81,13 @@ def Ticket_caisse(nom_mag : str, num : int, personnel : str, articles : list) :
     ticket.append(f"Ticket numéro : {num}")
     ticket.append("")
     # Affichage de la date
-    ticket.append(f"Date : {Date}")
+    ticket.append(f"Date : {date}")
     ticket.append("")
     # Affichage du prénom du caissier/ière
     ticket.append(f"Vous avez été servi par : {personnel}")
     ticket.append("")
     # Mise en place de l'entête de la liste des articles achetés
-    ticket.append(f"{'NB':<4}{'Desc.':<15}{'HT unitaire':<12}{'TVA':<6}{'Total'}")
+    ticket.append(f"{'NB':<4}{'Desc.':<20}{'HT unitaire':<12}{'TVA':<6}{'Total'}")
 
     total_ht = Total_HT
     total_tva = Total_TVA
@@ -110,7 +104,7 @@ def Ticket_caisse(nom_mag : str, num : int, personnel : str, articles : list) :
         total = ht + montant_tva
 
         # Affichage des totaux HT/TVA/final avec mise en page
-        ticket.append(f"{quantite:<4}{description:<15}{prix}€{'':<6}{int(tva*100)}%{total:>6.1f}€")
+        ticket.append(f"{quantite:<4}{description:<20}{prix}€{'':<11}{int(tva*100)}%{total:>6.1f}€")
 
         total_ht += ht
         total_tva += montant_tva
@@ -118,9 +112,9 @@ def Ticket_caisse(nom_mag : str, num : int, personnel : str, articles : list) :
     ticket.append("")
     
     # Mise en page de ces données
-    ticket.append(f"{'Total HT':<20}{total_ht:.1f}€")
-    ticket.append(f"{'Total TVA':<20}{total_tva:.1f}€")
-    ticket.append(f"{'Total':<20}{total_ht+total_tva:.1f}€")
+    ticket.append(f"{'Total HT':<15}{total_ht:.1f}€")
+    ticket.append(f"{'Total TVA':<15}{total_tva:.1f}€")
+    ticket.append(f"{'Total':<15}{total_ht+total_tva:.1f}€")
 
     # Ajout du texte au widget
     text.insert(tk.END, "\n".join(ticket))
@@ -130,11 +124,31 @@ def Ticket_caisse(nom_mag : str, num : int, personnel : str, articles : list) :
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
+        # Affichage du mode d'usage si l'utilisateur oubli un paramètre
         print("Usage : python3 main.py <NomMagasin> <Personnel> <Commande>")
         print('Exemple : python3 main.py "But Maket" "Lisa" "C01:10|C02:2"')
         sys.exit(1)
 
+    num_ticket += 1
     nom_mag, personnel, commande_client = sys.argv[1], sys.argv[2], sys.argv[3]
+
+    # Vérification si il y a un numéro dans le prénom
+    while not personnel.isalpha():
+        personnel = input("Veuillez saisir un prénom valide : ")
+
+    # Vérification de la commande faite
+    while True:
+        try:
+            commande_dict = dict(item.split(":") for item in commande_client.split("|"))
+            # Vérification que toutes les quantités sont des entiers > 0
+            for quant in commande_dict.values():
+                if int(quant) <= 0:
+                    raise ValueError
+            break  # Tout est ok
+        except (ValueError, AttributeError):
+            commande_client = input(
+                'Merci de renseigner les articles sous la forme C01:10|C02:2 : '
+            )
 
     infos = recuperer_infos_ticket(nom_mag, personnel, commande_client, articles)
 
