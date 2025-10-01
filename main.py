@@ -1,5 +1,6 @@
-# Tableau des articles
+from datetime import datetime
 
+# Tableau des articles
 articles : dict = {}
 
 articles = {{"Code" : "C01", "Description" : "Pack de coca", "Prix"  : 5}, 
@@ -9,7 +10,6 @@ articles = {{"Code" : "C01", "Description" : "Pack de coca", "Prix"  : 5},
             {"Code" : "C05", "Description" : "Crakers", "Prix"  : 4}}
 
 # def des variables
-
 TVA : float = 0.01
 
 Total_TVA : float = 0.0
