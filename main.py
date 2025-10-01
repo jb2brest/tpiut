@@ -58,8 +58,9 @@ for article in list_articles_brut:
             prix_HT:int = produits[i]["prix_HT"]
             description = produits[i]["description"]
             poids = produits[i]["poids"]
-    prix_HT = prix_HT*nb_article
-    total_TVA:float = prix_HT*((recup_tva(code_article)/100)+1)
+            tva:str = produits[i]["TVA"]
+            tva = tva.split(" ")
+    total_TVA:float = (prix_HT*((int(tva[0])/100)+1))*nb_article
     poids_tot = poids_total(code_article, nb_article)
     list_articles.append([nb_article, description, poids, poids_tot, prix_HT, recup_tva(code_article), round(total_TVA, 2)])
 
@@ -75,10 +76,11 @@ print("\n")
 
 def calcul_total(list_article:list):
     total_HT = 0
+    total_TVA = 0
     for i in range(1, len(list_article)):
-        prix_HT = list_article[i][4]
+        prix_HT = list_article[i][4]*list_article[i][0]
         total_HT += float(prix_HT)
-        total_TVA = list_article[i][-1]
+        total_TVA += list_article[i][6]
     return [["","Total HT : ", f"{total_HT}€"], ["","Total TVA : ", f"{round(total_TVA-total_HT, 2)}€"], ["", "Total : ", f"{round(total_TVA, 2)}€"]]
 
 list_total = calcul_total(list_articles)
