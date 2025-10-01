@@ -2,15 +2,45 @@
 
 TP sur la gestion de projet niveau IUT
 
+TRAVERS Gwenn - HENON Quentin
+
+## Projet Ticket de caisse 
+
+### Fonctionnement
 """
 Ce programme généer une ticket de caisse en fonction des arguments passés en ligne de commande.
+
+Les arguments a placé en ligne de commande sont les suivant:
+
+le nom du magasin
+
+le nom du vendeur
+
+le numero associé aux articles -> C01:10|C02:2
+
+### lancement
+
+Il faut renter dans le terminal ouvert à l'emplacement du fichier : python3 main.py <Magasin> <Vendeur> <Items ex: C01:2|C02:1>
 
 Exemple d'exécution en ligne de commande :
     python3 main.py "But Market" "Lisa" "C01:2|C02:1|C03:3"
 """
+Résultat attendu
 
-import sys
-from datetime import datetime
+Le ticket de ciasse s'affiche dans le terminal
+
+### Ajout d'un article
+
+Chaque article est représenté par un dictionnaire avec :
+
+- Un code de l’article.
+
+- Le nom de l’article.
+
+- Le prix HT
+
+Liste des produit  ci dessous:
+```Python
 
 PRODUITS = {
     "C01": {"nom": "Coca Cola", "prix_ht": 5.00},
@@ -19,62 +49,9 @@ PRODUITS = {
     "C04": {"nom": "Café soluble", "prix_ht": 3.00},
     "C05": {"nom": "Crackers", "prix_ht": 4.00},    
 }
+```
+Pour ajouter un produit il faut utiliser le même format que ci dessous en lui atribuant un numero de produit unique un nom ainsi qu'un prix HT
 
-TAUX_TVA = 0.10  # TVA de 10%
+Exemple :
 
-
-def generer_ticket(magasin: str, vendeur: str, items: str) -> str:
-    """
-    Génère un ticket de caisse sous le format demandé en cours
-    """
-    lignes_ticket = []
-    total_ht = 0
-
-    # --- En-tête ---
-
-    lignes_ticket.append(f"{magasin:^40}")
-    lignes_ticket.append(f"Vendeur : {vendeur:<25} {datetime.now().strftime('%d/%m/%Y %H:%M')}")
-    lignes_ticket.append("-" * 40)
-    lignes_ticket.append(f"{'Article':<20}{'Qté':>5}{'PU HT':>7}{'Total HT':>8}")
-    lignes_ticket.append("-" * 40)
-
-    # --- Produits ---
-    for item in items.split("|"):
-        try:
-            code, quantite = item.split(":")
-            quantite = int(quantite)
-        except ValueError:
-            print("Erreur : Vous devez fournir un nombre entier")
-
-        produit = PRODUITS.get(code)
-        if produit:
-            pu = produit["prix_ht"]
-            prix_total = pu * quantite
-            total_ht += prix_total
-            lignes_ticket.append(
-                f"{produit['nom']:<20}{quantite:>5}{pu:>7.2f}{prix_total:>8.2f}"
-            )
-
-    # --- Totaux ---
-    tva = total_ht * TAUX_TVA
-    total_ttc = total_ht + tva
-
-    lignes_ticket.append("-" * 40)
-    lignes_ticket.append(f"{'Total HT':<30}{total_ht:>9.2f} €")
-    lignes_ticket.append(f"TVA ({int(TAUX_TVA*100)}%)".ljust(30) + f"{tva:>9.2f} €")
-    lignes_ticket.append(f"{'Total TTC':<30}{total_ttc:>9.2f} €")
-
-    return "\n".join(lignes_ticket)
-
-
-if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("Usage: python3 main.py <Magasin> <Vendeur> <Items ex: C01:2|C02:1>")
-        sys.exit(1)
-
-    magasin = sys.argv[1]
-    vendeur = sys.argv[2]
-    items = sys.argv[3]
-
-    ticket = generer_ticket(magasin, vendeur, items)
-    print(ticket)
+"Id unique": {"nom": "mettre le nom d'un produit", "prix_ht": le prix en float}, 
