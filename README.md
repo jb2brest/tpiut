@@ -1,5 +1,3 @@
-# tpiut
-
 # Documentation - Système de Tickets de Caisse
 
 ## Description générale
@@ -22,6 +20,13 @@ Le programme dispose d'un catalogue de 5 produits :
 | C03 | pack Biscotte | 2€ |
 | C04 | Café soluble | 3€ |
 | C05 | Crackers | 4€ |
+
+# Ajout d'un article
+Pour ajouter un article il suffit d'ajouter une ligne en haut du fichier main.py dans la variable produit avec cette syntaxe :
+
+```python
+{"code_article":"C01", "description":"pack de coca", "prix_HT":5}
+```
 
 ## Utilisation
 
