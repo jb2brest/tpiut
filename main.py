@@ -25,18 +25,20 @@ list_articles_brut:str = sys.argv[3]
 list_articles: list[list[str | int]] = []
 list_articles.append(["NB", "Desc.", "HT unitaire", "TVA", "Total"])
 
-# Séparer par le pipe |
-list_articles = list_articles_brut.split("|")
+print(list_articles_brut)
 
-for article in list_articles:
+# Séparer par le pipe |
+list_articles_brut = list_articles_brut.split("|")
+
+for article in list_articles_brut:
     # Séparer par le deux-points :
     parties = article.split(":")
     code_article = parties[0]
     nb_article = int(parties[1])
     for i in range (len(produits)):
-        if code_article == produits(i)("code_article") :
-            prix_HT:int = produits(i)("prix_HT")
-            description = produits(i)("description")
+        if code_article == produits[i]["code_article"] :
+            prix_HT:int = produits[i]["prix_HT"]
+            description = produits[i]["description"]
     prix_HT = prix_HT*nb_article
     total_TVA:float = calcule_TVA(prix_HT)  
     list_articles.append([nb_article, description, prix_HT, "10%", total_TVA])
