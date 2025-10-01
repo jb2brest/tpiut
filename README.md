@@ -1,15 +1,15 @@
 # tpiut
 TP sur la gestion de projet niveau IUT
 
-##Document fait par Tugdual THEPAUT et Hugo SEVESTRE
+## Document fait par Tugdual THEPAUT et Hugo SEVESTRE
 
 
-###Lancement du programme
+### Lancement du programme
 
 Pour lancer le programme, il suffit de taper la commande **Python3 main.py "***Nom de Magasin***" “***Vendeur***” “***C01:10|C02:2***”**
 
 
-###Comment fonctionne le programme : 
+### Comment fonctionne le programme : 
 
 on va lui passer en paramètre la variable nom_de_magasin qui contient le nom du magasin que l'on veut afficher sur le ticket de caisse.
 
@@ -26,7 +26,7 @@ Le programme crée alors un tableau en 5 colonnes qu'il affiche. Il reprend le n
 Pour finir, le programme crée un tableau de 3 lignes contenant le prix total de tous les objets de votre ticket hors taxes, puis juste le prix de la TVA de la somme des produits sans le prix inital puis la combinaison des deux prix afin d'avoir le total TTC.
 
 
-###Comment ajouter des produits :
+### Comment ajouter des produits :
 
 vous trouverez dans le programme nommé main.py à partir de la ligne 5 (PRODUITS) la liste des produits déjà référencés. Si vous voulez ajouter des produits, vous pouvez créer une ligne supplémentaire juste en dessous de la dernière ligne en recopiant le schéma ici présent :
       "CXX": {"description": "blablabla", "prix_ht": X},
