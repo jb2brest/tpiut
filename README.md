@@ -17,6 +17,18 @@ Lancez le programme en ligne de commande, en respectant la syntaxe suivante :
 python3 main.py "Nom Magasin" "Vendeur" "C01:QTE|C02:QTE|..."
 ```
 
+### Liste des produits disponibles
+
+| Code | Description      | Poids/Volume | Prix HT | TVA   |
+|------|------------------|--------------|---------|-------|
+| C01  | pack de coca     | 2kg          | 5€      | 20 %  |
+| C02  | kilo de pdt      | 1kg          | 1€      | 10 %  |
+| C03  | pack Biscotte    | 950g         | 2€      | 10 %  |
+| C04  | Café soluble     | 250g         | 3€      | 10 %  |
+| C05  | Crakers          | 125g         | 4€      | 20 %  |
+| C06  | Eau              | 1.5L         | 6€      | 10 %  |
+| C07  | Pain             | 250g         | 1€      | 10 %  |
+
 
 ### Règles de saisie
 
@@ -53,13 +65,13 @@ Date : 01/10/2025
 
 Vous avez été servi par : José
 
-NB  Desc.           HT unitaire TVA   Total
-4   pack de coca    5€         10%  22.0€
-1   Crakers         4€         10%  4.4€
+NB  Desc.           Poids/U  Poids total HT unit. TVA   Total
+4   pack de coca    2kg      8.00kg      5€     20%  24.00€
+1   Crakers         125g     125g        4€     20%  4.80€
 
-Total HT         24€
-Total TVA        2.4€
-Total            26.4€
+Total HT                           24€
+Total TVA                          4.80€
+Total                              28.80€
 ```
 
 
@@ -72,11 +84,9 @@ Vous pouvez ajouter votre nouveau produit en modifiant les paramètres et en fai
 
 ### Modifier le taux de TVA
 
-Changez la variable `TAUX_TVA` dans `main.py` :
+Changez la valeur de la clé `"tva"` pour chaque produit dans `PRODUITS`
+par exemple `"tva": 0.20` pour 20%, `"tva": 0.10` pour 10%.
 
-```python
-TAUX_TVA = 0.10  # 10%
-```
 
 
 ## Auteur
