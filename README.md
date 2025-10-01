@@ -14,14 +14,15 @@ Ce projet a pour objectif de développer un système de gestion simple permettan
 
 ## Tableau des articles de base
 
-| Code article | Description      | Prix HT unitaire (€) |
-|--------------|------------------|-----------------------|
-| **C01**      | Pack de Coca     | 5.0                   |
-| **C02**      | Kilo de PDT      | 1.0                   |
-| **C03**      | Pack Biscotte    | 2.0                   |
-| **C04**      | Café soluble     | 3.0                   |
-| **C05**      | Crackers         | 4.0                   |
-
+| Code article | Description   | Poids ou volume unitaire | Prix HT unitaire (€) | TVA   | Origine     |
+|--------------|---------------|--------------------------|-----------------------|-------|-------------|
+| C01          | Pack de coca  | 2kg                      | 5                     | 20 %  | Lituanie    |
+| C02          | Kilo de pdt   | 1kg                      | 1                     | 10 %  | Espagne     |
+| C03          | Pack Biscotte | 950g                     | 2                     | 10 %  | France      |
+| C04          | Café soluble  | 250g                     | 3                     | 10 %  | Roumanie    |
+| C05          | Crackers      | 125g                     | 4                     | 20 %  | Angleterre  |
+| C06          | Eau           | 1.5L                     | 6                     | 10 %  | Suisse      |
+| C07          | Pain          | 250g                     | 1                     | 10 %  | France      |
 ---
 
 ## Exécution du programme
@@ -34,28 +35,9 @@ python3 main.py "[Magasin]" "[Caissier]" "[code article 1]:[quantité]|[code art
 
 Vous pouvez ajouter autant d’articles que nécessaire, en les séparant par **`|`**.  
 
----
-
-##  Modes disponibles
-
-### 1️ Mode Caisse (génération de ticket)
+### Exemple (génération de ticket)
 ```bash
 python3 main.py "But Market" "Lisa" "C01:10|C02:2"
-```
-
-### 2️ Mode Ajout (ajouter un article)
-```bash
-python3 main.py ajout "C06" "Eau minérale" "1.5"
-```
-
-### 3️ Mode Suppression (supprimer un article)
-```bash
-python3 main.py suppression "C06"
-```
-
-### 4 Mode Modification (modifier un article)
-```bash
-python3 main.py modification "C01" "Coca-Cola 2L" "6"
 ```
 
 ---
@@ -64,78 +46,48 @@ python3 main.py modification "C01" "Coca-Cola 2L" "6"
 
 ```
 --- ARTICLES DISPONIBLES ---
-C01: Coca-Cola 2L - 6.0€
-C02: Kilo de PDT   - 1.0€
-C03: Pack Biscotte - 2.0€
-C04: Café soluble  - 3.0€
-C05: Crackers      - 4.0€
+C01: pack de coca (2kg) - 5€ - TVA 20%
+C02: kilo de pdt (1kg) - 1€ - TVA 10%
+C03: pack Biscotte (950g) - 2€ - TVA 10%
+C04: Café soluble (250g) - 3€ - TVA 10%
+C05: Crakers (125g) - 4€ - TVA 20%
+C06: Eau (1.5L) - 6€ - TVA 10%
+C07: Pain (250g) - 1€ - TVA 10%
 -----------------------------
 ```
 
 ---
 
-## Exemple d’ajout de produit
-
-```bash
-python3 main.py ajout "C06" "Eau minérale" "1.5"
-```
-
-Résultat attendu :  
-```
-Article 'C06' ajouté avec succès :
-   Eau minérale - 1.5€
-```
-
-Puis à l’achat :  
-```bash
-python3 main.py "But Market" "Lisa" "C06:1"
-```
-
-```
-Bienvenue dans notre supermarché But Market !
-
-==================================================
-But Market
-Ticket numéro : 67
-Date : 01/10/2025
-Caissier : Lisa
-
-NB  Desc.           HT unitaire  TVA   Total 
-1   Eau minérale    1.5€         10%   1.65€  
-
-                               Total HT   1.5€
-                               Total TVA  0.15€
-                               Total      1.65€
-==================================================
-```
-
----
 
 ## Résultat attendu (exemple complet)
 
 Commande :  
 ```bash
-python3 main.py "But Market" "Lisa" "C01:10|C02:2"
+python3 main.py "But Market" "Lisa" "C01:10|C02:2|C07:4"
 ```
 
 Résultat :  
 ```
 Bienvenue dans notre supermarché But Market !
 
-==================================================
+================================================================================
 But Market
-Ticket numéro : 66
+Ticket numéro : 92
+
 Date : 01/10/2025
-Caissier : Lisa
 
-NB  Desc.           HT unitaire  TVA   Total 
-10  Coca-Cola 2L    6.0€         10%   60.0€ 
-2   Kilo de PDT     1.0€         10%   2.0€  
+Vous avez été servi par : Lisa
 
-                               Total HT   62.0€
-                               Total TVA  6.2€
-                               Total      68.2€
-==================================================
+NB  Desc.           Poids/volume  Poids/volume  HT unitaire TVA  Total HT
+                    unitaire      total                                
+10  pack de coca    2kg           20.0kg        5€          20%  50.0€ 
+2   kilo de pdt     1kg           2.0kg         1€          10%  2.0€  
+4   Pain            250g          1000.0g       1€          10%  4.0€  
+
+                                                                   Total HT    56€
+                                                                   Total TVA   10.6€
+                                                                   Total       66.6€
+================================================================================
 ```
 
 
