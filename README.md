@@ -25,7 +25,7 @@ Le programme dispose d'un catalogue de 5 produits :
 Pour ajouter un article il suffit d'ajouter une ligne en haut du fichier main.py dans la variable produit avec cette syntaxe :
 
 ```python
-{"code_article":"C01", "description":"pack de coca", "prix_HT":5}
+{"code_article":"C01", "description":"pack de coca","poids":"2 kg" , "prix_HT":5, "TVA":"20 %", "origine":"Lituanie" }
 ```
 
 ## Utilisation
