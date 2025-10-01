@@ -9,7 +9,7 @@ articles = [{"Code" : "C01", "Description" : "Pack de coca", "Prix"  : 5},
             {"Code" : "C05", "Description" : "Crakers", "Prix"  : 4}]
 
 # Définition des variables
-TVA : float = 0.01
+TVA : float = 0.1
 Total_TVA : float = 0.0
 Total_HT : float = 0.0
 Total_articles : float = 0.0
