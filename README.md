@@ -2,10 +2,6 @@
 
 Projet IUT : gestion de projet. Binôme : Maël LE GALLO, Markan Le Galliot.
 
-## Prérequis
-
-- Python 3.8 ou plus récent (aucune librairie à installer)
-
 ## Lancement
 
 ```bash
