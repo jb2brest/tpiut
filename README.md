@@ -1,3 +1,7 @@
-# tpiut
-TP sur la gestion de projet niveau IUT  
-Antoine Guery & Thomas Le Floc'h
+# Ticketo
+
+Logiciel Python servant à l'édition de tickets de caisse
+
+## Utilisation
+
+Appelez le fichier avec main.py "" "" ""
