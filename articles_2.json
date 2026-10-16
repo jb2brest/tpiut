@@ -1,0 +1,51 @@
+{
+  "C01": {
+    "description": "pack de coca",
+    "poids": "2kg",
+    "prix_ht": 5,
+    "tva": 0.2,
+    "origine": "Lituanie"
+  },
+  "C02": {
+    "description": "kilo de pdt",
+    "poids": "1kg",
+    "prix_ht": 1,
+    "tva": 0.1,
+    "origine": "Espagne"
+  },
+  "C03": {
+    "description": "pack Biscotte",
+    "poids": "950g",
+    "prix_ht": 2,
+    "tva": 0.1,
+    "origine": "France"
+  },
+  "C04": {
+    "description": "Café soluble",
+    "poids": "250g",
+    "prix_ht": 3,
+    "tva": 0.1,
+    "origine": "Roumanie"
+  },
+  "C05": {
+    "description": "Crackers",
+    "poids": "125g",
+    "prix_ht": 4,
+    "tva": 0.2,
+    "origine": "Angleterre"
+  },
+  "C06": {
+    "description": "Eau",
+    "poids": "1,5L",
+    "prix_ht": 6,
+    "tva": 0.1,
+    "origine": "Suisse"
+  },
+  "C07": {
+    "description": "Pain",
+    "poids": "250g",
+    "prix_ht": 1,
+    "tva": 0.1,
+    "origine": "France"
+  }
+}
