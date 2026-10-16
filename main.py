@@ -34,6 +34,19 @@ def lire_arguments():
 
     return magasin, vendeur, articles
 
+def calcul_montant(arguments : tuple) -> tuple :
+    for code, quantite in arguments[2] :
+        if code not in dic_article :
+            article = dic_article[code]
+        
+        montant_ht = article["prix HT unitaire"] * quantite
+        montant_tva = montant_ht * article["tva"]
+
+        total_ht += montant_ht
+        total_tva += montant_tva
+
+    total_ttc = total_ht + total_tva
+    return total_ht, total_tva, total_ttc
 
 # Point d'entrée du programme
 if __name__ == "__main__":
