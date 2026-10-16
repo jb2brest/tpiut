@@ -11,7 +11,7 @@ Script Python qui génère un ticket de caisse dans le terminal à partir d'une 
 ### Lancement
 
 ```bash
-python3 main.py "Magasin" "Vendeur" "C01:10|C02:2"
+python3 main.py "BUT Market" "Lisa" "C01:1|C02:3|C03:4"
 ```
 
 Les arguments sont, dans l'ordre :
@@ -23,22 +23,23 @@ Les arguments sont, dans l'ordre :
 ### Exemple de résultat
 
 ```
-┌──────────────────────────────────────────────────┐
-│ Magasin                                          │
-│ Ticket numéro : 1000                             │
-│                                                  │
-│ Date : 16/10/2026                                │
-│                                                  │
-│ Vous avez été servi par : Vendeur                │
-│                                                  │
-│ NB  Desc.             HT unitaire  TVA     Total │
-│ 10  Pack de coca      5€           10%       55€ │
-│ 2   Kilo de pdt       1€           10%      2,2€ │
-│                                                  │
-│                             Total HT         52€ │
-│                             Total TVA       5,2€ │
-│                             Total          57,2€ │
-└──────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────┐
+│ BUT Market                                                                     │
+│ Ticket numéro : 1000                                                           │
+│                                                                                │
+│ Date : 16/10/2026                                                              │
+│                                                                                │
+│ Vous avez été servi par : Lisa                                                 │
+│                                                                                │
+│ NB  Desc.             Pds/vol. unit.  Pds/vol. total  HT unitaire TVA    Total │
+│ 1   Pack de coca      2kg             2kg             5€          20%       6€ │
+│ 3   Kilo de pdt       1kg             3kg             1€          10%     3,3€ │
+│ 4   Pack de biscotte  950g            3,8kg           2€          10%     8,8€ │
+│                                                                                │
+│                                                           Total HT         16€ │
+│                                                           Total TVA       2,1€ │
+│                                                           Total          18,1€ │
+└────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Ajouter un article
@@ -46,8 +47,10 @@ Les arguments sont, dans l'ordre :
 Les articles sont stockés dans le dictionnaire `dic_article` de `main.py`. Pour en ajouter un, ajoutez une ligne :
 
 ```python
-"C03": {"description": "Nom de l'article", "prix HT unitaire": 12.50, "tva": 0.10},
+"C07": {"description": "Pain", "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 1, "tva": 0.10},
 ```
 
+- `description` : nom ou description du produit
 - `prix HT unitaire` : prix hors taxe en euros
 - `tva` : taux sous forme décimale (`0.10` = 10 %)
+- `Poids ou volume unitaire` : poid ou volume du produit pour un seul article
