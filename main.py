@@ -30,9 +30,26 @@ def lire_arguments():
     articles = []
     # Les articles sont séparés par "|"
     for element in commande.split("|"):
-        # Chaque article est de la forme "CODE:QUANTITE"
+        # Vérification du format CODE:QUANTITE
+        if element.count(":") != 1:
+            print(f"Erreur : '{element}' n'est pas au format CODE:QUANTITE (ex : C01:2)")
+            sys.exit(1)
+
         code, quantite = element.split(":")
-        articles.append((code.strip().upper(), int(quantite)))
+        code = code.strip().upper()
+        quantite = quantite.strip()
+
+        # Vérification que l'article existe dans le catalogue
+        if code not in dic_article:
+            print(f"Erreur : l'article {code} n'existe pas dans le catalogue")
+            sys.exit(1)
+
+        # Vérification que la quantité est un nombre entier positif
+        if not quantite.isdigit() or int(quantite) == 0:
+            print(f"Erreur : la quantité '{quantite}' pour {code} doit être un nombre entier positif")
+            sys.exit(1)
+
+        articles.append((code, int(quantite)))
 
     return magasin, vendeur, articles
 
