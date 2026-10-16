@@ -1,0 +1,32 @@
+{
+    "C01": {
+        "nom": "pack de coca",
+        "prix_ht": 5.0,
+        "tva": 10
+    },
+    "C02": {
+        "nom": "kilo de pdt",
+        "prix_ht": 1.0,
+        "tva": 10
+    },
+    "C03": {
+        "nom": "pack Biscotte",
+        "prix_ht": 2.0,
+        "tva": 10
+    },
+    "C04": {
+        "nom": "Café soluble",
+        "prix_ht": 3.0,
+        "tva": 10
+    },
+    "C05": {
+        "nom": "Crakers",
+        "prix_ht": 4.0,
+        "tva": 10
+    },
+    "C06": {
+        "nom": "Jus d'orange",
+        "prix_ht": 3.5,
+        "tva": 10
+    }
+}
