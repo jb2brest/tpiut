@@ -46,7 +46,11 @@ produit_qte:str = produits.split("|")
 for produit in produit_qte:
     infos_achat = produit.split(":")
     code_achete = infos_achat[0]
-    qte_achetee = int(infos_achat[1])
+    qte_achetee = 0
+    try:
+        qte_achetee = int(infos_achat[1])
+    except ValueError:
+        sortie += f"{infos_achat[1]} ERREUR: il faut taper une quantité entière !\n"
     desc_produit = "NONE"
     prix_unitaire = 0
     tot_produit = 0
@@ -55,9 +59,9 @@ for produit in produit_qte:
         prix_unitaire = ARTICLES[code_achete][1]
         tot_produit = prix_unitaire * int(qte_achetee)
     except KeyError:
-        print(f"ERREUR: Êtes-vous sûr que le code {code_achete} est référencé ?")
+        sortie += f"ERREUR: Êtes-vous sûr que le code {code_achete} est référencé ?\n"
     except Exception as e:
-        print(f"ERREUR {e}: Demandez à Claude.")
+        sortie += f"ERREUR {e}: Demandez à Claude.\n"
 
     grand_total_ht += tot_produit
     sortie += f"{qte_achetee}      {desc_produit}     {prix_unitaire}€           10%    {tot_produit*qte_achetee*1.1:.2f}€\n"
