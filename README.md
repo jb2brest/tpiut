@@ -24,14 +24,14 @@ Date : 16/10/2026
 
 Vous avez été servi par : Lisa
 
-NB   Desc.           HT unitaire   TVA   Total
-1    pack de coca    5€            10%   5,5€
-3    kilo de pdt     1€            10%   3,3€
-4    pack Biscotte   2€            10%   8,8€
+NB   Desc.           Poids/volume unitaire   Poids/volume total   HT unitaire   TVA   Total
+1    pack de coca    2kg                     2kg                  5€            20%   6€
+3    kilo de pdt     1kg                     3kg                  1€            10%   3,3€
+4    pack Biscotte   950g                    3,8kg                2€            10%   8,8€
 
-                     Total HT            16€
-                     Total TVA           1,6€
-                     Total               17,6€
+                                                                  Total HT            16€
+                                                                  Total TVA           2,1€
+                                                                  Total               18,1€
 ```
 
 ## Fonctionnement
@@ -44,6 +44,8 @@ NB   Desc.           HT unitaire   TVA   Total
 6. La date affichée est celle du jour.
 7. Un même article saisi plusieurs fois (`C01:2|C01:1`) est regroupé sur une seule ligne.
 8. Les colonnes du ticket s'adaptent à la longueur des descriptions.
+9. Le poids/volume total = poids/volume unitaire × quantité, affiché dans l'unité la plus lisible (4 × 950g = 3,8kg, 3 × 1,5L = 4,5L).
+10. La TVA est définie produit par produit : on peut avoir 10 % et 20 % sur le même ticket.
 
 Les montants sont calculés en `Decimal` pour éviter les erreurs d'arrondi.
 
@@ -52,12 +54,16 @@ Les montants sont calculés en `Decimal` pour éviter les erreurs d'arrondi.
 Ajouter une ligne dans `produits.csv` (séparateur `;`) :
 
 ```
-code;description;prix_ht;tva
-C06;Jus d'orange;2.5;5.5
+code;description;poids_volume;prix_ht;tva;origine
+C08;Jus d'orange;1L;2.5;5.5;Espagne
 ```
 
+- `poids_volume` : poids ou volume d'une unité. Unités acceptées : `g`, `kg`, `mL`, `cL`, `L` (ex : `950g`, `2kg`, `1,5L`, `33cL`)
 - `prix_ht` : prix unitaire hors taxe (point ou virgule acceptés)
-- `tva` : taux en pourcentage (10 = 10 %)
+- `tva` : taux en pourcentage (10 = 10 %, 20 = 20 %)
+- `origine` : pays d'origine (enregistré, pas affiché sur le ticket binôme)
+
+Pour changer la TVA d'un produit (ex : passage à 20 %), il suffit de modifier la colonne `tva`.
 
 Le code n'a pas besoin d'être modifié.
 
@@ -70,6 +76,7 @@ Le code n'a pas besoin d'être modifié.
 | Code article inconnu (`C99:1`) | `Erreur : Code article inconnu : C99` |
 | Quantité non numérique, nulle ou négative | `Erreur : Quantité invalide...` |
 | Format sans `:` | `Erreur : Format invalide...` |
+| Poids/volume mal écrit dans le catalogue | `Erreur : Poids/volume invalide...` |
 
 Quand le ticket est en erreur, aucun numéro de ticket n'est consommé.
 

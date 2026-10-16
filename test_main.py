@@ -15,19 +15,37 @@ class TestTicket(unittest.TestCase):
         self.produits = main.charger_produits()
 
     def test_catalogue_charge(self):
-        # Les 5 articles du client sont présents
-        self.assertEqual(len(self.produits), 5)
+        # Les 7 articles du client sont présents, avec la nouvelle TVA à 20%
+        self.assertEqual(len(self.produits), 7)
         self.assertEqual(self.produits["C01"]["prix_ht"], Decimal(5))
+        self.assertEqual(self.produits["C01"]["tva"], Decimal(20))
+        self.assertEqual(self.produits["C05"]["tva"], Decimal(20))
+        self.assertEqual(self.produits["C06"]["poids_volume"], "1,5L")
 
     def test_parser_panier(self):
         self.assertEqual(main.parser_panier("C01:10|C02:2"), [("C01", 10), ("C02", 2)])
 
     def test_exemple_client(self):
-        # Ticket du client : 1 coca, 3 kg pdt, 4 biscottes -> 16 / 1,6 / 17,6
+        # Nouveau ticket du client : coca à 20% de TVA -> 16 / 2,1 / 18,1
         lignes = main.calculer_lignes(main.parser_panier("C01:1|C02:3|C03:4"), self.produits)
-        self.assertEqual([main.euro(l["total_ttc"]) for l in lignes], ["5,5€", "3,3€", "8,8€"])
+        self.assertEqual([main.euro(l["total_ttc"]) for l in lignes], ["6€", "3,3€", "8,8€"])
+        self.assertEqual([l["poids_total"] for l in lignes], ["2kg", "3kg", "3,8kg"])
         ht, tva, ttc = main.calculer_totaux(lignes)
-        self.assertEqual((main.euro(ht), main.euro(tva), main.euro(ttc)), ("16€", "1,6€", "17,6€"))
+        self.assertEqual((main.euro(ht), main.euro(tva), main.euro(ttc)), ("16€", "2,1€", "18,1€"))
+
+    def test_poids_volume(self):
+        # Lecture des unités et affichage dans l'unité la plus lisible
+        self.assertEqual(main.lire_poids_volume("950g"), (Decimal(950), "g"))
+        self.assertEqual(main.lire_poids_volume("1,5L"), (Decimal(1500), "ml"))
+        self.assertEqual(main.poids_volume(Decimal(3800), "g"), "3,8kg")
+        self.assertEqual(main.poids_volume(Decimal(250), "g"), "250g")
+        self.assertEqual(main.poids_volume(Decimal(4500), "ml"), "4,5L")
+        self.assertEqual(main.poids_volume(Decimal(330), "ml"), "330mL")
+
+    def test_poids_volume_invalide(self):
+        for texte in ("", "abc", "12", "3 tonnes"):
+            with self.assertRaises(main.ErreurTicket):
+                main.lire_poids_volume(texte)
 
     def test_code_inconnu(self):
         with self.assertRaises(main.ErreurTicket):
@@ -41,7 +59,7 @@ class TestTicket(unittest.TestCase):
         # Une description longue ne doit pas décaler la colonne Total
         produits = dict(self.produits)
         produits["C99"] = {"description": "Pack de bouteilles d'eau minérale gazeuse",
-                           "prix_ht": Decimal("12.99"), "tva": Decimal("5.5")}
+                           "poids_volume": "50cl", "prix_ht": Decimal("12.99"), "tva": Decimal("5.5")}
         lignes = main.calculer_lignes([("C01", 1), ("C99", 150)], produits)
         ticket = main.generer_ticket("M", "V", 1, date.today(), lignes).splitlines()
         debut = next(i for i, l in enumerate(ticket) if l.startswith("NB"))

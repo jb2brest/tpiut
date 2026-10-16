@@ -10,6 +10,7 @@ Exemple :
 
 import csv
 import os
+import re
 import sys
 from datetime import date
 from decimal import Decimal, ROUND_HALF_UP
@@ -20,22 +21,41 @@ FICHIER_PRODUITS = os.path.join(DOSSIER, "produits.csv")
 FICHIER_COMPTEUR = os.path.join(DOSSIER, "compteur.txt")
 PREMIER_NUMERO = 2200
 
+# Unités de poids/volume acceptées -> (unité de base, coefficient)
+# Les poids sont ramenés en grammes, les volumes en millilitres
+UNITES = {
+    "g": ("g", 1), "kg": ("g", 1000),
+    "ml": ("ml", 1), "cl": ("ml", 10), "l": ("ml", 1000),
+}
+
 
 class ErreurTicket(Exception):
     """Erreur fonctionnelle (code inconnu, quantité invalide...)."""
 
 
+def lire_poids_volume(texte):
+    """Convertit "950g" / "2kg" / "1,5L" en (valeur en unité de base, unité de base)."""
+    m = re.fullmatch(r"\s*(\d+(?:[.,]\d+)?)\s*([a-zA-Z]+)\s*", texte)
+    if not m or m.group(2).lower() not in UNITES:
+        raise ErreurTicket(f"Poids/volume invalide : '{texte}' (ex: 950g, 2kg, 1,5L)")
+    base, coef = UNITES[m.group(2).lower()]
+    return Decimal(m.group(1).replace(",", ".")) * coef, base
+
+
 def charger_produits(chemin=FICHIER_PRODUITS):
-    """Lit le catalogue CSV et renvoie un dict {code: {description, prix_ht, tva}}."""
+    """Lit le catalogue CSV et renvoie un dict {code: {description, poids, prix_ht, tva, origine}}."""
     produits = {}
     with open(chemin, encoding="utf-8") as f:
         for ligne in csv.DictReader(f, delimiter=";"):
             code = ligne["code"].strip().upper()
             produits[code] = {
                 "description": ligne["description"].strip(),
+                "poids_volume": ligne["poids_volume"].strip(),
                 # Decimal évite les erreurs d'arrondi des float (ex: 0.1 + 0.2)
                 "prix_ht": Decimal(ligne["prix_ht"].strip().replace(",", ".")),
                 "tva": Decimal(ligne["tva"].strip().replace(",", ".")),
+                # Origine stockée pour une évolution future (pas affichée en binôme)
+                "origine": (ligne.get("origine") or "").strip(),
             }
     return produits
 
@@ -73,9 +93,12 @@ def calculer_lignes(panier, produits):
         p = produits[code]
         total_ht = p["prix_ht"] * qte
         montant_tva = total_ht * p["tva"] / 100
+        valeur, unite = lire_poids_volume(p["poids_volume"])
         lignes.append({
             "nb": qte,
             "description": p["description"],
+            "poids_unitaire": p["poids_volume"],
+            "poids_total": poids_volume(valeur * qte, unite),
             "prix_ht": p["prix_ht"],
             "tva": p["tva"],
             "total_ht": total_ht,
@@ -92,11 +115,25 @@ def calculer_totaux(lignes):
     return total_ht, total_tva, total_ht + total_tva
 
 
+def nombre(valeur, decimales=2):
+    """Formate un nombre à la française sans zéros inutiles : 5.50 -> '5,5', 16.00 -> '16'."""
+    valeur = Decimal(valeur).quantize(Decimal(1).scaleb(-decimales), rounding=ROUND_HALF_UP)
+    texte = f"{valeur:.{decimales}f}"
+    if "." in texte:
+        texte = texte.rstrip("0").rstrip(".")
+    return texte.replace(".", ",")
+
+
 def euro(montant):
     """Formate un montant à la française : 5 -> '5€', 5.5 -> '5,5€', 1.25 -> '1,25€'."""
-    montant = Decimal(montant).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    texte = f"{montant:.2f}".rstrip("0").rstrip(".")
-    return texte.replace(".", ",") + "€"
+    return nombre(montant) + "€"
+
+
+def poids_volume(valeur, unite):
+    """Affiche un poids (g) ou un volume (ml) dans l'unité la plus lisible : 3800g -> '3,8kg'."""
+    if unite == "g":
+        return nombre(valeur / 1000, 3) + "kg" if valeur >= 1000 else nombre(valeur) + "g"
+    return nombre(valeur / 1000, 3) + "L" if valeur >= 1000 else nombre(valeur) + "mL"
 
 
 def pourcent(taux):
@@ -131,18 +168,20 @@ def generer_ticket(magasin, vendeur, numero, jour, lignes):
         "",
     ]
     # Tableau : chaque colonne s'adapte à son contenu le plus long
-    entete = ["NB", "Desc.", "HT unitaire", "TVA", "Total"]
+    entete = ["NB", "Desc.", "Poids/volume unitaire", "Poids/volume total",
+              "HT unitaire", "TVA", "Total"]
     tableau = [
-        [str(l["nb"]), l["description"], euro(l["prix_ht"]),
-         pourcent(l["tva"]), euro(l["total_ttc"])]
+        [str(l["nb"]), l["description"], l["poids_unitaire"], l["poids_total"],
+         euro(l["prix_ht"]), pourcent(l["tva"]), euro(l["total_ttc"])]
         for l in lignes
     ]
-    largeurs = [max(len(ligne[i]) for ligne in [entete] + tableau) + 3 for i in range(4)]
+    nb_col = len(entete)
+    largeurs = [max(len(ligne[i]) for ligne in [entete] + tableau) + 3 for i in range(nb_col - 1)]
     for ligne in [entete] + tableau:
-        sortie.append("".join(c.ljust(w) for c, w in zip(ligne, largeurs)) + ligne[4])
+        sortie.append("".join(c.ljust(w) for c, w in zip(ligne, largeurs)) + ligne[-1])
     # Totaux : libellé sous "HT unitaire", montant aligné sur la colonne "Total"
-    marge = " " * (largeurs[0] + largeurs[1])
-    largeur_libelle = largeurs[2] + largeurs[3]
+    marge = " " * sum(largeurs[:4])
+    largeur_libelle = largeurs[4] + largeurs[5]
     sortie.append("")
     for libelle, montant in (("Total HT", total_ht), ("Total TVA", total_tva), ("Total", total_ttc)):
         sortie.append(marge + libelle.ljust(largeur_libelle) + euro(montant))
