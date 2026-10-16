@@ -1,7 +1,7 @@
 # Auteur : Titouan PLANSON-JEULLAIN // Léo Dumont--Bauer
 # Groupe : 3A1
 # Date : 16/10/2026
-# Description : Programme pour générer un ticket de caisse - version 1
+# Description : Programme pour générer un ticket de caisse - version 2
 
 # Importation des modules
 import os
@@ -10,13 +10,13 @@ from datetime import datetime
 
 # Catalogue : dictionnaire de dictionnaires, une entrée par article
 dic_article: dict = {
-    "C01": {"description": "Pack de coca",     "Poids ou volume unitaire" : "2Kg"  ,"prix HT unitaire": 5, "tva": 0.20},
-    "C02": {"description": "Kilo de pdt",      "Poids ou volume unitaire" : "1Kg"  ,"prix HT unitaire": 1, "tva": 0.10},
+    "C01": {"description": "Pack de coca",     "Poids ou volume unitaire" : "2kg"  ,"prix HT unitaire": 5, "tva": 0.20},
+    "C02": {"description": "Kilo de pdt",      "Poids ou volume unitaire" : "1kg"  ,"prix HT unitaire": 1, "tva": 0.10},
     "C03": {"description": "Pack de biscotte", "Poids ou volume unitaire" : "950g" ,"prix HT unitaire": 2, "tva": 0.10},
     "C04": {"description": "Café soluble",     "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 3, "tva": 0.10},
     "C05": {"description": "Crackers",         "Poids ou volume unitaire" : "125g" ,"prix HT unitaire": 4, "tva": 0.20},
     "C06": {"description": "Eau",              "Poids ou volume unitaire" : "1,5L" ,"prix HT unitaire": 6, "tva": 0.10},
-    "C05": {"description": "Pain",             "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 1, "tva": 0.10},
+    "C07": {"description": "Pain",             "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 1, "tva": 0.10},
 }
 
 
@@ -75,6 +75,35 @@ def generer_numero_et_date():
     return str(numero), date
 
 
+# Fonction pour séparer la valeur et l'unité (ex : "1,5L" -> 1.5 et "L")
+def separer_poids_volume(texte: str) -> tuple:
+    # On récupère les chiffres (et la virgule) au début du texte
+    nombre = ""
+    for caractere in texte:
+        if caractere.isdigit() or caractere in ",.":
+            nombre += caractere
+        else:
+            break
+    # Le reste du texte correspond à l'unité
+    unite = texte[len(nombre):].strip()
+    return float(nombre.replace(",", ".")), unite
+
+
+# Fonction pour calculer le poids ou volume total d'une ligne (ex : "950g" x 4 -> "3,8kg")
+def calcul_poids_volume_total(poids_unitaire: str, quantite: int) -> str:
+    valeur, unite = separer_poids_volume(poids_unitaire)
+    total = valeur * quantite
+
+    # Au-delà de 1000g on passe en kg
+    if unite == "g" and total >= 1000:
+        total = total / 1000
+        unite = "kg"
+
+    # On enlève les zéros inutiles puis on remplace le point par une virgule
+    texte = f"{total:.3f}".rstrip("0").rstrip(".")
+    return texte.replace(".", ",") + unite
+
+
 # Fonction pour calculer les montants
 def calcul_montant(articles: list) -> tuple:
     # Initialisation des variables
@@ -92,6 +121,8 @@ def calcul_montant(articles: list) -> tuple:
             lignes.append({
                 "quantite": quantite,
                 "description": article["description"],
+                "poids_unitaire": article["Poids ou volume unitaire"],
+                "poids_total": calcul_poids_volume_total(article["Poids ou volume unitaire"], quantite),
                 "prix_ht": article["prix HT unitaire"],
                 "tva": article["tva"],
                 "total_ttc": round(montant_ht + montant_tva, 2),
