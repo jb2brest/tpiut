@@ -74,7 +74,7 @@ def calcul_montant(articles: list) -> tuple:
     return lignes, round(total_ht, 2), round(total_tva, 2), round(total_ttc, 2)
 
 
-# Fonction pour formater un montant comme sur le ticket (ex : 5,5€ ou 16€)
+# Fonction pour formater un montant comme sur l'exemple (ex : 5,5€ ou 16€)
 def formater_prix(montant: float) -> str:
     # On enlève les zéros inutiles puis on remplace le point par une virgule
     texte = f"{montant:.2f}".rstrip("0").rstrip(".")
@@ -83,7 +83,7 @@ def formater_prix(montant: float) -> str:
 
 # Fonction pour afficher le ticket dans le terminal
 def afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva, total_ttc):
-    # Largeur intérieure du cadre
+    # Largeur du cadre
     largeur = 48
 
     # Construction des lignes du ticket
