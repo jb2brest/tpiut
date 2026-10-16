@@ -1,39 +1,53 @@
-# Création de ticket de caisse 
+# Ticket de caisse
 
-Ce programme vise à créé un ticket de caisse dans un terminal via un script python
+Script Python qui génère un ticket de caisse dans le terminal à partir d'une liste d'articles préenregistrés.
 
-Le programme utilise une liste d'articles préenregistré.
+## Prérequis
 
-## utilisation 
+- Python 3.x (aucune dépendance externe)
 
-### ajout d'un produit
+## Utilisation
 
-Les articles par défaut sont sauvegardé dans un dictionnaire de dictionnaires, 
+### Lancement
 
-Articles par défaut : 
+```bash
+python3 main.py "Magasin" "Vendeur" "C01:10|C02:2"
+```
 
-![articles](https://robindesbriques.fr//gesproj/uploads/images/68dcbdf8d5500_1759297016.png)
+Les arguments sont, dans l'ordre :
 
-pour ajouter des article, il faut ajouter une ligne au dictionnaire "dic_article" ligne 10 : 
+1. le nom du magasin ;
+2. le nom du vendeur ;
+3. la liste des articles, au format `code:quantité`, séparés par `|`.
 
-exemple de ligne :
+### Exemple de résultat
+
+```
+┌──────────────────────────────────────────────────┐
+│ Magasin                                          │
+│ Ticket numéro : 261016094649                     │
+│                                                  │
+│ Date : 16/10/2026                                │
+│                                                  │
+│ Vous avez été servi par : Vendeur                │
+│                                                  │
+│ NB  Desc.             HT unitaire  TVA     Total │
+│ 10  Pack de coca      5€           10%       55€ │
+│ 2   Kilo de pdt       1€           10%      2,2€ │
+│                                                  │
+│                             Total HT         52€ │
+│                             Total TVA       5,2€ │
+│                             Total          57,2€ │
+└──────────────────────────────────────────────────┘
+```
+
+### Ajouter un article
+
+Les articles sont stockés dans le dictionnaire `dic_article` de `main.py`. Pour en ajouter un, ajoutez une ligne :
 
 ```python
-"#CODE": {"description": "# NOM ARTICLE", "prix HT unitaire": 000 , "tva": 0.10},
-```
----
-### lancement du programme
-
-dans un terminal : 
-```bash
-python3 main.py "Magasin" "Vendeur" "C01:10|C0
-2:2"
-```
-on appelle dans le fichier main en renseignant le nom de la structure qui vend les articles puis le nom du vendeur, ensuite on utilise le code des articles puis leur quantité, les articles sont séparé par des "|" :
-
-```
-"code:quantité|code:quantité"
+"C03": {"description": "Nom de l'article", "prix HT unitaire": 12.50, "tva": 0.10},
 ```
 
-
-
+- `prix HT unitaire` : prix hors taxe en euros
+- `tva` : taux sous forme décimale (`0.10` = 10 %)
