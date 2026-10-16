@@ -1,8 +1,6 @@
 import sys
 from datetime import datetime
 
-
-
 # poids : en grammes (unite "g") ou en millilitres (unite "ml")
 CATALOGUE = {
     "C01": {"nom": "pack de coca",  "prix_ht": 5.0, "tva": 20, "poids": 2000, "unite": "g"},
@@ -15,10 +13,10 @@ CATALOGUE = {
 }
 
 
-def ajouter_article_catalogue(code, nom, prix_ht, tva, poids, unite, origine):
-    """Ajoute un produit au catalogue (exemple : ajouter_article_catalogue("C08", "Jus", 3.5, 10, 1000, "ml", "Espagne"))."""
+def ajouter_article_catalogue(code, nom, prix_ht, tva, poids, unite):
+    """Ajoute un produit au catalogue (exemple : ajouter_article_catalogue("C08", "Jus", 3.5, 10, 1000, "ml"))."""
     CATALOGUE[code] = {"nom": nom, "prix_ht": float(prix_ht), "tva": tva,
-                       "poids": poids, "unite": unite, "origine": origine}
+                       "poids": poids, "unite": unite}
 
 
 def formater_poids(valeur, unite):
@@ -40,8 +38,8 @@ def main():
 
     magasin, caissier, commande = sys.argv[1], sys.argv[2], sys.argv[3]
 
-    colonnes = [("NB", 4), ("Desc.", 15), ("Pds/vol. unitaire", 19), ("Pds/vol. total", 16)]
-    colonnes += [("HT unitaire", 13), ("TVA", 6), ("Total", 8)]
+    colonnes = [("NB", 4), ("Desc.", 15), ("Pds/vol. unitaire", 19), ("Pds/vol. total", 16),
+                ("HT unitaire", 13), ("TVA", 6), ("Total", 8)]
 
     def ligne(valeurs):
         return "".join(f"{v:<{w}}" for v, (_, w) in zip(valeurs, colonnes)).rstrip()
@@ -75,10 +73,10 @@ def main():
         total_ht += ligne_ht
         total_tva += ligne_tva
 
-        valeurs = [qte, a["nom"],]
+        valeurs = [qte, a["nom"],
                    formater_poids(a["poids"], a["unite"]),
-                   formater_poids(a["poids"] * qte, a["unite"])
-        valeurs += [euro(a["prix_ht"]), f"{a['tva']}%", euro(ligne_ht + ligne_tva)]
+                   formater_poids(a["poids"] * qte, a["unite"]),
+                   euro(a["prix_ht"]), f"{a['tva']}%", euro(ligne_ht + ligne_tva)]
         print(ligne([str(v) for v in valeurs]))
 
     decalage = " " * sum(w for _, w in colonnes[:-3])
