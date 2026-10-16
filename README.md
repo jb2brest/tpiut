@@ -1,4 +1,4 @@
-# Générateur de Tickets de Caisse (Projet Python)
+# Générateur de Tickets de Caisse 
 
 Projet développé dans le cadre du module IUT. Ce programme en ligne de commande permet de générer un ticket de caisse formaté à partir d'un catalogue d'articles et d'une commande passée en argument.
 
