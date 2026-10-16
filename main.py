@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 # Catalogue officiel du projet (Code: Nom, Prix HT, TVA en %)
 CATALOGUE = {
@@ -13,17 +14,20 @@ def main():
     # Vérification des arguments (magasin, caissier, commande)
     if len(sys.argv) < 4:
         print("Erreur : arguments manquants.")
-        print('Utilisation : python3 main.py "Magasin" "Caissier" "C01:1|C02:3"')
+        print('Utilisation : python main.py "Magasin" "Caissier" "C01:1|C02:3"')
         sys.exit(1)
 
     magasin = sys.argv[1]
     caissier = sys.argv[2]
     commande = sys.argv[3]
 
+    # Récupération de la date actuelle au format JJ/MM/AAAA
+    date_du_jour = datetime.now().strftime("%d/%m/%Y")
+
     # En-tête du ticket
     print(f"{magasin}")
     print("Ticket numéro : 2200")
-    print("Date : 08/09/2023\n")
+    print(f"Date : {date_du_jour}\n")
     print(f"Vous avez été servi par : {caissier}\n")
 
     # En-tête du tableau des articles
