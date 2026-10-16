@@ -144,8 +144,8 @@ def formater_prix(montant: float) -> str:
 
 # Fonction pour afficher le ticket dans le terminal
 def afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva, total_ttc):
-    # Largeur du cadre
-    largeur = 48
+    # Largeur du cadre (élargie pour les colonnes poids/volume)
+    largeur = 78
 
     # Construction des lignes du ticket
     contenu = []
@@ -158,7 +158,10 @@ def afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva,
     contenu.append("")
 
     # En-tête du tableau
-    contenu.append(f"{'NB':<4}{'Desc.':<18}{'HT unitaire':<13}{'TVA':<6}{'Total':>7}")
+    contenu.append(
+        f"{'NB':<4}{'Desc.':<18}{'Pds/vol. unit.':<16}{'Pds/vol. total':<16}"
+        f"{'HT unitaire':<12}{'TVA':<5}{'Total':>7}"
+    )
 
     # Une ligne par article (description coupée si trop longue pour garder l'alignement)
     for ligne in lignes:
@@ -166,16 +169,18 @@ def afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva,
         contenu.append(
             f"{ligne['quantite']:<4}"
             f"{ligne['description'][:17]:<18}"
-            f"{formater_prix(ligne['prix_ht']):<13}"
-            f"{tva:<6}"
+            f"{ligne['poids_unitaire']:<16}"
+            f"{ligne['poids_total']:<16}"
+            f"{formater_prix(ligne['prix_ht']):<12}"
+            f"{tva:<5}"
             f"{formater_prix(ligne['total_ttc']):>7}"
         )
     contenu.append("")
 
     # Totaux alignés à droite
-    contenu.append(" " * 28 + f"{'Total HT':<12}{formater_prix(total_ht):>8}")
-    contenu.append(" " * 28 + f"{'Total TVA':<12}{formater_prix(total_tva):>8}")
-    contenu.append(" " * 28 + f"{'Total':<12}{formater_prix(total_ttc):>8}")
+    contenu.append(" " * (largeur - 20) + f"{'Total HT':<12}{formater_prix(total_ht):>8}")
+    contenu.append(" " * (largeur - 20) + f"{'Total TVA':<12}{formater_prix(total_tva):>8}")
+    contenu.append(" " * (largeur - 20) + f"{'Total':<12}{formater_prix(total_ttc):>8}")
 
     # Affichage avec un cadre autour, comme sur le modèle
     print("┌" + "─" * (largeur + 2) + "┐")
