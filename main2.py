@@ -77,9 +77,7 @@ def main():
 
         valeurs = [qte, a["nom"],
                    formater_poids(a["poids"], a["unite"]),
-                   formater_poids(a["poids"] * qte, a["unite"])]
-        if AFFICHER_ORIGINE:
-            valeurs.append(a["origine"])
+                   formater_poids(a["poids"] * qte, a["unite"])
         valeurs += [euro(a["prix_ht"]), f"{a['tva']}%", euro(ligne_ht + ligne_tva)]
         print(ligne([str(v) for v in valeurs]))
 
