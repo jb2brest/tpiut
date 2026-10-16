@@ -19,7 +19,7 @@ def tester_calculs():
     assert montant_tva == 1.0
     assert total_ttc == 11.0
     
-    print("✅ TEST RÉUSSI : Le catalogue et les calculs fonctionnent parfaitement !")
+    print("TEST RÉUSSI : Le catalogue et les calculs fonctionnent parfaitement !")
 
 if __name__ == "__main__":
     tester_calculs()
