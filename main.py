@@ -10,11 +10,11 @@ from datetime import datetime
 
 # Catalogue : dictionnaire de dictionnaires, une entrée par article
 dic_article: dict = {
-    "C01": {"description": "Pack de coca",     "prix HT unitaire": 5, "tva": 0.10},
-    "C02": {"description": "Kilo de pdt",      "prix HT unitaire": 1, "tva": 0.10},
-    "C03": {"description": "Pack de biscotte", "prix HT unitaire": 2, "tva": 0.10},
-    "C04": {"description": "Café soluble",     "prix HT unitaire": 3, "tva": 0.10},
-    "C05": {"description": "Crackers",         "prix HT unitaire": 4, "tva": 0.10},
+    "C01": {"description": "Pack de coca",     "prix HT unitaire": 5, "tva": 0.20},
+    "C02": {"description": "Kilo de pdt",      "prix HT unitaire": 1, "tva": 0.20},
+    "C03": {"description": "Pack de biscotte", "prix HT unitaire": 2, "tva": 0.20},
+    "C04": {"description": "Café soluble",     "prix HT unitaire": 3, "tva": 0.20},
+    "C05": {"description": "Crackers",         "prix HT unitaire": 4, "tva": 0.20},
 }
 
 
