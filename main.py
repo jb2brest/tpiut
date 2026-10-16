@@ -10,13 +10,13 @@ from datetime import datetime
 
 # Catalogue : dictionnaire de dictionnaires, une entrée par article
 dic_article: dict = {
-    "C01": {"description": "Pack de coca",     "prix HT unitaire": 5, "tva": 0.20},
-    "C02": {"description": "Kilo de pdt",      "prix HT unitaire": 1, "tva": 0.10},
-    "C03": {"description": "Pack de biscotte", "prix HT unitaire": 2, "tva": 0.10},
-    "C04": {"description": "Café soluble",     "prix HT unitaire": 3, "tva": 0.10},
-    "C05": {"description": "Crackers",         "prix HT unitaire": 4, "tva": 0.20},
-    "C06": {"description": "Eau",              "prix HT unitaire": 6, "tva": 0.10},
-    "C05": {"description": "Pain",             "prix HT unitaire": 1, "tva": 0.10},
+    "C01": {"description": "Pack de coca",     "Poids ou volume unitaire" : "2Kg"  ,"prix HT unitaire": 5, "tva": 0.20},
+    "C02": {"description": "Kilo de pdt",      "Poids ou volume unitaire" : "1Kg"  ,"prix HT unitaire": 1, "tva": 0.10},
+    "C03": {"description": "Pack de biscotte", "Poids ou volume unitaire" : "950g" ,"prix HT unitaire": 2, "tva": 0.10},
+    "C04": {"description": "Café soluble",     "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 3, "tva": 0.10},
+    "C05": {"description": "Crackers",         "Poids ou volume unitaire" : "125g" ,"prix HT unitaire": 4, "tva": 0.20},
+    "C06": {"description": "Eau",              "Poids ou volume unitaire" : "1,5L" ,"prix HT unitaire": 6, "tva": 0.10},
+    "C05": {"description": "Pain",             "Poids ou volume unitaire" : "250g" ,"prix HT unitaire": 1, "tva": 0.10},
 }
 
 
