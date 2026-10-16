@@ -82,18 +82,6 @@ NB  Desc.          Pds/vol. unitaire  Pds/vol. total  HT unitaire  TVA   Total
                                                       Total      17.5€
 ```
 
-Résultat en format trinôme (`AFFICHER_ORIGINE = True`), avec la colonne **Orig.** :
-
-```text
-NB  Desc.          Pds/vol. unitaire  Pds/vol. total  Orig.       HT unitaire  TVA   Total
-2   pack de coca   2kg                4kg             Lituanie    5€           20%   12€
-3   kilo de pdt    1kg                3kg             Espagne     1€           10%   3.3€
-1   pack Biscotte  950g               950g            France      2€           10%   2.2€
-
-                                                                  Total HT   15€
-                                                                  Total TVA  2.5€
-                                                                  Total      17.5€
-```
 
 ## Fonctionnement
 
