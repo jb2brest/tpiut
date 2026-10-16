@@ -31,7 +31,7 @@ L'objectif du programme est de générer un ticket de caisse à partir d'un nom 
 +-------------------------------------------------+
 ```
 Evitez d'utiliser exprès un code qui n'existe pas. On l'a prévu hein, mais vous allez juste perdre votre temps.  
-Pour rajouter un produit : rendez-vous dans le code à la ligne 20. Dans le dictionnaire ARTICLES, vous allez ajouter le nouveau produit.  
+Pour rajouter un produit : rendez-vous dans le code à la ligne 25. Dans le dictionnaire ARTICLES, vous allez ajouter le nouveau produit.  
 Voici le format à respecter :
 ```
 ARTICLES = { ...
