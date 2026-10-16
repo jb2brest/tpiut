@@ -34,13 +34,45 @@ Le catalogue est défini dans le dictionnaire `CATALOGUE` de `main.py` :
 
 Les poids sont stockés en grammes (`"g"`) ou en millilitres (`"ml"`) et convertis à l'affichage (`2000 g` → `2kg`, `1500 ml` → `1.5L`).
 
-## Format binôme / trinôme
+## Format binôme
 
-Au début de `main.py` :
+## Lancement
 
-```python
-AFFICHER_ORIGINE = True   # format trinôme (colonne Origine)
-AFFICHER_ORIGINE = False  # format binôme
+### Générer un ticket
+
+```bash
+python main.py "Magasin" "Caissier" "CODE:QUANTITÉ|CODE:QUANTITÉ"
+```
+
+Le script prend 3 arguments obligatoires :
+
+1. Nom du magasin
+2. Nom du caissier
+3. Contenu de la commande au format `CODE:QUANTITÉ`, plusieurs articles séparés par `|`
+
+Exemple :
+
+```bash
+python main.py "Mon Magasin" "Hugo" "C01:2|C02:3|C03:1"
+```
+
+Résultat en format binôme (`AFFICHER_ORIGINE = False`) :
+
+```text
+Mon Magasin
+Ticket numéro : 2200
+Date : 16/10/2026
+
+Vous avez été servi par : Hugo
+
+NB  Desc.          Pds/vol. unitaire  Pds/vol. total  HT unitaire  TVA   Total
+2   pack de coca   2kg                4kg             5€           20%   12€
+3   kilo de pdt    1kg                3kg             1€           10%   3.3€
+1   pack Biscotte  950g               950g            2€           10%   2.2€
+
+                                                      Total HT   15€
+                                                      Total TVA  2.5€
+                                                      Total      17.5€
 ```
 
 ## Lancement
