@@ -2,7 +2,7 @@ import sys
 from datetime import datetime
 
 # True = format trinôme (colonne Origine), False = format binôme
-AFFICHER_ORIGINE = True
+AFFICHER_ORIGINE = False
 
 # poids : en grammes (unite "g") ou en millilitres (unite "ml")
 CATALOGUE = {
