@@ -1,18 +1,17 @@
 import sys
 from datetime import datetime
 
-# True = format trinôme (colonne Origine), False = format binôme
-AFFICHER_ORIGINE = False
+
 
 # poids : en grammes (unite "g") ou en millilitres (unite "ml")
 CATALOGUE = {
-    "C01": {"nom": "pack de coca",  "prix_ht": 5.0, "tva": 20, "poids": 2000, "unite": "g",  "origine": "Lituanie"},
-    "C02": {"nom": "kilo de pdt",   "prix_ht": 1.0, "tva": 10, "poids": 1000, "unite": "g",  "origine": "Espagne"},
-    "C03": {"nom": "pack Biscotte", "prix_ht": 2.0, "tva": 10, "poids": 950,  "unite": "g",  "origine": "France"},
-    "C04": {"nom": "Café soluble",  "prix_ht": 3.0, "tva": 10, "poids": 250,  "unite": "g",  "origine": "Roumanie"},
-    "C05": {"nom": "Crakers",       "prix_ht": 4.0, "tva": 20, "poids": 125,  "unite": "g",  "origine": "Angleterre"},
-    "C06": {"nom": "Eau",           "prix_ht": 6.0, "tva": 10, "poids": 1500, "unite": "ml", "origine": "Suisse"},
-    "C07": {"nom": "Pain",          "prix_ht": 1.0, "tva": 10, "poids": 250,  "unite": "g",  "origine": "France"},
+    "C01": {"nom": "pack de coca",  "prix_ht": 5.0, "tva": 20, "poids": 2000, "unite": "g"},
+    "C02": {"nom": "kilo de pdt",   "prix_ht": 1.0, "tva": 10, "poids": 1000, "unite": "g"},
+    "C03": {"nom": "pack Biscotte", "prix_ht": 2.0, "tva": 10, "poids": 950,  "unite": "g"},
+    "C04": {"nom": "Café soluble",  "prix_ht": 3.0, "tva": 10, "poids": 250,  "unite": "g,},
+    "C05": {"nom": "Crakers",       "prix_ht": 4.0, "tva": 20, "poids": 125,  "unite": "g"},
+    "C06": {"nom": "Eau",           "prix_ht": 6.0, "tva": 10, "poids": 1500, "unite": "ml"},
+    "C07": {"nom": "Pain",          "prix_ht": 1.0, "tva": 10, "poids": 250,  "unite": "g"},
 }
 
 
@@ -42,8 +41,6 @@ def main():
     magasin, caissier, commande = sys.argv[1], sys.argv[2], sys.argv[3]
 
     colonnes = [("NB", 4), ("Desc.", 15), ("Pds/vol. unitaire", 19), ("Pds/vol. total", 16)]
-    if AFFICHER_ORIGINE:
-        colonnes.append(("Orig.", 12))
     colonnes += [("HT unitaire", 13), ("TVA", 6), ("Total", 8)]
 
     def ligne(valeurs):
