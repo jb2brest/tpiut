@@ -75,7 +75,7 @@ def main():
         total_ht += ligne_ht
         total_tva += ligne_tva
 
-        valeurs = [qte, a["nom"],
+        valeurs = [qte, a["nom"],]
                    formater_poids(a["poids"], a["unite"]),
                    formater_poids(a["poids"] * qte, a["unite"])
         valeurs += [euro(a["prix_ht"]), f"{a['tva']}%", euro(ligne_ht + ligne_tva)]
