@@ -60,7 +60,7 @@ for produit in produit_qte:
         print(f"ERREUR {e}: Demandez à Claude.")
 
     grand_total_ht += tot_produit
-    sortie += f"{qte_achetee}      {desc_produit}     {prix_unitaire}€           10%    {tot_produit*qte_achetee*1.1}€\n"
+    sortie += f"{qte_achetee}      {desc_produit}     {prix_unitaire}€           10%    {tot_produit*qte_achetee*1.1:.2f}€\n"
 
 sortie += f"                                              Total HT {grand_total_ht:.2f}€\n"
 sortie += f"                                              TVA 10%\n"
