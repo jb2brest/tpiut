@@ -8,18 +8,20 @@ import os                   # pour tester l'existence du fichier d'index
 from datetime import date   # pour afficher la date du jour sur le ticket
 
 # INVENTAIRE DES PRODUITS
-# clé = code article, valeur = description et prix hors taxe en euros
+# clé = code article, valeur = description, poids/volume unitaire et son unité,
+# prix hors taxe en euros et taux de TVA propre au produit
 INVENTAIRE = {
-    "C01": {"description": "pack de coca", "prix_ht": 5.0},
-    "C02": {"description": "kilo de pdt", "prix_ht": 1.0},
-    "C03": {"description": "pack Biscotte", "prix_ht": 2.0},
-    "C04": {"description": "Café soluble", "prix_ht": 3.0},
-    "C05": {"description": "Crakers", "prix_ht": 4.0}
+    "C01": {"description": "pack de coca", "poids_vol": 2, "unite": "kg", "prix_ht": 5.0, "tva": 0.20},
+    "C02": {"description": "kilo de pdt", "poids_vol": 1, "unite": "kg", "prix_ht": 1.0, "tva": 0.10},
+    "C03": {"description": "pack Biscotte", "poids_vol": 950, "unite": "g", "prix_ht": 2.0, "tva": 0.10},
+    "C04": {"description": "Café soluble", "poids_vol": 250, "unite": "g", "prix_ht": 3.0, "tva": 0.10},
+    "C05": {"description": "Crakers", "poids_vol": 125, "unite": "g", "prix_ht": 4.0, "tva": 0.20},
+    "C06": {"description": "Eau", "poids_vol": 1.5, "unite": "L", "prix_ht": 6.0, "tva": 0.10},
+    "C07": {"description": "Pain", "poids_vol": 250, "unite": "g", "prix_ht": 1.0, "tva": 0.10}
 }
 
 INDEX_FILE = "index.txt" # fichier contenant l'index du ticket
-TVA = 0.10 # une TVA de 10%
-LARGEUR = 54 # largeur du contenu du ticket (sans les bordures)
+LARGEUR = 40 # largeur minimale du contenu du ticket (sans les bordures)
 
 
 def erreur(message):
@@ -98,10 +100,17 @@ def prochain_numero_ticket():
     return numero
 
 
+def nombre(valeur):
+    # formate un nombre sans zéros inutiles : 3.30 -> "3,3", 19.0 -> "19"
+    # :.2f arrondit à 2 décimales, on retire les 0 puis la virgule en trop à la fin
+    texte = f"{valeur:.2f}".rstrip("0").rstrip(".")
+    # virgule à la place du point (format français)
+    return texte.replace(".", ",")
+
+
 def euros(montant):
-    # formate un montant : 5.5 -> "5,50 €"
-    # :.2f garde 2 décimales, puis on remplace le point par une virgule (format français)
-    return f"{montant:.2f}".replace(".", ",") + " €"
+    # formate un montant : 5.5 -> "5,5€"
+    return nombre(montant) + "€"
 
 
 def afficher_ticket(magasin, caissier, articles):
@@ -113,40 +122,55 @@ def afficher_ticket(magasin, caissier, articles):
     lignes = [
         magasin,
         "Ticket numéro : " + str(numero),
+        "",
         "Date : " + date.today().strftime("%d/%m/%Y"),
+        "",
         "Vous avez été servi par : " + caissier,
         "",
         # en-tête du tableau : :<N aligne le texte à gauche sur N caractères
-        f"{'NB':<5}{'Desc.':<21}{'HT unitaire':<13}{'TVA':<6}{'Total TTC':<9}"
+        f"{'NB':<6}{'Desc.':<19}{'Pds/vol. unitaire':<19}{'Pds/vol. total':<17}"
+        f"{'HT unitaire':<14}{'TVA':<7}{'Total'}"
     ]
 
-    # une ligne du tableau par article, en cumulant le total HT
+    # une ligne du tableau par article, en cumulant le total HT et le total TVA
+    # (la TVA dépend maintenant du produit, on ne peut plus la calculer à la fin)
     total_ht = 0
+    total_tva = 0
     for code, quantite in articles:
         produit = INVENTAIRE[code]
         prix_ht = produit["prix_ht"]
-        # total de la ligne TTC = prix HT x quantité x (1 + TVA)
-        total_ligne_ttc = prix_ht * quantite * (1 + TVA)
-        total_ht += prix_ht * quantite
-        # la description est coupée à 20 caractères pour ne pas casser les colonnes
-        description = produit["description"][:20]
-        tva_texte = str(int(TVA * 100)) + "%"  # 0.10 -> "10%"
-        lignes.append(f"{quantite:<5}{description:<21}{euros(prix_ht):<13}{tva_texte:<6}{euros(total_ligne_ttc):<9}")
+        tva = produit["tva"]
+        ligne_ht = prix_ht * quantite
+        ligne_tva = ligne_ht * tva
+        total_ht += ligne_ht
+        total_tva += ligne_tva
+        # poids/volume : unitaire, puis multiplié par la quantité (ex : 2kg x 2 -> 4kg)
+        pds_unitaire = nombre(produit["poids_vol"]) + produit["unite"]
+        pds_total = nombre(produit["poids_vol"] * quantite) + produit["unite"]
+        # description coupée pour ne pas casser les colonnes
+        description = produit["description"][:18]
+        tva_texte = str(round(tva * 100)) + "%"  # 0.20 -> "20%"
+        lignes.append(f"{quantite:<6}{description:<19}{pds_unitaire:<19}{pds_total:<17}"
+                      f"{euros(prix_ht):<14}{tva_texte:<7}{euros(ligne_ht + ligne_tva)}")
 
-    # calcul des totaux à partir du total HT
-    total_tva = total_ht * TVA
     total_ttc = total_ht + total_tva
 
-    totaux = [
-        "Total HT : " + euros(total_ht),
-        "Total TVA : " + euros(total_tva),
-        "Total TTC : " + euros(total_ttc)
+    # (libellé, montant) : libellés alignés à droite pour aligner les ":",
+    # montants alignés à droite pour aligner les "€"
+    valeurs = [
+        ("Total HT", euros(total_ht)),
+        ("Total TVA", euros(total_tva)),
+        ("Total", euros(total_ttc))
     ]
+    larg_libelle = max(len(libelle) for libelle, _ in valeurs)
+    larg_montant = max(len(montant) for _, montant in valeurs)
+    totaux = [f"{libelle:>{larg_libelle}} : {montant:>{larg_montant}}" for libelle, montant in valeurs]
 
+    # largeur ajustée au contenu le plus long (le tableau en général),
     # le ticket s'élargit si un nom (magasin, caissier) est trop long
     largeur = max([LARGEUR] + [len(l) for l in lignes + totaux])
 
-    # ligne vide puis totaux alignés à droite (rjust)
+    # ligne vide puis bloc des totaux collé à droite (rjust)
     lignes.append("")
     lignes += [t.rjust(largeur) for t in totaux]
 

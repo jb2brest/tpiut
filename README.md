@@ -28,24 +28,27 @@ Il faut bien mettre les guillemets autour de la liste d'articles, sinon le termi
 Exemple :
 
 ```
-python3 main.py "Super U" "Alice" "C01:10|C02:2"
+python3 main.py "Super U" "Jean" "C01:2|C02:3|C06:1"
 ```
 
 ```
-+--------------------------------------------------------+
-| Super U                                                |
-| Ticket numéro : 1                                      |
-| Date : 16/10/2026                                      |
-| Vous avez été servi par : Alice                        |
-|                                                        |
-| NB   Desc.                HT unitaire  TVA   Total TTC |
-| 10   pack de coca         5,00 €       10%   55,00 €   |
-| 2    kilo de pdt          1,00 €       10%   2,20 €    |
-|                                                        |
-|                                     Total HT : 52,00 € |
-|                                     Total TVA : 5,20 € |
-|                                    Total TTC : 57,20 € |
-+--------------------------------------------------------+
++-----------------------------------------------------------------------------------------+
+| Super U                                                                                 |
+| Ticket numéro : 4                                                                       |
+|                                                                                         |
+| Date : 16/10/2026                                                                       |
+|                                                                                         |
+| Vous avez été servi par : Jean                                                          |
+|                                                                                         |
+| NB    Desc.              Pds/vol. unitaire  Pds/vol. total   HT unitaire   TVA    Total |
+| 2     pack de coca       2kg                4kg              5€            20%    12€   |
+| 3     kilo de pdt        1kg                3kg              1€            10%    3,3€  |
+| 1     Eau                1,5L               1,5L             6€            10%    6,6€  |
+|                                                                                         |
+|                                                                        Total HT :   19€ |
+|                                                                       Total TVA :  2,9€ |
+|                                                                           Total : 21,9€ |
++-----------------------------------------------------------------------------------------+
 ```
 
 ## Fonctionnement
@@ -54,15 +57,19 @@ Le script vérifie d'abord les paramètres : il en faut 3, non vides, chaque cod
 
 Le numéro du ticket est stocké dans le fichier index.txt. A chaque ticket on lit le numéro, on ajoute 1 et on le réécrit. Si le fichier n'existe pas il est créé et on commence à 1. Une commande qui finit en erreur ne change pas le numéro. Pour remettre le compteur à zéro il suffit de mettre 0 dans index.txt.
 
-Pour les calculs :
-- total TTC d'une ligne = prix HT x quantité x 1,10
+Chaque produit a son propre taux de TVA (10 % ou 20 %), défini dans l'inventaire. Pour les calculs :
+- total d'une ligne = prix HT x quantité x (1 + TVA du produit)
 - total HT = somme des prix HT x quantité
-- total TVA = total HT x 0,10
-- total TTC = total HT + total TVA
+- total TVA = somme des prix HT x quantité x TVA du produit
+- total = total HT + total TVA
 
-La TVA est de 10 %, on peut la changer avec la variable TVA en haut de main.py.
+Le ticket affiche aussi le poids ou volume unitaire du produit et le poids/volume total (unitaire x quantité). Les montants sont affichés sans zéros inutiles (19€, 3,3€).
 
-Les descriptions sont coupées à 20 caractères pour que les colonnes restent alignées. Si le nom du magasin ou du caissier est trop long, le ticket s'élargit.
+Les descriptions sont coupées à 18 caractères pour que les colonnes restent alignées.
+
+Les totaux sont regroupés en bas à droite : les « : » sont alignés entre eux, ainsi que les montants (les « € » tombent dans la même colonne).
+
+La largeur du ticket s'adapte à son contenu : le cadre fait la largeur de la ligne la plus longue (en général le tableau des articles), avec un minimum de 40 caractères (constante LARGEUR). Si le nom du magasin ou du caissier est trop long, le ticket s'élargit.
 
 ## Ajouter un produit
 
@@ -70,27 +77,25 @@ Les produits sont dans le dictionnaire INVENTAIRE au début de main.py :
 
 ```python
 INVENTAIRE = {
-    "C01": {"description": "pack de coca", "prix_ht": 5.0},
-    "C02": {"description": "kilo de pdt", "prix_ht": 1.0},
-    "C03": {"description": "pack Biscotte", "prix_ht": 2.0},
-    "C04": {"description": "Café soluble", "prix_ht": 3.0},
-    "C05": {"description": "Crakers", "prix_ht": 4.0}
+    "C01": {"description": "pack de coca", "poids_vol": 2, "unite": "kg", "prix_ht": 5.0, "tva": 0.20},
+    "C02": {"description": "kilo de pdt", "poids_vol": 1, "unite": "kg", "prix_ht": 1.0, "tva": 0.10},
+    "C03": {"description": "pack Biscotte", "poids_vol": 950, "unite": "g", "prix_ht": 2.0, "tva": 0.10},
+    "C04": {"description": "Café soluble", "poids_vol": 250, "unite": "g", "prix_ht": 3.0, "tva": 0.10},
+    "C05": {"description": "Crakers", "poids_vol": 125, "unite": "g", "prix_ht": 4.0, "tva": 0.20},
+    "C06": {"description": "Eau", "poids_vol": 1.5, "unite": "L", "prix_ht": 6.0, "tva": 0.10},
+    "C07": {"description": "Pain", "poids_vol": 250, "unite": "g", "prix_ht": 1.0, "tva": 0.10}
 }
 ```
 
 Pour ajouter un produit il suffit de rajouter une ligne, par exemple :
 
 ```python
-    "C05": {"description": "Crakers", "prix_ht": 4.0},
-    "C06": {"description": "Bouteille d'eau", "prix_ht": 0.8}
+    "C07": {"description": "Pain", "poids_vol": 250, "unite": "g", "prix_ht": 1.0, "tva": 0.10},
+    "C08": {"description": "Jus d'orange", "poids_vol": 1, "unite": "L", "prix_ht": 2.5, "tva": 0.10}
 ```
 
-Attention à la virgule à la fin de la ligne d'avant, au code en majuscules et au prix avec un point et pas une virgule. Il n'y a rien d'autre à modifier, le produit est utilisable directement :
+Attention à la virgule à la fin de la ligne d'avant, au code en majuscules et au prix, au poids et à la TVA avec un point et pas une virgule (0.20 pour 20 %). Il n'y a rien d'autre à modifier, le produit est utilisable directement :
 
 ```
-python3 main.py "Super U" "Alice" "C06:3"
+python3 main.py "Super U" "Alice" "C08:3"
 ```
-
-## Remarque
-
-Sous Windows les accents et le symbole € peuvent mal s'afficher dans le terminal. Dans ce cas on peut taper `chcp 65001` avant de lancer le script.
