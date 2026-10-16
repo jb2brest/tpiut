@@ -24,14 +24,14 @@ Date : 16/10/2026
 
 Vous avez été servi par : Lisa
 
-NB    Desc.               HT unitaire   TVA    Total
-1     pack de coca        5€            10%    5,5€
-3     kilo de pdt         1€            10%    3,3€
-4     pack Biscotte       2€            10%    8,8€
+NB   Desc.           HT unitaire   TVA   Total
+1    pack de coca    5€            10%   5,5€
+3    kilo de pdt     1€            10%   3,3€
+4    pack Biscotte   2€            10%   8,8€
 
-                                 Total HT      16€
-                                 Total TVA     1,6€
-                                 Total         17,6€
+                     Total HT            16€
+                     Total TVA           1,6€
+                     Total               17,6€
 ```
 
 ## Fonctionnement
@@ -42,6 +42,8 @@ NB    Desc.               HT unitaire   TVA    Total
 4. Les totaux HT, TVA et TTC sont calculés en bas du ticket.
 5. Le numéro de ticket commence à 2200 et augmente de 1 à chaque ticket. Il est enregistré dans `compteur.txt`. Supprimer ce fichier fait repartir le compteur à 2200.
 6. La date affichée est celle du jour.
+7. Un même article saisi plusieurs fois (`C01:2|C01:1`) est regroupé sur une seule ligne.
+8. Les colonnes du ticket s'adaptent à la longueur des descriptions.
 
 Les montants sont calculés en `Decimal` pour éviter les erreurs d'arrondi.
 
@@ -64,6 +66,7 @@ Le code n'a pas besoin d'être modifié.
 | Cas | Message |
 |-----|---------|
 | Mauvais nombre d'arguments | Affiche l'aide d'utilisation |
+| Magasin ou vendeur vide | `Erreur : Le nom du magasin et du vendeur sont obligatoires` |
 | Code article inconnu (`C99:1`) | `Erreur : Code article inconnu : C99` |
 | Quantité non numérique, nulle ou négative | `Erreur : Quantité invalide...` |
 | Format sans `:` | `Erreur : Format invalide...` |

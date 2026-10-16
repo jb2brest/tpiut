@@ -41,8 +41,9 @@ def charger_produits(chemin=FICHIER_PRODUITS):
 
 
 def parser_panier(texte):
-    """Transforme "C01:10|C02:2" en liste [("C01", 10), ("C02", 2)]."""
-    panier = []
+    """Transforme "C01:10|C02:2" en liste [("C01", 10), ("C02", 2)].
+    Un même code saisi plusieurs fois est regroupé sur une seule ligne."""
+    panier = {}  # dict : garde l'ordre de saisie et cumule les quantités
     for element in texte.split("|"):
         element = element.strip()
         if not element:
@@ -57,10 +58,10 @@ def parser_panier(texte):
             raise ErreurTicket(f"Quantité invalide pour {code} : '{qte}'")
         if qte <= 0:
             raise ErreurTicket(f"La quantité de {code} doit être positive")
-        panier.append((code, qte))
+        panier[code] = panier.get(code, 0) + qte
     if not panier:
         raise ErreurTicket("Le panier est vide")
-    return panier
+    return list(panier.items())
 
 
 def calculer_lignes(panier, produits):
@@ -128,19 +129,23 @@ def generer_ticket(magasin, vendeur, numero, jour, lignes):
         "",
         f"Vous avez été servi par : {vendeur}",
         "",
-        f"{'NB':<6}{'Desc.':<20}{'HT unitaire':<14}{'TVA':<7}Total",
     ]
-    for l in lignes:
-        sortie.append(
-            f"{l['nb']:<6}{l['description']:<20}{euro(l['prix_ht']):<14}"
-            f"{pourcent(l['tva']):<7}{euro(l['total_ttc'])}"
-        )
-    sortie += [
-        "",
-        f"{'':<33}{'Total HT':<14}{euro(total_ht)}",
-        f"{'':<33}{'Total TVA':<14}{euro(total_tva)}",
-        f"{'':<33}{'Total':<14}{euro(total_ttc)}",
+    # Tableau : chaque colonne s'adapte à son contenu le plus long
+    entete = ["NB", "Desc.", "HT unitaire", "TVA", "Total"]
+    tableau = [
+        [str(l["nb"]), l["description"], euro(l["prix_ht"]),
+         pourcent(l["tva"]), euro(l["total_ttc"])]
+        for l in lignes
     ]
+    largeurs = [max(len(ligne[i]) for ligne in [entete] + tableau) + 3 for i in range(4)]
+    for ligne in [entete] + tableau:
+        sortie.append("".join(c.ljust(w) for c, w in zip(ligne, largeurs)) + ligne[4])
+    # Totaux : libellé sous "HT unitaire", montant aligné sur la colonne "Total"
+    marge = " " * (largeurs[0] + largeurs[1])
+    largeur_libelle = largeurs[2] + largeurs[3]
+    sortie.append("")
+    for libelle, montant in (("Total HT", total_ht), ("Total TVA", total_tva), ("Total", total_ttc)):
+        sortie.append(marge + libelle.ljust(largeur_libelle) + euro(montant))
     return "\n".join(sortie)
 
 
@@ -148,8 +153,10 @@ def main(argv):
     if len(argv) != 4:
         print(__doc__.strip())
         return 1
-    magasin, vendeur, panier_texte = argv[1], argv[2], argv[3]
+    magasin, vendeur, panier_texte = argv[1].strip(), argv[2].strip(), argv[3]
     try:
+        if not magasin or not vendeur:
+            raise ErreurTicket("Le nom du magasin et du vendeur sont obligatoires")
         produits = charger_produits()
         lignes = calculer_lignes(parser_panier(panier_texte), produits)
     except ErreurTicket as e:

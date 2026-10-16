@@ -33,6 +33,25 @@ class TestTicket(unittest.TestCase):
         with self.assertRaises(main.ErreurTicket):
             main.calculer_lignes([("C99", 1)], self.produits)
 
+    def test_code_en_double_regroupe(self):
+        # "C01:2|c01:1" -> une seule ligne de 3 coca
+        self.assertEqual(main.parser_panier("C01:2|C02:1|c01:1"), [("C01", 3), ("C02", 1)])
+
+    def test_colonnes_alignees(self):
+        # Une description longue ne doit pas décaler la colonne Total
+        produits = dict(self.produits)
+        produits["C99"] = {"description": "Pack de bouteilles d'eau minérale gazeuse",
+                           "prix_ht": Decimal("12.99"), "tva": Decimal("5.5")}
+        lignes = main.calculer_lignes([("C01", 1), ("C99", 150)], produits)
+        ticket = main.generer_ticket("M", "V", 1, date.today(), lignes).splitlines()
+        debut = next(i for i, l in enumerate(ticket) if l.startswith("NB"))
+        tableau = ticket[debut:debut + 3]  # en-tête + 2 lignes d'articles
+        debuts_total = {ligne.rindex(" ") + 1 for ligne in tableau}
+        self.assertEqual(len(debuts_total), 1)
+
+    def test_magasin_vide(self):
+        self.assertEqual(main.main(["main.py", " ", "Lisa", "C01:1"]), 2)
+
     def test_quantite_invalide(self):
         for panier in ("C01:abc", "C01:0", "C01:-2", "C01", ""):
             with self.assertRaises(main.ErreurTicket):
