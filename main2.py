@@ -8,7 +8,7 @@ CATALOGUE = {
     "C01": {"nom": "pack de coca",  "prix_ht": 5.0, "tva": 20, "poids": 2000, "unite": "g"},
     "C02": {"nom": "kilo de pdt",   "prix_ht": 1.0, "tva": 10, "poids": 1000, "unite": "g"},
     "C03": {"nom": "pack Biscotte", "prix_ht": 2.0, "tva": 10, "poids": 950,  "unite": "g"},
-    "C04": {"nom": "Café soluble",  "prix_ht": 3.0, "tva": 10, "poids": 250,  "unite": "g,},
+    "C04": {"nom": "Café soluble",  "prix_ht": 3.0, "tva": 10, "poids": 250,  "unite": "g"},
     "C05": {"nom": "Crakers",       "prix_ht": 4.0, "tva": 20, "poids": 125,  "unite": "g"},
     "C06": {"nom": "Eau",           "prix_ht": 6.0, "tva": 10, "poids": 1500, "unite": "ml"},
     "C07": {"nom": "Pain",          "prix_ht": 1.0, "tva": 10, "poids": 250,  "unite": "g"},
