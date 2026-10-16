@@ -1,4 +1,5 @@
 # Auteur : Titouan PLANSON-JEULLAIN // Léo Dumont--Bauer
+# Groupe : 3A1
 # Date : 16/10/2026
 # Description : Programme pour générer un ticket de caisse - version 1
 
@@ -73,14 +74,60 @@ def calcul_montant(articles: list) -> tuple:
     return lignes, round(total_ht, 2), round(total_tva, 2), round(total_ttc, 2)
 
 
+# Fonction pour formater un montant comme sur le ticket (ex : 5,5€ ou 16€)
+def formater_prix(montant: float) -> str:
+    # On enlève les zéros inutiles puis on remplace le point par une virgule
+    texte = f"{montant:.2f}".rstrip("0").rstrip(".")
+    return texte.replace(".", ",") + "€"
+
+
+# Fonction pour afficher le ticket dans le terminal
+def afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva, total_ttc):
+    # Largeur intérieure du cadre
+    largeur = 48
+
+    # Construction des lignes du ticket
+    contenu = []
+    contenu.append(magasin)
+    contenu.append(f"Ticket numéro : {numero}")
+    contenu.append("")
+    contenu.append(f"Date : {date}")
+    contenu.append("")
+    contenu.append(f"Vous avez été servi par : {vendeur}")
+    contenu.append("")
+
+    # En-tête du tableau
+    contenu.append(f"{'NB':<4}{'Desc.':<18}{'HT unitaire':<13}{'TVA':<6}{'Total':>7}")
+
+    # Une ligne par article (description coupée si trop longue pour garder l'alignement)
+    for ligne in lignes:
+        tva = f"{round(ligne['tva'] * 100)}%"
+        contenu.append(
+            f"{ligne['quantite']:<4}"
+            f"{ligne['description'][:17]:<18}"
+            f"{formater_prix(ligne['prix_ht']):<13}"
+            f"{tva:<6}"
+            f"{formater_prix(ligne['total_ttc']):>7}"
+        )
+    contenu.append("")
+
+    # Totaux alignés à droite
+    contenu.append(" " * 28 + f"{'Total HT':<12}{formater_prix(total_ht):>8}")
+    contenu.append(" " * 28 + f"{'Total TVA':<12}{formater_prix(total_tva):>8}")
+    contenu.append(" " * 28 + f"{'Total':<12}{formater_prix(total_ttc):>8}")
+
+    # Affichage avec un cadre autour, comme sur le modèle
+    print("┌" + "─" * (largeur + 2) + "┐")
+    for texte in contenu:
+        print("│ " + texte.ljust(largeur) + " │")
+    print("└" + "─" * (largeur + 2) + "┘")
+
+
 # Point d'entrée du programme
 if __name__ == "__main__":
     magasin, vendeur, articles = lire_arguments()
     numero, date = generer_numero_et_date()
     lignes, total_ht, total_tva, total_ttc = calcul_montant(articles)
 
-    # Affichage temporaire pour vérifier
-    print("Ticket numéro :", numero)
-    print("Date :", date)
-    print(lignes)
-    print(total_ht, total_tva, total_ttc)
+    # Affichage du ticket
+    afficher_ticket(magasin, vendeur, numero, date, lignes, total_ht, total_tva, total_ttc)
