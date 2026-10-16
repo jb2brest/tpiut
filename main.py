@@ -1,3 +1,7 @@
+# Auteur : Titouan PLANSON-JEULLAIN // Léo Dumont--Bauer
+# Date : 16/10/2026
+# Description : Programme pour générer un ticket de caisse - version 1
+
 # Importation des modules
 import sys
 from datetime import datetime
