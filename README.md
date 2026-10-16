@@ -1,56 +1,122 @@
-# Projet programme ticket de caisse
+# Générateur de Tickets de Caisse (Projet Python)
 
-> Ce programme permet de générer un ticket de caisse d'une liste de produit déjà définie en dur dans le programme. On entre en arguments à l'execution du programme : le nom du magasin, le/la caissier(ère) et les produit avec leur quantité. Il calcule automatiquement le prix de chaque produit avec leur quantité et calcule la TVA pour afficher à la fin du ticket le prix TTC
+Projet développé dans le cadre du module IUT. Ce programme en ligne de commande génère un ticket de caisse formaté à partir d'un catalogue d'articles et d'une commande passée en argument. Le catalogue est stocké dans un fichier JSON, ce qui permet d'ajouter des produits de façon permanente.
 
-**Version :** 1.1 · **Auteur :** Antoine et Thomas · **Dernière mise à jour :** 16/10/2026 · **Statut :** terminé
+## Structure du projet
 
----
+- `main.py` : script principal, génère et affiche le ticket de caisse
+- `test.py` : script de test simple pour vérifier le catalogue et les calculs de TVA
+- `catalogue.json` : catalogue des articles (créé automatiquement au premier lancement)
+- `README.md` : documentation du projet
 
-## 1. Contexte et objectifs  
+## Prérequis
 
-L'objectif du programme est de générer un ticket de caisse à partir d'un nom de magasin, de caissier et une liste de produits (par code) associés à une quantité.  
+- Python 3.6 ou supérieur
+- Aucune bibliothèque externe (uniquement la bibliothèque standard : `sys`, `json`, `os`, `datetime`)
 
-## 2. Prérequis
-- Matériel : un ordinateur
-- Logiciels et versions : Python 3
+## Catalogue par défaut
 
-## 3. Installation
-1. Installer Python
-2. Récupérer le projet sur Github (`git clone https://github.com/jb2brest/tpiut/tree/LEFLOCH_GUERY`)
+Au premier lancement, `catalogue.json` est créé avec 5 articles, TVA à 10 % :
 
-## 4. Base de produit utilisé
+| Code | Description   | Prix HT | TVA |
+|------|---------------|---------|-----|
+| C01  | Pack de coca  | 5.00 €  | 10% |
+| C02  | Kilo de pdt   | 1.00 €  | 10% |
+| C03  | Pack Biscotte | 2.00 €  | 10% |
+| C04  | Café soluble  | 3.00 €  | 10% |
+| C05  | Crakers       | 4.00 €  | 10% |
+
+## Lancement
+
+### Générer un ticket
+
 ```bash
-+-------------------------------------------------+
-| Code Article | Description   | Prix HT unitaire |
-+-------------------------------------------------+
-|     C01      | pack de coca  | 5                |
-|     C02      | kilo de pdt   | 1                |
-|     C03      | pack Biscotte | 2                |
-|     C04      | Café soluble  | 3                |
-|     C05      | Crakers       | 4                |
-+-------------------------------------------------+
-```
-Evitez d'utiliser exprès un code qui n'existe pas. On l'a prévu hein, mais vous allez juste perdre votre temps.
-
-## 5. Utilisation
-Pour lancer le programme, la commande ressemble à ça :
-```python
-python3 main.py "Nom_Magasin" "Prénom_caissier" "C01:41|C02:7|C05:1"
-``` 
-- 1er argument : Nom du magasin
-- Deuxième argument : Prénom du caissier
-- Troisième argument : Liste de produits. Le format est code:quantité, chaque produit séparé par un pipe |
-
-## 6. Structure du projet
-```bash
-projet/
-├── main.py <- le code
-└── README.md <- la doc à lire
-└── compteur.txt <- le compteur pour le numéro de ticket. à ne pas toucher sinon je viendrai vous toucher la nuit
+python main.py "Magasin" "Caissier" "CODE:QUANTITÉ|CODE:QUANTITÉ"
 ```
 
-## 7. Historique des versions
-| Version | Date | Modifications |
-|---------|------|---------------|
-| 1.0 | 16/10/2026 | Version initiale |
-| 1.1 | 16/10/2026 | Version boostée |
+Le script prend 3 arguments obligatoires :
+
+1. Nom du magasin
+2. Nom du caissier
+3. Contenu de la commande au format `CODE:QUANTITÉ`, plusieurs articles séparés par `|`
+
+Exemple :
+
+```bash
+python main.py "Mon Magasin" "Hugo" "C01:2|C02:3|C03:1"
+```
+
+Résultat :
+
+```text
+Mon Magasin
+Ticket numéro : 2200
+Date : 16/10/2026
+
+Vous avez été servi par : Hugo
+
+NB   Desc.            HT unitaire  TVA    Total 
+2    pack de coca     5.00€        10%    11.00€
+3    kilo de pdt      1.00€        10%    3.30€
+1    pack Biscotte    2.00€        10%    2.20€
+
+                    Total HT        15.00€
+                    Total TVA       1.50€
+                    Total           16.50€
+```
+
+## Fonctionnement
+
+Pour chaque ligne de la commande, le programme :
+
+1. Cherche le code dans le catalogue
+2. Calcule le total HT de la ligne : `prix HT × quantité`
+3. Calcule la TVA : `total HT × taux / 100`
+4. Affiche le total TTC de la ligne (HT + TVA)
+
+À la fin, il affiche le total HT, le total de TVA et le total TTC du ticket.
+
+Gestion des erreurs :
+
+- Code inconnu : la ligne est ignorée avec le message `Ligne ignorée (code inconnu)`
+- Quantité invalide : la ligne est ignorée avec le message `Ligne ignorée (quantité invalide)`
+- Arguments manquants : un message d'utilisation est affiché
+
+## Ajout de produits
+
+Un produit s'ajoute avec un 4e argument optionnel au format `CODE:NOM:PRIX:TVA` :
+
+```bash
+python main.py "Mon Magasin" "Hugo" "C01:1" "C06:Jus d'orange:3.5:10"
+```
+
+- `CODE` : identifiant unique du produit (ex. `C06`)
+- `NOM` : nom affiché sur le ticket
+- `PRIX` : prix HT, avec un point comme séparateur décimal
+- `TVA` : taux de TVA en pourcentage (entier)
+
+Le produit est enregistré dans `catalogue.json` : il reste disponible aux lancements suivants, sans repasser le 4e argument.
+
+Notes :
+
+- Le 3e argument (la commande) reste obligatoire lors d'un ajout, utiliser par exemple `C01:1`
+- Si le code existe déjà, le script affiche `Erreur : le code ... existe déjà.` et s'arrête
+- Pour repartir du catalogue par défaut, supprimer `catalogue.json`
+
+Une fois ajouté, le produit s'utilise normalement :
+
+```bash
+python main.py "Mon Magasin" "Hugo" "C01:2|C06:3"
+```
+
+## Tests
+
+```bash
+python test.py
+```
+
+Si tout fonctionne, le terminal affiche :
+
+```text
+TEST RÉUSSI : Le catalogue et les calculs fonctionnent parfaitement !
+```
