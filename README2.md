@@ -56,7 +56,6 @@ Exemple :
 python main.py "Mon Magasin" "Hugo" "C01:2|C02:3|C03:1"
 ```
 
-Résultat en format binôme (`AFFICHER_ORIGINE = False`) :
 
 ```text
 Mon Magasin
@@ -95,7 +94,6 @@ Exemple :
 python main.py "Mon Magasin" "Hugo" "C01:2|C02:3|C03:1"
 ```
 
-Résultat en format binôme (`AFFICHER_ORIGINE = False`) :
 
 ```text
 Mon Magasin
