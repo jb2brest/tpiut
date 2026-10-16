@@ -4,6 +4,7 @@
 # Description : Programme pour générer un ticket de caisse - version 1
 
 # Importation des modules
+import os
 import sys
 from datetime import datetime
 
@@ -55,11 +56,21 @@ def lire_arguments():
 
 
 def generer_numero_et_date():
-    # Génération du numéro de ticket et de la date
-    maintenant = datetime.now()
-    numero = maintenant.strftime("%y%m%d%H%M%S")
-    date = maintenant.strftime("%d/%m/%Y")
-    return numero, date
+    # Numéro de ticket incrémental, sauvegardé dans ticket.txt (départ : 1000)
+    fichier = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ticket.txt")
+    numero = 1000
+
+    if os.path.exists(fichier):
+        with open(fichier, "r", encoding="utf-8") as f:
+            contenu = f.read().strip()
+        if contenu.isdigit():
+            numero = int(contenu)
+
+    with open(fichier, "w", encoding="utf-8") as f:
+        f.write(str(numero + 1))
+
+    date = datetime.now().strftime("%d/%m/%Y")
+    return str(numero), date
 
 
 # Fonction pour calculer les montants

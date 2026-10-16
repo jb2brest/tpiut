@@ -25,7 +25,7 @@ Les arguments sont, dans l'ordre :
 ```
 ┌──────────────────────────────────────────────────┐
 │ Magasin                                          │
-│ Ticket numéro : 261016094649                     │
+│ Ticket numéro : 1000                             │
 │                                                  │
 │ Date : 16/10/2026                                │
 │                                                  │
